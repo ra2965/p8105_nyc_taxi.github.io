@@ -46,7 +46,8 @@ pilot <-
   filter(
     passenger_count != 0,
     trip_distance != 0,
-    total_amount > 0
+    total_amount > 0,
+    fare_amount != 0
   ) %>% 
   sample_frac(0.1) %>% 
   mutate(tpep_pickup_datetime = as.character(tpep_pickup_datetime),

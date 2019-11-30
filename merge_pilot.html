@@ -676,7 +676,8 @@ pilot &lt;-
   filter(
     passenger_count != 0,
     trip_distance != 0,
-    total_amount &gt; 0
+    total_amount &gt; 0,
+    fare_amount != 0
   ) %&gt;% 
   sample_frac(0.1) %&gt;% 
   mutate(tpep_pickup_datetime = as.character(tpep_pickup_datetime),
@@ -709,10 +710,10 @@ pilot &lt;-
     do_zone = zone
   ) %&gt;% 
   select(-pu_location_id, -do_location_id)</code></pre>
-<pre><code>## Warning: Expected 2 pieces. Additional pieces discarded in 118046 rows [1,
+<pre><code>## Warning: Expected 2 pieces. Additional pieces discarded in 118032 rows [1,
 ## 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, ...].
 
-## Warning: Expected 2 pieces. Additional pieces discarded in 118046 rows [1,
+## Warning: Expected 2 pieces. Additional pieces discarded in 118032 rows [1,
 ## 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, ...].</code></pre>
 <p>export pilot dataset (joined with weather and boro lookup table)</p>
 <pre class="r"><code>pilot %&gt;% 
