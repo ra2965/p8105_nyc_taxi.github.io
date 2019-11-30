@@ -1,9 +1,7 @@
----
-title: "regression analysis"
-output: github_document
----
+regression analysis
+================
 
-```{r message=FALSE}
+``` r
 library(tidyverse)
 library(ggplot2)
 
@@ -25,14 +23,15 @@ reg_sample = pilot %>%
 reg_sample %>% 
   ggplot(aes(x = trip_distance, y = fare_amount)) +
   geom_point()
-
-
 ```
 
-```{r}
+![](regression_analysis_files/figure-markdown_github/unnamed-chunk-1-1.png)
+
+``` r
 reg_sample %>% 
   filter(duration <= 1000) %>% 
   ggplot(aes(x = duration, y = fare_amount)) +
   geom_point()
 ```
 
+![](regression_analysis_files/figure-markdown_github/unnamed-chunk-2-1.png)
