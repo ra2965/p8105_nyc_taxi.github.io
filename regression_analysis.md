@@ -48,30 +48,34 @@ reg_plot %>%
 
 ``` r
 tip_plot = reg_sample %>% 
-  filter(payment_type == 1, do_boro == 'Manhattan', do_zone != 'Unknown', pu_zone != 'Unknown') %>% 
+  filter(payment_type == 1, do_boro == 'Manhattan', pu_boro == 'Manhattan', do_zone != 'Unknown', pu_zone != 'Unknown') %>% 
 mutate(do_zone = forcats::fct_reorder(do_zone, tip_percent),
        pu_zone = forcats::fct_reorder(pu_zone, tip_percent)) %>% 
   drop_na(do_zone, pu_zone)
 
 tip_plot %>% 
-    ggplot(aes(x = do_zone, y = tip_percent)) +
+    ggplot(aes(x = do_zone, y = tip_percent,color = do_zone)) +
   geom_boxplot(na.rm = TRUE, outlier.size = 0.1) +
   scale_y_continuous(
     limits = c(0,0.4)
   ) +
-  theme(axis.text.x = element_text(angle = 70, hjust = 1))
+  theme(axis.text.x = element_text(angle = 70, hjust = 1), 
+        legend.position = "none") +
+  viridis::scale_color_viridis(discrete = TRUE)
 ```
 
 ![](regression_analysis_files/figure-markdown_github/unnamed-chunk-3-1.png)
 
 ``` r
 tip_plot %>% 
-    ggplot(aes(x = pu_zone, y = tip_percent)) +
+    ggplot(aes(x = pu_zone, y = tip_percent, color = pu_zone)) +
   geom_boxplot(na.rm = TRUE, outlier.size = 0.1) +
   scale_y_continuous(
     limits = c(0,0.4)
   ) +
-  theme(axis.text.x = element_text(angle = 70, hjust = 1))
+  theme(axis.text.x = element_text(angle = 70, hjust = 1),
+        legend.position = "none") +
+  viridis::scale_color_viridis(discrete = TRUE)
 ```
 
 ![](regression_analysis_files/figure-markdown_github/unnamed-chunk-4-1.png)
