@@ -54,7 +54,7 @@ weather_drive=plot_data%>%
   enter_appear()+
   exit_fade()
    
-animate(weather_drive, duration=7,nframes = 12)
+animate(weather_drive, duration=7)
 ```
  
  
