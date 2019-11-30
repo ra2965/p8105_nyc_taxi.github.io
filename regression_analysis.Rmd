@@ -1,6 +1,6 @@
 ---
 title: "regression analysis"
-output: github_document
+output: html_document
 ---
 
 ```{r message=FALSE}
@@ -81,5 +81,15 @@ tip_plot %>%
   theme(axis.text.x = element_text(angle = 70, hjust = 1),
         legend.position = "none") +
   viridis::scale_color_viridis(discrete = TRUE)
+```
+
+```{r}
+lm = lm(fare_amount ~ duration + trip_distance + duration*trip_distance, data = reg_sample ) %>% 
+  broom::tidy() %>% 
+  janitor::clean_names() %>% 
+  mutate(p = round(p_value,3))
+  data_frame()
+
+
 ```
 

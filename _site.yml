@@ -1,0 +1,20 @@
+name: "NYC Yellow Cab"
+output_dir: "."
+navbar:
+  title: "Home"
+  right:
+      - text: "Analysis"
+         menu:
+          - text: "Regression  Analysis"
+            href: regression_analysis.html
+          - text: "Weather and Drive"
+            href: weather-and-drive.html
+          - text: "Heatmap"
+            href: heatmap.html
+          - text: "Heatmap Time Desitination"
+            href: heatmap_time_destination.html
+          - text: "Merge"
+            href: merge_pilot.html
+output:
+  html_document:
+    theme: cerulean
