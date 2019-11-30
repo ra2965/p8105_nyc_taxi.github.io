@@ -42,10 +42,18 @@ plot_data =
 
 ```{r}
 weather_drive=plot_data%>%
-  ggplot(aes(x=average_temp, y=daily_drive, color= month))+
-  geom_point()
+  ggplot(aes(x=average_temp, y=daily_drive, frame_vars(month)))+
+  geom_point(aes(colour = month))+
+   labs(title = "Daily temperature and daily usage",
+       x = 'Daily average temperature for year 2018', 
+       y = 'Daily drive amount',
+       colour = 'Month'
+       ) +
+  transition_states(month,2,1)+
+  enter_appear()+
+  exit_fade()
    
-weather_drive
+animate(weather_drive, duration=7,nframes = 12)
 ```
  
  
