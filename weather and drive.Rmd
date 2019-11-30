@@ -1,0 +1,52 @@
+---
+title: "weather and drive amount"
+author: "Yuqing Xue"
+date: "11/30/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(gganimate)
+library(ggplot2)
+```
+
+read in data
+```{r}
+pilot=read_csv(file = "./data/pilot.csv")
+```
+plot
+O
+```{r}
+ plot_df=pilot%>%
+  mutate(
+  average_temp=(tmin+tmax)/2)
+
+cab=pilot%>%
+  group_by(month)%>%count(pu_date)%>%
+  mutate(daily_drive=n)%>%
+  ungroup(month)
+
+```
+
+join dataset
+```{r}
+plot_data = 
+  left_join(plot_df, cab, by = c("month","pu_date"))%>%
+  select(month, pu_date,average_temp, daily_drive)%>%
+  mutate(month=as.factor(month))
+
+
+```
+
+```{r}
+weather_drive=plot_data%>%
+  ggplot(aes(x=average_temp, y=daily_drive, color= month))+
+  geom_point()
+   
+weather_drive
+```
+ 
+ 
+ 
