@@ -12,6 +12,17 @@ library(tidyverse)
 Read in datasets & merge 12 month's data into one:
 ```{r}
 
+weather <-
+  read_csv("./data/weather_nyc_2018.csv") %>% 
+  mutate(date = as.character(date)) %>%
+  separate(date, into = c("year","month","day"), sep = "-", convert = TRUE) %>%
+  select(-year, -name, -id)
+
+zone_lookup <-
+  read_csv("./data/taxi_zone_lookup.csv") %>% 
+  janitor::clean_names() %>% 
+  select(-service_zone)
+
 file_names <- list.files("./data/yellow_cab")
 read_in = function(x) {
   read_csv("./data/yellow_cab/x") 
@@ -24,16 +35,6 @@ taxi_2018 <-
   separate(source, c("a","b","year", "month", "c"), sep = "([\\.\\_])") %>% 
   select(-a, -b, -c, -X1)
 
-weather <-
-  read_csv("./data/weather_nyc_2018.csv") %>% 
-  mutate(date = as.character(date)) %>%
-  separate(date, into = c("year","month","day"), sep = "-", convert = TRUE) %>%
-  select(-year, -name, -id)
-
-zone_lookup <-
-  read_csv("./data/taxi_zone_lookup.csv") %>% 
-  janitor::clean_names() %>% 
-  select(-service_zone)
 
 ```
 
@@ -42,6 +43,12 @@ Create the pilot dataset and join with weather & zone lookup table
 set.seed(1)
 pilot <-
   taxi_2018 %>% 
+  filter(
+    passenger_count != 0,
+    trip_distance != 0,
+    total_amount > 0,
+    fare_amount != 0
+  ) %>% 
   sample_frac(0.1) %>% 
   mutate(tpep_pickup_datetime = as.character(tpep_pickup_datetime),
          tpep_dropoff_datetime = as.character(tpep_dropoff_datetime)) %>%
