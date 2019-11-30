@@ -3,8 +3,8 @@ output_dir: "."
 navbar:
   title: "Home"
   right:
-      - text: "Analysis"
-         menu:
+    - text: "Analysis"
+      menu:
           - text: "Regression  Analysis"
             href: regression_analysis.html
           - text: "Weather and Drive"
