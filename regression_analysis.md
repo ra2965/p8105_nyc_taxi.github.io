@@ -16,11 +16,21 @@ reg_sample = pilot %>%
     duration = case_when(
     pu_date != do_date ~ do_min - pu_min + (60 *(do_hour - pu_hour + 24)),
     pu_date == do_date ~ do_min - pu_min + (60 *(do_hour - pu_hour) )
-  )
-  ) %>% 
-  sample_frac(size = 0.1, replace = FALSE) 
 
-reg_sample %>% 
+  ),
+      tip_percent = tip_amount/fare_amount
+  ) %>% 
+  filter(fare_amount != 0,
+         tip_amount != 0)
+
+reg_plot = reg_sample %>% 
+  sample_frac(size = 0.1, replace = FALSE) %>% 
+  filter(fare_amount != 0,
+         tip_amount != 0,
+         fare_amount != 52 #We find that there might be an entry error since all records that fare_amount is 52 have different distance and duration#
+         ) 
+
+reg_plot %>% 
   ggplot(aes(x = trip_distance, y = fare_amount)) +
   geom_point()
 ```
@@ -28,10 +38,44 @@ reg_sample %>%
 ![](regression_analysis_files/figure-markdown_github/unnamed-chunk-1-1.png)
 
 ``` r
-reg_sample %>% 
-  filter(duration <= 1000) %>% 
+reg_plot %>% 
+  filter(duration <= 360) %>% 
   ggplot(aes(x = duration, y = fare_amount)) +
   geom_point()
 ```
 
 ![](regression_analysis_files/figure-markdown_github/unnamed-chunk-2-1.png)
+
+``` r
+tip_plot = reg_sample %>% 
+  filter(payment_type == 1, do_boro == 'Manhattan', pu_boro == 'Manhattan', do_zone != 'Unknown', pu_zone != 'Unknown') %>% 
+mutate(do_zone = forcats::fct_reorder(do_zone, tip_percent),
+       pu_zone = forcats::fct_reorder(pu_zone, tip_percent)) %>% 
+  drop_na(do_zone, pu_zone)
+
+tip_plot %>% 
+    ggplot(aes(x = do_zone, y = tip_percent,color = do_zone)) +
+  geom_boxplot(na.rm = TRUE, outlier.size = 0.1) +
+  scale_y_continuous(
+    limits = c(0,0.4)
+  ) +
+  theme(axis.text.x = element_text(angle = 70, hjust = 1), 
+        legend.position = "none") +
+  viridis::scale_color_viridis(discrete = TRUE)
+```
+
+![](regression_analysis_files/figure-markdown_github/unnamed-chunk-3-1.png)
+
+``` r
+tip_plot %>% 
+    ggplot(aes(x = pu_zone, y = tip_percent, color = pu_zone)) +
+  geom_boxplot(na.rm = TRUE, outlier.size = 0.1) +
+  scale_y_continuous(
+    limits = c(0,0.4)
+  ) +
+  theme(axis.text.x = element_text(angle = 70, hjust = 1),
+        legend.position = "none") +
+  viridis::scale_color_viridis(discrete = TRUE)
+```
+
+![](regression_analysis_files/figure-markdown_github/unnamed-chunk-4-1.png)
