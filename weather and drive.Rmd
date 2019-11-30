@@ -44,7 +44,7 @@ plot_data =
 weather_drive=plot_data%>%
   ggplot(aes(x=average_temp, y=daily_drive, frame_vars(month)))+
   geom_point(aes(colour = month))+
-   labs(title = "Daily temperature and daily usage",
+   labs(title = 'Month: {closest_state}',
        x = 'Daily average temperature for year 2018', 
        y = 'Daily drive amount',
        colour = 'Month'
