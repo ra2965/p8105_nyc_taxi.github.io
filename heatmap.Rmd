@@ -1,0 +1,41 @@
+---
+title: "heatmap"
+author: "Xintao Ding"
+date: "11/30/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(plotly)
+library(hrbrthemes)
+set.seed(20191130)
+
+heatmap <- pilot %>% 
+  filter(fare_amount > 0, do_boro != "Unknown") %>% 
+  mutate(ride_time = case_when(
+    pu_hour %in% c(1,2,3) ~ "Wee Hours",
+    pu_hour %in% c(4,5,6) ~ "Early Morning",
+    pu_hour %in% c(7,8,9) ~ "Morning Rush Hours",
+    pu_hour %in% c(10,11,12) ~ "Late Morning",
+    pu_hour %in% c(13,14,15) ~ "Early Afternoon",
+    pu_hour %in% c(16,17,18) ~ "Afternoon Rush Hours",
+    pu_hour %in% c(19,20,21) ~ "Evening",
+    pu_hour %in% c(22,23,0) ~ "Night",
+  ))
+
+plot <- heatmap %>% 
+  group_by(do_boro) %>% 
+  summarise(proportion = n()/119897) %>%  
+  mutate(text = str_c("Pick Up Time: ", pu_hour , "\nDrop Off Borough: ", do_boro, "\nTrip Proportions:", proportion)) %>% 
+  ggplot(aes(x = pu_hour, y = do_boro, fill = proportion, text= text)) +
+    geom_tile() +
+    theme_ipsum()
+ggplotly(plot, tooltip = "text")
+
+```
+
