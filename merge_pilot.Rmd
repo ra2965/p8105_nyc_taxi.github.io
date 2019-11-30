@@ -1,0 +1,85 @@
+---
+title: "Merge 2018 taxi dataset & generate pilot dataset"
+date: "11/13/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+Read in datasets & merge 12 month's data into one:
+```{r}
+
+file_names <- list.files("./data/yellow_cab")
+read_in = function(x) {
+  read_csv("./data/yellow_cab/x") 
+}
+setwd("./data/yellow_cab")
+taxi_2018 <-
+  file_names %>% 
+  set_names() %>% 
+  map_dfr(read_csv, .id = "source") %>% 
+  separate(source, c("a","b","year", "month", "c"), sep = "([\\.\\_])") %>% 
+  select(-a, -b, -c, -X1)
+
+weather <-
+  read_csv("./data/weather_nyc_2018.csv") %>% 
+  mutate(date = as.character(date)) %>%
+  separate(date, into = c("year","month","day"), sep = "-", convert = TRUE) %>%
+  select(-year, -name, -id)
+
+zone_lookup <-
+  read_csv("./data/taxi_zone_lookup.csv") %>% 
+  janitor::clean_names() %>% 
+  select(-service_zone)
+
+```
+
+Create the pilot dataset and join with weather & zone lookup table
+```{r}
+set.seed(1)
+pilot <-
+  taxi_2018 %>% 
+  sample_frac(0.1) %>% 
+  mutate(tpep_pickup_datetime = as.character(tpep_pickup_datetime),
+         tpep_dropoff_datetime = as.character(tpep_dropoff_datetime)) %>%
+  separate(tpep_pickup_datetime, into = c("a","b"), sep = " ") %>%
+  separate(a, into = c("pick_year","pick_month","pu_date"), sep = "-") %>%
+  separate(b, into = c("pu_hour","pu_min"), sep = ":") %>%
+  separate(tpep_dropoff_datetime, into = c("c","d"),sep = " ") %>%
+  separate(c,into = c("drop_year","drop_month","do_date"),sep = "-") %>%
+  separate(d, into = c("do_hour","do_min"), sep = ":") %>%
+  select(-pick_month,-drop_month,-pick_year,-drop_year) %>% 
+  mutate(
+    month = as.integer(month),
+    pu_date = as.integer(pu_date),
+    pu_hour = as.integer(pu_hour),
+    pu_min = as.integer(pu_min),
+    do_date = as.integer(do_date),
+    do_hour = as.integer(do_hour),
+    do_min = as.integer(do_min)
+  ) %>% 
+  left_join(weather, by = c("month" = "month", "pu_date" = "day")) %>% 
+  left_join(zone_lookup, by = c("pu_location_id" = "location_id")) %>% 
+  rename(
+    pu_boro = borough,
+    pu_zone = zone
+  ) %>% 
+  left_join(zone_lookup, by = c("do_location_id" = "location_id")) %>% 
+  rename(
+    do_boro = borough,
+    do_zone = zone
+  ) %>% 
+  select(-pu_location_id, -do_location_id)
+
+```
+
+
+export pilot dataset (joined with weather and boro lookup table)
+```{r}
+pilot %>% 
+  write.csv(.,file = "./data/pilot.csv")
+```
+

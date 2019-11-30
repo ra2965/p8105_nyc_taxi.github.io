@@ -1,0 +1,63 @@
+---
+title: "Initial Data Tidy"
+author: "Xun Wang"
+date: "11/18/2019"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+
+knitr::opts_chunk$set(
+	echo = TRUE,
+	warning = FALSE,
+	fig.width = 8, 
+  fig.height = 6,
+  out.width = "90%"
+)
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+set.seed(1)
+```
+
+#### Sampling some datasets for the first meeting with the TA.
+
+The codechunk below generates a dataset with 100,000 samples randomly sampled from the [TLC TriP Record Data](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page), January 2018.
+
+
+```{r}
+yellow_tripdata_2018_01 = 
+  read_csv(file = "/Users/Kasza Lab/Desktop/yellow_tripdata_2018-01.csv") %>% 
+  janitor::clean_names() %>% 
+  sample_n(10000) %>% 
+  arrange(tpep_pickup_datetime)
+
+write.csv(yellow_tripdata_2018_01, "./tmp/yellow_tripdata_2018_01_sampled.csv", row.names = FALSE)
+
+green_tripdata_2018_01 = 
+  read_csv(file = "/Users/Kasza Lab/Desktop/green_tripdata_2018-01.csv") %>% 
+  janitor::clean_names() %>% 
+  sample_n(10000) %>% 
+  arrange(lpep_pickup_datetime)
+
+write.csv(green_tripdata_2018_01, "./tmp/green_tripdata_2018_01_sampled.csv", row.names = FALSE)
+
+fhv_tripdata_2018_01 = 
+  read_csv(file = "/Users/Kasza Lab/Desktop/fhv_tripdata_2018-01.csv") %>% 
+  janitor::clean_names() %>% 
+  sample_n(10000) %>% 
+  arrange(pickup_date_time) %>% 
+  view()
+
+write.csv(fhv_tripdata_2018_01, "./tmp/fhv_tripdata_2018_01_sampled.csv", row.names = FALSE)
+```
+
