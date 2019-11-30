@@ -3,7 +3,7 @@ title: "regression analysis"
 output: github_document
 ---
 
-```{r}
+```{r message=FALSE}
 library(tidyverse)
 pilot = read.csv("./data/pilot.csv")
 taxi_zone_lookup = read.csv("./data/taxi_zone_lookup.csv")
