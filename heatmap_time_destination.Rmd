@@ -1,0 +1,49 @@
+---
+title: "Heatmap of time (hour) by trip destination"
+date: "11/30/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(plotly)
+```
+
+```{r}
+heatmap <-
+  read_csv("./data/pilot.csv")
+
+heatmap %>% 
+  filter(do_boro != "Unknown") %>% 
+  select (do_boro, pu_hour) %>% 
+  mutate(
+    do_boro = fct_infreq(do_boro)
+  ) %>% 
+  group_by(do_boro, pu_hour) %>% 
+  count() %>% 
+  group_by(do_boro) %>% 
+  mutate( 
+    total = sum(n)
+    ) %>% 
+   mutate(percent = round((n/total)*100,1)) %>% 
+  arrange(do_boro, pu_hour) %>% 
+    plot_ly(
+    x = ~pu_hour, y = ~do_boro,
+    height = 400, width = 1400) %>%
+  add_heatmap(
+    z = ~percent,
+    text = ~paste(
+      "Trip to: ", do_boro, "<br>Time: ", pu_hour, ": 00",
+      "<br>Percent: ", percent, "%"),
+    hoverinfo = "text", showscale = TRUE,
+    opacity = 0.90)
+
+```
+
+
+
+```{r}
+
+
+```
