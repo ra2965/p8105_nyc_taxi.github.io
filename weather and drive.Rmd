@@ -56,6 +56,34 @@ weather_drive=plot_data%>%
    
 animate(weather_drive, duration=7)
 ```
- 
- 
+
+precipitaiton and drive amout 
+```{r}
+precipitation=
+  left_join(pilot, cab, by = c("month","pu_date"))%>%
+  select(month, pu_date, prcp, daily_drive)%>%
+  mutate(month=as.factor(month),
+         month=recode_factor(month, '1'="January", '2'="Feburary",'3'="March",'4'='April','5'='May','6'='June','7'='July','8'='August','9'='September','10'='October','11'='November','12'='December'))
+
+  
+```
+
+making plot
+```{r}
+prcp_drive=precipitation%>%
+  ggplot(aes(x=prcp, y=daily_drive, frame_vars(month)))+
+  geom_point(aes(colour = month))+
+   labs(title = 'Month: {closest_state}',
+       x = 'Daily precipitation for year 2018', 
+       y = 'Daily drive amount',
+       colour = 'Month'
+       ) +
+  transition_states(month,2,1)+
+  enter_appear()+
+  exit_fade()
+   
+animate(prcp_drive, duration=7)
+```
+```
+
  
