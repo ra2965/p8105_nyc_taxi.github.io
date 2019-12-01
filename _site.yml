@@ -1,18 +1,44 @@
-name: "NYC Yellow Cab"
-output_dir: "."
-navbar:
-  title: "Home"
-  right:
-    - text: "Analysis"
-      menu:
-          - text: "Regression  Analysis"
-            href: regression_analysis.html
-          - text: "Weather and Drive"
-            href: weather_and_drive.html
-          - text: "Heatmap Time Desitination"
-            href: heatmap_time_destination.html
-          - text: "Merge"
-            href: merge_pilot.html
-output:
-  html_document:
-    theme: cerulean
+---
+title: "new weather plots"
+author: "Yuqing Xue"
+date: "11/30/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(gganimate)
+library(ggplot2)
+```
+ 
+```{r}
+ plot_df=pilot%>%
+  mutate(
+  average_temp=(tmin+tmax)/2)
+
+cab=pilot%>%
+  group_by(month)%>%count(pu_date)%>%
+  mutate(daily_drive=n)%>%
+  ungroup(month)
+```
+ 
+
+
+join dataset
+```{r}
+plot_data = 
+  left_join(plot_df, cab, by = c("month","pu_date"))%>%
+  select(month, pu_date,average_temp, daily_drive)%>%
+  mutate(month=as.factor(month),
+         month=recode_factor(month, '1'="January", '2'="Feburary",'3'="March",'4'='April','5'='May','6'='June','7'='July','8'='August','9'='September','10'='October','11'='November','12'='December'))
+
+
+```
+
+```{r}
+plot_weather=plot_data%>%
+  ggplot(aes(x=average_temp, y=daily_drive,color=month))+
+  geom_point()
+plot_weather
+```
