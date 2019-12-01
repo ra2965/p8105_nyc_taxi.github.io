@@ -4,7 +4,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r }
@@ -20,7 +20,7 @@ weather_nyc_2018 = read.csv("./data/weather_nyc_2018.csv")
 
 
   
-reg_sample = pilot %>% 
+reg = pilot %>% 
   mutate(
     duration = case_when(
     pu_date != do_date ~ do_min - pu_min + (60 *(do_hour - pu_hour + 24)),
@@ -55,12 +55,12 @@ reg_plot %>%
 
 
 ```{r }
-fit1 = lm(fare_amount ~ duration + trip_distance , data = reg_sample ) %>% 
+fit1 = lm(fare_amount ~ duration + trip_distance , data = reg) %>% 
   broom::tidy() %>% 
   janitor::clean_names() %>% 
   mutate(p = round(p_value,3))
 
-fit1 = lm(fare_amount ~ duration + trip_distance , data = reg_sample ) 
+fit1 = lm(fare_amount ~ duration + trip_distance , data = reg ) 
 summary(fit1)
 ```
 
@@ -72,28 +72,21 @@ plot(fit1)
 ```
 
 ```{r }
-diagnostics = reg_sample %>% 
-  select(trip_distance, duration, fare_amount)
-X = diagnostics %>% 
-  select(trip_distance, duration)
-
-omcdiag(X,reg_sample$fare_amount)
-```
-The calculated value of the Chi-square test statistic is found to be 63761.5711 and it is highly significant thereby implying the presence of multicollinearity in the model specification.
-
-
-This induces us to go for the next step of Farrar – Glauber test (F – test) for the location of the multicollinearity.
-```{r }
-imcdiag(X, diagnostics$fare_amount)
-
-```
-
-The VIF, TOL and Wi columns provide the diagnostic output for variance inflation factor, tolerance and Farrar-Glauber F-test respectively. 
-```{r }
-pcor(X, method = "pearson")
+pcor(pred, method = "pearson")
 
 ```  
-  
+
+
+```{r }
+pred = reg %>% dplyr::select(trip_distance, duration)
+imcdiag(pred, reg$fare_amount)
+
+
+```
+
+The VIF, TOL and Wi columns provide the diagnostic output for variance inflation factor, tolerance and Farrar-Glauber F-test respectively. We find that 
+
+
 
 
 
