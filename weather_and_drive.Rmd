@@ -5,7 +5,7 @@ date: "11/30/2019"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, message=FALSE, warning=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(gganimate)
