@@ -8,6 +8,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(plotly)
+
 ```
 
 ```{r}
@@ -39,11 +40,8 @@ heatmap %>%
     hoverinfo = "text", showscale = TRUE,
     opacity = 0.90)
 
-```
-
-
-
-```{r}
 
 
 ```
+
+
