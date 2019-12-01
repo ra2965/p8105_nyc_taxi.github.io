@@ -9,7 +9,7 @@ output:
 
 # Do we still need Yellow / Green Cabs in NYC?
 
-![](yellowcab.jpg)
+![](images/taxi.png)
 Taxicab service has been around New York City for as early as the late 1890s and has since been a major player in the NYC transportation system. In 2011, the ridesharing company Uber went alive in New York City, and disrupted the taxicab business tremendously. Since the emergence of Uber, taxi usage and profits have gone down, causing the value of NYC taxi medallion to go down by more than 80%. In NYC, there are more rideshare vehicles than taxi medallion vehicles. In addition, with the increasing prevalence of smartphones, more people choose to order and pay for their rides via ride-sharing apps. 
    
 In this report, we ask the question, NYC taxicabs, besides being part of the NYC signature look, do we still need them around? Our goal is to provide data-driven insights into the taxicab operation in NYC and determine if and why NYC cabs should still be around for a while. How many passengers have NYC taxies picked up over the past couple of years? How much does weather affect the cab business? How might pick up/drop off locations affect the tips given? Etc.
@@ -27,3 +27,4 @@ In this report, we ask the question, NYC taxicabs, besides being part of the NYC
    
 
 
+![](images/taxi.png)
