@@ -15,27 +15,48 @@ library(plotly)
 library(hrbrthemes)
 set.seed(20191130)
 
+pilot <- read_csv("./data/pilot.csv")
 heatmap <- pilot %>% 
-  filter(fare_amount > 0, do_boro != "Unknown") %>% 
-  mutate(ride_time = case_when(
-    pu_hour %in% c(1,2,3) ~ "Wee Hours",
-    pu_hour %in% c(4,5,6) ~ "Early Morning",
-    pu_hour %in% c(7,8,9) ~ "Morning Rush Hours",
-    pu_hour %in% c(10,11,12) ~ "Late Morning",
-    pu_hour %in% c(13,14,15) ~ "Early Afternoon",
-    pu_hour %in% c(16,17,18) ~ "Afternoon Rush Hours",
-    pu_hour %in% c(19,20,21) ~ "Evening",
-    pu_hour %in% c(22,23,0) ~ "Night",
-  ))
-
-plot <- heatmap %>% 
+  filter(do_boro != "Unknown") %>% 
+  select (do_boro, pu_hour) %>% 
+  group_by(do_boro, pu_hour) %>% 
+  count() %>% 
   group_by(do_boro) %>% 
-  summarise(proportion = n()/119897) %>%  
-  mutate(text = str_c("Pick Up Time: ", pu_hour , "\nDrop Off Borough: ", do_boro, "\nTrip Proportions:", proportion)) %>% 
-  ggplot(aes(x = pu_hour, y = do_boro, fill = proportion, text= text)) +
+  mutate( 
+    total = sum(n)
+    ) %>% 
+   mutate(percent = round((n/total)*100,1))
+
+
+```
+
+
+```{r}
+plot <- heatmap %>% 
+  mutate(text = str_c("Pick Up Time: ", pu_hour , "\nDrop Off Borough: ", do_boro, "\nTrip Percentage:", percent)) %>%
+  ggplot(aes(x = pu_hour, y = do_boro, fill = percent, text= text)) +
     geom_tile() +
+    labs(x = "Pick Up Hour", y = "Drop-off Borough") + 
     theme_ipsum()
 ggplotly(plot, tooltip = "text")
+  
+```
+
+```{r}
+# circular plot
+circular <- heatmap %>% 
+  select(do_boro, pu_hour, percent) %>% 
+  mutate(individual = percent,
+         group = pu_hour,
+         value1 = "Manhattan",
+         value2 = "Bronx", 
+         value3 = "Staten Island",
+         value4 = "Queens", 
+         vaue5 = "Brooklyn",
+         value6 = "EWR")
+circular <- circular %>% 
+  gather(key = "observation", value = "value",-c(1,2))
+
 
 ```
 
