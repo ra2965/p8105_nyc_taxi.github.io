@@ -24,6 +24,9 @@ In this report, we ask the question, NYC taxicabs, besides being part of the NYC
 * what factors might affect the tips given?
 * How did time and distance affect fare amount based on the codebook on the NYC Taxi Website?
    
+<<<<<<< HEAD
+## The anticipated data sources are
+=======
 ## Exploratory analysis:
 
 what we found:
@@ -40,6 +43,7 @@ what we found:
 * We also fitted a linear regression model to further analyze the asssociation between fare amount/tip percent and travel time and distance.   
 
 ## Data sources:
+>>>>>>> b4f4253fc7f5b2c046427a60b391fbff766bd3b4
 
 * [NYC TLC Trip Record Data](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page)
 * [NYC RNOAA](https://data.nodc.noaa.gov/cgi-bin/iso?id=gov.noaa.ncdc:C00861
