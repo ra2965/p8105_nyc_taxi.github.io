@@ -320,7 +320,7 @@ $(document).ready(function () {
 library(tidyverse)
 library(gganimate)
 library(ggplot2)</code></pre>
-<p>read in data</p>
+<p>In this part, we want to see whether there is a trend between weather and yellow cab use. We use the weather data including temperature and precipitation data in 2018. For temperature, we use average temperature as the mean of maximum temperarure and miniminum temperature in each day.</p>
 <pre class="r"><code>pilot=read_csv(file = &quot;./data/pilot.csv&quot;)</code></pre>
 <pre><code>## Warning: Missing column names filled in: &#39;X1&#39; [1]</code></pre>
 <pre><code>## Parsed with column specification:
@@ -333,7 +333,6 @@ library(ggplot2)</code></pre>
 ##   do_zone = col_character()
 ## )</code></pre>
 <pre><code>## See spec(...) for full column specifications.</code></pre>
-<p>plot O</p>
 <pre class="r"><code> plot_df=pilot%&gt;%
   mutate(
   average_temp=(tmin+tmax)/2)
@@ -342,12 +341,12 @@ cab=pilot%&gt;%
   group_by(month)%&gt;%count(pu_date)%&gt;%
   mutate(daily_drive=n)%&gt;%
   ungroup(month)</code></pre>
-<p>join dataset</p>
 <pre class="r"><code>plot_data = 
   left_join(plot_df, cab, by = c(&quot;month&quot;,&quot;pu_date&quot;))%&gt;%
   select(month, pu_date,average_temp, daily_drive,prcp)%&gt;%
   mutate(month=as.factor(month),
          month=recode_factor(month, &#39;1&#39;=&quot;January&quot;, &#39;2&#39;=&quot;Feburary&quot;,&#39;3&#39;=&quot;March&quot;,&#39;4&#39;=&#39;April&#39;,&#39;5&#39;=&#39;May&#39;,&#39;6&#39;=&#39;June&#39;,&#39;7&#39;=&#39;July&#39;,&#39;8&#39;=&#39;August&#39;,&#39;9&#39;=&#39;September&#39;,&#39;10&#39;=&#39;October&#39;,&#39;11&#39;=&#39;November&#39;,&#39;12&#39;=&#39;December&#39;))</code></pre>
+<p>Here we make an animation plot to show the daily drive amount and average daily temperature for each month. Although we hypothesis that cold weather and hot weather might have more taxi use, there is no obvious difference for different daily temperature. There is a slightly increase daily taxi usage in Feburary.</p>
 <pre class="r"><code>weather_drive=plot_data%&gt;%
   ggplot(aes(x=average_temp, y=daily_drive, frame_vars(month)))+
   geom_point(aes(size=prcp,colour = month))+
@@ -398,62 +397,24 @@ animate(weather_drive, duration=7)</code></pre>
 
 ## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
 <p><img src="weather_and_drive_files/figure-html/unnamed-chunk-4-1.gif" /><!-- --></p>
-<p>precipitaiton and drive amout</p>
+<p>We then want to further look at the association between precipitation, as we guess that people might take more taxi in rainy days. This time, we make a panel of scatterplot for each month in 2018, with precipitation as x-axis and daily drive amount in y-axis. Still, there is no obvious difference in the taxi use.</p>
 <pre class="r"><code>precipitation=
   left_join(pilot, cab, by = c(&quot;month&quot;,&quot;pu_date&quot;))%&gt;%
   select(month, pu_date, prcp, daily_drive)%&gt;%
   mutate(month=as.factor(month),
          month=recode_factor(month, &#39;1&#39;=&quot;January&quot;, &#39;2&#39;=&quot;Feburary&quot;,&#39;3&#39;=&quot;March&quot;,&#39;4&#39;=&#39;April&#39;,&#39;5&#39;=&#39;May&#39;,&#39;6&#39;=&#39;June&#39;,&#39;7&#39;=&#39;July&#39;,&#39;8&#39;=&#39;August&#39;,&#39;9&#39;=&#39;September&#39;,&#39;10&#39;=&#39;October&#39;,&#39;11&#39;=&#39;November&#39;,&#39;12&#39;=&#39;December&#39;))</code></pre>
-<p>making plot</p>
 <pre class="r"><code>prcp_drive=precipitation%&gt;%
-  ggplot(aes(x=prcp, y=daily_drive, frame_vars(month)))+
+  ggplot(aes(x=prcp, y=daily_drive, color=month))+
   geom_point(aes(colour = month))+
    labs(title = &#39;Month: {closest_state}&#39;,
        x = &#39;Daily precipitation for year 2018&#39;, 
        y = &#39;Daily drive amount&#39;,
        colour = &#39;Month&#39;
        ) +
-  transition_states(month,2,1)+
-  enter_appear()+
-  exit_fade()
-   
-animate(prcp_drive, duration=7)</code></pre>
-<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
-<p><img src="weather_and_drive_files/figure-html/unnamed-chunk-6-1.gif" /><!-- --> ```</p>
+  facet_grid(month ~ .)
+prcp_drive</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values (geom_point).</code></pre>
+<p><img src="weather_and_drive_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 
 
 
