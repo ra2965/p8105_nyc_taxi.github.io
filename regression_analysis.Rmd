@@ -1,6 +1,6 @@
 ---
 title: "regression analysis"
-output: github_document
+output: html_document
 ---
 
 ```{r message=FALSE}
@@ -34,7 +34,7 @@ reg_plot = reg_sample %>%
 
 reg_plot %>% 
   ggplot(aes(x = trip_distance, y = fare_amount)) +
-  geom_point()
+  geom_point(alpha = 0.3, color = 'blue') 
 
 
 
@@ -46,7 +46,7 @@ reg_plot %>%
 reg_plot %>% 
   filter(duration <= 360) %>% 
   ggplot(aes(x = duration, y = fare_amount)) +
-  geom_point()
+  geom_point(alpha = 0.3, color = 'red')
 ```
 
 
@@ -84,6 +84,7 @@ tip_plot %>%
 ```
 
 ```{r}
+
 label_data <- tip_plot %>% 
   distinct(pu_zone) %>% 
   mutate(id = seq(1,64), 
@@ -153,3 +154,8 @@ geom_text(data=do_label_data, aes(x=id, y = value, label= individual, hjust=hjus
 p
 
 ```
+
+
+
+
+
