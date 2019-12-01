@@ -8,6 +8,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 
 library(tidyverse)
 library(ggplot2)
+library(plotly)
 
 pilot = read.csv("./data/pilot.csv")
 taxi_zone_lookup = read.csv("./data/taxi_zone_lookup.csv")
@@ -39,16 +40,68 @@ tip_plot = boxplot %>%
        pu_zone = forcats::fct_reorder(pu_zone, tip_percent)) %>% 
   drop_na(do_zone, pu_zone)
 
-tip_plot %>% 
+do_plot <- tip_plot %>%
+  mutate(do_median = median(tip_percent)) %>% 
+  mutate(text = str_c("Drop Off Zone: ", do_zone , "\nTip Percent: ", tip_percent, "\nMedian Percentage:", tip_percent)) %>%
     ggplot(aes(x = do_zone, y = tip_percent,color = do_zone)) +
-  geom_boxplot(na.rm = TRUE, outlier.size = 0.1) +
+  geom_boxplot(na.rm = TRUE, outlier.size = 0.00001) +
   scale_y_continuous(
     limits = c(0,0.4)
   ) +
   theme(axis.text.x = element_text(angle = 70, hjust = 1), 
         legend.position = "none") +
-  viridis::scale_color_viridis(discrete = TRUE)
+  viridis::scale_color_viridis(discrete = TRUE)  
 
+ggplotly(do_plot, tooltip = "text")
+```
+```{r}
+# plotly for do_zone
+f1 <- list(
+  family = "Arial, sans-serif",
+  size = 18,
+  color = "grey"
+)
+f2 <- list(
+  family = "Old Standard TT, serif",
+  size = 14,
+  color = "black"
+)
+a <- list(
+  title = "Tip Percentage",
+  titlefont = f1,
+  showticklabels = TRUE,
+  tickangle = 45,
+  tickfont = f2,
+  exponentformat = "E",
+  range = c(0,2)
+)
+
+
+
+b <- list(
+  title = "Neighborhoods",
+  titlefont = f1, 
+  showticklabels = TRUE,
+  tickangle = 45,
+  tickfont = f2,
+  exponntformat = "E"
+)
+tip_plot %>% 
+  mutate(do_zone = forcats::fct_reorder(do_zone, tip_percent),
+       pu_zone = forcats::fct_reorder(pu_zone, tip_percent)) %>% 
+  drop_na(do_zone, pu_zone) %>% 
+  plot_ly(y = ~tip_percent, color = ~do_zone, type = "box", colors = "Set2") %>% 
+  layout(xaxis = b, yaxis = a)
+```
+
+
+```{r}
+tip_plot %>% 
+  mutate(do_zone = forcats::fct_reorder(do_zone, tip_percent),
+       pu_zone = forcats::fct_reorder(pu_zone, tip_percent)) %>% 
+  drop_na(do_zone, pu_zone) %>% 
+  plot_ly(y = ~tip_percent, color = ~pu_zone, type = "box", colors = "Set2") %>% 
+  layout(xaxis = b, yaxis = a)
 ```
 
 
@@ -88,9 +141,15 @@ label_data$angle<-ifelse(angle < -90, angle+180, angle)
 
 
 ```{r}
-p <- ggplot(tip_plot, aes(x=pu_zone, y=tip_percent)) +
+
+tip_plot %>% 
+  group_by(pu_zone) %>% 
+  summarise(pu_median = median(tip_percent)) %>% 
+  mutate(
+  pu_zone = forcats::fct_reorder(pu_zone, pu_median)) %>% 
+  ggplot(aes(x = pu_zone, y = pu_median)) +
   geom_bar(stat = "identity", fill = alpha("skyblue", 0.7)) +
-ylim(-100, 120) +
+ ylim(0, 0.5) +
   theme_minimal() +
   theme(
     axis.text = element_blank(),
@@ -101,7 +160,6 @@ ylim(-100, 120) +
   coord_polar(start = 0) +
 geom_text(data=label_data, aes(x=id, y = value, label= individual, hjust=hjust), color="black", fontface="bold",alpha=0.6, size=2.5, angle= label_data$angle, inherit.aes = FALSE ) 
   
-p
 
 
 
@@ -121,7 +179,7 @@ do_label_data$hjust<-ifelse( angle < -90, 1, 0)
 # flip angle BY to make them readable
 do_label_data$angle<-ifelse(angle < -90, angle+180, angle)
 
-p <- ggplot(tip_plot, aes(x=do_zone, y=tip_percent)) +
+p <- ggplot(tip_plot, aes(x=do_zone, y=tip_percent) +
   geom_bar(stat = "identity", fill = alpha("skyblue", 0.7)) +
 ylim(-100, 120) +
   theme_minimal() +
