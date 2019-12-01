@@ -9,7 +9,7 @@ output:
 
 # Do we still need Yellow / Green Cabs in NYC?
 
-![](taxi.png)
+![](images/taxi.png)
 
 ## Motivation:
 
