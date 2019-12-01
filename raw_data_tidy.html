@@ -10,9 +10,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Xun Wang" />
 
+<meta name="date" content="2019-11-25" />
 
-<title>NYC Yellow Cab</title>
+<title>Raw Data Tidy</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -20,9 +22,6 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -251,63 +250,6 @@ $(document).ready(function () {
 
 
 
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
-
-
 
 </head>
 
@@ -315,16 +257,6 @@ div.tocify {
 
 
 <div class="container-fluid main-container">
-
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -368,58 +300,64 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">NYC Yellow Cab</h1>
+<h1 class="title toc-ignore">Raw Data Tidy</h1>
+<h4 class="author">Xun Wang</h4>
+<h4 class="date">11/25/2019</h4>
 
 </div>
 
 
-<div id="do-we-still-need-yellow-green-cabs-in-nyc" class="section level1">
-<h1>Do we still need Yellow / Green Cabs in NYC?</h1>
-<p><img src="taxi.png" /></p>
-<div id="motivation" class="section level2">
-<h2>Motivation:</h2>
-<p>Taxicab service has been around New York City for as early as the late 1890s and has since been a major player in the NYC transportation system. In 2011, the ridesharing company Uber went alive in New York City, and disrupted the taxicab business tremendously. Since the emergence of Uber, taxi usage and profits have gone down, causing the value of NYC taxi medallion to go down by more than 80%. In NYC, there are more rideshare vehicles than taxi medallion vehicles. In addition, with the increasing prevalence of smartphones, more people choose to order and pay for their rides via ride-sharing apps.</p>
-</div>
-<div id="initial-questions" class="section level2">
-<h2>Initial questions:</h2>
-<p>In this report, we ask the question, NYC taxicabs, besides being part of the NYC signature look, do we still need them around? Our goal is to provide data-driven insights into the taxicab operation in NYC and determine if and why NYC cabs should still be around for a while.</p>
+<div id="raw-data-explanation" class="section level3">
+<h3>1. Raw Data Explanation</h3>
 <ul>
-<li>How many passengers have NYC taxies picked up over the past couple of years?</li>
-<li>How much does weather affect the cab business?</li>
-<li>what factors might affect the tips given?</li>
-<li>How did time and distance affect fare amount based on the codebook on the NYC Taxi Website?</li>
+<li><p><strong>NYC Weather Data:</strong> The weather of New York City (NYC) in 2018 raw data is from the <a href="https://www.ncdc.noaa.gov/data-access/land-based-station-data/land-based-datasets/global-historical-climatology-network-ghcn">Global Historical Climatology Network’s daily data (GHCND)</a>. This dataset can be downloaded by <code>rnoaa::meteo_pull_monitors</code>.</p></li>
+<li><p><strong>NYC Yellow Taxi Data:</strong> The NYC yellow taxi raw data is from the <a href="https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page">TLC TriP Record Data</a>. It contains all the yellow taxi trip records in NYC from 2009 to 2019. First, to analyze change of the NYC yellow taxi use across 10 years, we focus on Yellow Taxi Trip Records raw data in every January of 2009, 2011, 2013, 2015, 2017, 2019. Next, to analyze change of the NYC yellow taxi use in detail, we focus on the yeat of 2018 and generate randomly sampled sub-datasets for each month in 2018. Because the raw data is too large, we put it in a folder named <em>raw_data</em> and added it to the <code>.gitignore</code> file. So the <em>raw_data</em> folder was not uploaded to the Github. The monthly sub-datasets were generated by randomly sampling 100,000 observations from each month of 2018 and saved in the folder <em>data</em>.</p></li>
 </ul>
 </div>
-<div id="exploratory-analysis" class="section level2">
-<h2>Exploratory analysis:</h2>
-<p>what we found:</p>
-<ul>
-<li>We made plots showing Yellow Taxi usage over the past 10 years and specifically, trend in 2018.</li>
-</ul>
-<p>** In the overall description part, we found that:</p>
-<ul>
-<li><p>We found no significant association between weather and Taxi drives. However, Feburary did have more daily taxi usage compared to other month, we concluded that extreme bad weather in Feburary did sitimulate taxi service in New York City.</p></li>
-<li><p>Heatmap:</p></li>
-<li><p>We also fitted a linear regression model to further analyze the asssociation between fare amount/tip percent and travel time and distance.</p></li>
-</ul>
+<div id="datasets-generation-and-cleaning" class="section level3">
+<h3>2. Datasets Generation and Cleaning</h3>
+<div id="nyc-weather-dataset" class="section level5">
+<h5>2.1 NYC Weather Dataset</h5>
+<p>The code chunk below generates the NYC weather dataset <code>weather_df</code> containing daily temperature and precipitation in NYC 2018 and saves the dataset as <em><strong>weather_nyc_2018.csv</strong></em> in the folder <em><strong>data</strong></em>.</p>
+<pre class="r"><code>weather_df = 
+  rnoaa::meteo_pull_monitors(
+    c(&quot;USW00094728&quot;),
+    var = c(&quot;PRCP&quot;, &quot;TMIN&quot;, &quot;TMAX&quot;), 
+    date_min = &quot;2018-01-01&quot;,
+    date_max = &quot;2018-12-31&quot;) %&gt;%
+  mutate(
+    name = recode(id, USW00094728 = &quot;CentralPark_NY&quot;),
+    tmin = tmin / 10,
+    tmax = tmax / 10) %&gt;%
+  select(name, id, everything())
+
+write.csv(weather_df, &quot;./data/weather_nyc_2018.csv&quot;, row.names = FALSE)</code></pre>
 </div>
-<div id="data-sources" class="section level2">
-<h2>Data sources:</h2>
-<ul>
-<li><a href="https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page">NYC TLC Trip Record Data</a></li>
-<li><a href="https://data.nodc.noaa.gov/cgi-bin/iso?id=gov.noaa.ncdc:C00861">NYC RNOAA</a></li>
-</ul>
+<div id="monthly-nyc-yellow-taxi-trip-datasets-in-2018" class="section level5">
+<h5>2.2 Monthly NYC Yellow Taxi Trip Datasets in 2018</h5>
+<p>The code chunk below generates the 12 NYC yellow taxi datasets with 100,000 observations randomly sampled from the yellow taxi records in each month of 2018, and saves the datasets <em><strong>yellow_tripdata_2018_month</strong></em> in the folder <em><strong>data</strong></em>. These datasets are used for detailed analysis of the NYC yellow taxi use within a year.</p>
+<pre class="r"><code>set.seed(1)
+
+file_name = list.files(path = &quot;raw_data&quot;, pattern = &quot;2018&quot;)
+
+taxi_trip_2018_df = map(.x = file_name, ~ read_csv(str_c(&quot;raw_data/&quot;, .x)))
+
+taxi_trip_2018_df_sampled = 
+  taxi_trip_2018_df %&gt;% 
+  map(.x = ., ~janitor::clean_names(.x)) %&gt;% 
+  map(.x = ., ~sample_n(.x, 100000)) %&gt;% 
+  map(.x = ., ~arrange(.x, tpep_pickup_datetime))
+
+map2(.x = taxi_trip_2018_df_sampled, .y = file_name, ~write.csv(.x, str_c(&quot;./data/&quot;, .y)), row.names = FALSE)  </code></pre>
 </div>
-<div id="discussion" class="section level2">
-<h2>Discussion</h2>
-<p>For 2018, although we hypothesis that adverse weather event like low and high average daily temperature and precipitation will increase taxi usage, we did find an obvious trend. This can be due to the limitation of sample size, as we only generate 12000 observation from the larger database. Also, facotrs like travel distance and time might affect taxi use, as people might only choose taxi drive for shorter distance.</p>
+<div id="yearly-nyc-yellow-taxi-trip-datasets-between-2009-and-2019." class="section level5">
+<h5>2.3 Yearly NYC Yellow Taxi Trip Datasets between 2009 and 2019.</h5>
+<p>The code chunk below generates the yearly NYC yellow taxi dataset from the yellow taxi records in Januaries of 2009, 2011, 2013, 2015, 2017, 2019, and saves the datasets in the folder <em><strong>data</strong></em>. These datasets are used for general analysis of the NYC yellow taxi use in the past 10 years.</p>
 </div>
 </div>
 
 
 
-</div>
-</div>
 
 </div>
 
@@ -452,32 +390,6 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

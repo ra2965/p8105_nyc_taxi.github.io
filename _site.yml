@@ -9,10 +9,8 @@ navbar:
             href: regression_analysis.html
           - text: "Weather and Drive"
             href: weather_and_drive.html
-          - text: "Heatmap Time Desitination"
-            href: heatmap_time_destination.html
-          - text: "Merge"
-            href: merge_pilot.html
 output:
   html_document:
-    theme: cerulean
+    theme: simplex
+    
+
