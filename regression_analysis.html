@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
@@ -232,6 +231,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -328,24 +328,125 @@ reg_sample = pilot %&gt;%
       tip_percent = tip_amount/fare_amount
   ) %&gt;% 
   filter(fare_amount != 0,
-         tip_amount != 0)
+         fare_amount != 52,#We find that there might be an entry error since all records that fare_amount is 52 have different distance and duration#
+         tip_amount != 0,
+         duration &lt;= 360)
 
 reg_plot = reg_sample %&gt;% 
-  sample_frac(size = 0.1, replace = FALSE) %&gt;% 
-  filter(fare_amount != 0,
-         tip_amount != 0,
-         fare_amount != 52 #We find that there might be an entry error since all records that fare_amount is 52 have different distance and duration#
-         ) 
-
+  sample_frac(size = 0.1, replace = FALSE)
+ 
 reg_plot %&gt;% 
   ggplot(aes(x = trip_distance, y = fare_amount)) +
   geom_point(alpha = 0.3, color = &#39;blue&#39;) </code></pre>
 <p><img src="regression_analysis_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
 <pre class="r"><code>reg_plot %&gt;% 
-  filter(duration &lt;= 360) %&gt;% 
   ggplot(aes(x = duration, y = fare_amount)) +
   geom_point(alpha = 0.3, color = &#39;red&#39;)</code></pre>
 <p><img src="regression_analysis_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<<<<<<< HEAD
+<pre class="r"><code>fit1 = lm(fare_amount ~ duration + trip_distance , data = reg_sample ) %&gt;% 
+  broom::tidy() %&gt;% 
+  janitor::clean_names() %&gt;% 
+  mutate(p = round(p_value,3))
+
+fit1 = lm(fare_amount ~ duration + trip_distance , data = reg_sample ) 
+summary(fit1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = fare_amount ~ duration + trip_distance, data = reg_sample)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -62.920  -0.445  -0.068   0.280 205.534 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   2.040888   0.015310   133.3   &lt;2e-16 ***
+## duration      0.326338   0.001346   242.5   &lt;2e-16 ***
+## trip_distance 2.119713   0.004615   459.3   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.453 on 76072 degrees of freedom
+## Multiple R-squared:  0.9301, Adjusted R-squared:  0.9301 
+## F-statistic: 5.059e+05 on 2 and 76072 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>library(PerformanceAnalytics)
+library(mctest)
+diagnostics = reg_sample %&gt;% 
+  select(trip_distance, duration, fare_amount)</code></pre>
+<pre class="r"><code>par(mfrow=c(2,2))
+plot(fit1)</code></pre>
+<p><img src="regression_analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code>X = diagnostics %&gt;% select(trip_distance, duration)
+library(mctest)
+omcdiag(X,diagnostics$fare_amount)</code></pre>
+<pre><code>## 
+## Call:
+## omcdiag(x = X, y = diagnostics$fare_amount)
+## 
+## 
+## Overall Multicollinearity Diagnostics
+## 
+##                        MC Results detection
+## Determinant |X&#39;X|:         0.4325         0
+## Farrar Chi-Square:     63761.5711         1
+## Red Indicator:             0.7533         1
+## Sum of Lambda Inverse:     4.6243         0
+## Theil&#39;s Method:            0.2049         0
+## Condition Number:          5.2044         0
+## 
+## 1 --&gt; COLLINEARITY is detected by the test 
+## 0 --&gt; COLLINEARITY is not detected by the test</code></pre>
+<p>The calculated value of the Chi-square test statistic is found to be 63761.5711 and it is highly significant thereby implying the presence of multicollinearity in the model specification.</p>
+<p>This induces us to go for the next step of Farrar – Glauber test (F – test) for the location of the multicollinearity.</p>
+<pre class="r"><code>imcdiag(X, diagnostics$fare_amount)</code></pre>
+<pre><code>## 
+## Call:
+## imcdiag(x = X, y = diagnostics$fare_amount)
+## 
+## 
+## All Individual Multicollinearity Diagnostics Result
+## 
+##                  VIF    TOL       Wi  Fi Leamer    CVIF Klein IND1 IND2
+## trip_distance 2.3121 0.4325 99817.54 Inf 0.6576 -0.2641     0    0    1
+## duration      2.3121 0.4325 99817.54 Inf 0.6576 -0.2641     0    0    1
+## 
+## 1 --&gt; COLLINEARITY is detected by the test 
+## 0 --&gt; COLLINEARITY is not detected by the test
+## 
+## * all coefficients have significant t-ratios
+## 
+## R-square of y on all x: 0.9301 
+## 
+## * use method argument to check which regressors may be the reason of collinearity
+## ===================================</code></pre>
+<p>The VIF, TOL and Wi columns provide the diagnostic output for variance inflation factor, tolerance and Farrar-Glauber F-test respectively.</p>
+<pre class="r"><code>library(ppcor)
+pcor(X, method = &quot;pearson&quot;)</code></pre>
+<pre><code>## $estimate
+##               trip_distance  duration
+## trip_distance     1.0000000 0.7533247
+## duration          0.7533247 1.0000000
+## 
+## $p.value
+##               trip_distance duration
+## trip_distance             0        0
+## duration                  0        0
+## 
+## $statistic
+##               trip_distance duration
+## trip_distance        0.0000 315.9391
+## duration           315.9391   0.0000
+## 
+## $n
+## [1] 76075
+## 
+## $gp
+## [1] 0
+## 
+## $method
+## [1] &quot;pearson&quot;</code></pre>
+=======
 <pre class="r"><code>tip_plot = reg_sample %&gt;% 
   filter(payment_type == 1, do_boro == &#39;Manhattan&#39;, pu_boro == &#39;Manhattan&#39;, do_zone != &#39;Unknown&#39;, pu_zone != &#39;Unknown&#39;) %&gt;% 
 mutate(do_zone = forcats::fct_reorder(do_zone, tip_percent),
@@ -432,6 +533,7 @@ geom_text(data=do_label_data, aes(x=id, y = value, label= individual, hjust=hjus
 p</code></pre>
 <pre><code>## Warning: Removed 38687 rows containing missing values (geom_bar).</code></pre>
 <p><img src="regression_analysis_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+>>>>>>> 2e270cc3e923e1bd15c1a9141f97c5969490b994
 
 
 
