@@ -84,11 +84,12 @@ tip_plot %>%
 ```
 
 ```{r}
-lm = lm(fare_amount ~ duration + trip_distance + duration*trip_distance, data = reg_sample ) %>% 
+lm = lm(fare_amount ~ duration + trip_distance , data = reg_sample ) %>% 
   broom::tidy() %>% 
   janitor::clean_names() %>% 
   mutate(p = round(p_value,3))
-  data_frame()
 
+lm = lm(fare_amount ~ duration + trip_distance , data = reg_sample ) %>%
+  broom::glance()
 ```
 
