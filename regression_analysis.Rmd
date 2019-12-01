@@ -43,7 +43,12 @@ reg_plot = reg %>%
  
 reg_plot %>% 
   ggplot(aes(x = trip_distance, y = fare_amount)) +
-  geom_point(alpha = 0.3, color = 'skyblue') 
+  geom_point(alpha = 0.3, color = 'skyblue') +
+  labs(
+    title = "The distribution of fare amount by trip distance",
+    x = "Trip Distance",
+    y = "Fare Amount"
+  )
 
 
 
@@ -54,13 +59,13 @@ reg_plot %>%
 ```{r }
 reg_plot %>% 
   ggplot(aes(x = duration, y = fare_amount)) +
-  geom_point(alpha = 0.3, color = 'red')
+  geom_point(alpha = 0.3, color = 'red') +
+  labs(
+    title = "The distribution of fare amount by trip distance",
+    x = "Trip Duration",
+    y = "Fare Amount"
+  )
 ```
-
-
-
-
-
 
 
 
