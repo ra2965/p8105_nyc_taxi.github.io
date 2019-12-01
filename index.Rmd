@@ -19,7 +19,7 @@ In this report, we ask the question, NYC taxicabs, besides being part of the NYC
    
 * The visualization of the current facts and the trend of change of Yellow Cab in NY(in 2019?), including travel miles, fare, tips, time and frequent pick-up/drop-down locations.
    
-##The anticipated data sources are
+## The anticipated data sources are
 
 * [NYC TLC Trip Record Data](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page)
 * [NYC RNOAA](https://data.nodc.noaa.gov/cgi-bin/iso?id=gov.noaa.ncdc:C00861

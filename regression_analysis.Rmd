@@ -2,12 +2,13 @@
 title: "regression analysis"
 output: html_document
 ---
+# Motivation
+
+According to the codebook from the TLC website, the fare amount is defined as "The time-and-distance fare calculated by the meter". Therefore, we hope to explore the association between fare amount and trip distance and duration.  
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-```
 
-```{r }
 library(tidyverse)
 library(ggplot2)
 library(PerformanceAnalytics)
@@ -17,15 +18,18 @@ library(ppcor)
 pilot = read.csv("./data/pilot.csv")
 taxi_zone_lookup = read.csv("./data/taxi_zone_lookup.csv")
 weather_nyc_2018 = read.csv("./data/weather_nyc_2018.csv")
+```
 
+# Tidy the data
 
-  
+First of all, we meed to clean the dataset:
+By 
+```{r }
 reg = pilot %>% 
   mutate(
     duration = case_when(
     pu_date != do_date ~ do_min - pu_min + (60 *(do_hour - pu_hour + 24)),
     pu_date == do_date ~ do_min - pu_min + (60 *(do_hour - pu_hour) )
-
   ),
       tip_percent = tip_amount/fare_amount
   ) %>% 
@@ -34,12 +38,12 @@ reg = pilot %>%
          tip_amount != 0,
          duration <= 360)
 
-reg_plot = reg_sample %>% 
+reg_plot = reg %>% 
   sample_frac(size = 0.1, replace = FALSE)
  
 reg_plot %>% 
   ggplot(aes(x = trip_distance, y = fare_amount)) +
-  geom_point(alpha = 0.3, color = 'blue') 
+  geom_point(alpha = 0.3, color = 'skyblue') 
 
 
 
@@ -54,6 +58,12 @@ reg_plot %>%
 ```
 
 
+
+
+
+
+
+
 ```{r }
 fit1 = lm(fare_amount ~ duration + trip_distance , data = reg) %>% 
   broom::tidy() %>% 
@@ -62,6 +72,10 @@ fit1 = lm(fare_amount ~ duration + trip_distance , data = reg) %>%
 
 fit1 = lm(fare_amount ~ duration + trip_distance , data = reg ) 
 summary(fit1)
+```
+```{r}
+pred = reg %>% dplyr::select(trip_distance, duration)
+omcdiag(pred,reg$fare_amount)
 ```
 
 
@@ -78,7 +92,7 @@ pcor(pred, method = "pearson")
 
 
 ```{r }
-pred = reg %>% dplyr::select(trip_distance, duration)
+
 imcdiag(pred, reg$fare_amount)
 
 
