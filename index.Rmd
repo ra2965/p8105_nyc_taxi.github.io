@@ -33,7 +33,7 @@ what we found:
 ** In the overall description part, we found that:
 
 
-* For 2018, although we hypothesis that adverse weather event like low and high average daily temperature and precipitation will increase taxi usage, we found no significant association between weather and Taxi drives. However, Feburary did have more daily taxi usage compared to other month, we concluded that extreme bad weather in Feburary did sitimulate taxi service in New York City.
+* We found no significant association between weather and Taxi drives. However, Feburary did have more daily taxi usage compared to other month, we concluded that extreme bad weather in Feburary did sitimulate taxi service in New York City.
 
 * Heatmap:
 
@@ -44,4 +44,8 @@ what we found:
 * [NYC TLC Trip Record Data](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page)
 * [NYC RNOAA](https://data.nodc.noaa.gov/cgi-bin/iso?id=gov.noaa.ncdc:C00861
 )
-   
+
+## Discussion
+
+For 2018, although we hypothesis that adverse weather event like low and high average daily temperature and precipitation will increase taxi usage, we did find an obvious trend. This can be due to the limitation of sample size, as we only generate 12000 observation from the larger database. Also, facotrs like travel distance and time might affect taxi use, as people might only choose taxi drive for shorter distance. 
+
