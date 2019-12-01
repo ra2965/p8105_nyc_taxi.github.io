@@ -3,9 +3,15 @@ title: "regression analysis"
 output: html_document
 ---
 
-```{r message=FALSE}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+```{r }
 library(tidyverse)
 library(ggplot2)
+library(PerformanceAnalytics)
+library(mctest)
 
 pilot = read.csv("./data/pilot.csv")
 taxi_zone_lookup = read.csv("./data/taxi_zone_lookup.csv")
@@ -23,15 +29,13 @@ reg_sample = pilot %>%
       tip_percent = tip_amount/fare_amount
   ) %>% 
   filter(fare_amount != 0,
-         tip_amount != 0)
+         fare_amount != 52,#We find that there might be an entry error since all records that fare_amount is 52 have different distance and duration#
+         tip_amount != 0,
+         duration <= 360)
 
 reg_plot = reg_sample %>% 
-  sample_frac(size = 0.1, replace = FALSE) %>% 
-  filter(fare_amount != 0,
-         tip_amount != 0,
-         fare_amount != 52 #We find that there might be an entry error since all records that fare_amount is 52 have different distance and duration#
-         ) 
-
+  sample_frac(size = 0.1, replace = FALSE)
+ 
 reg_plot %>% 
   ggplot(aes(x = trip_distance, y = fare_amount)) +
   geom_point(alpha = 0.3, color = 'blue') 
@@ -42,54 +46,50 @@ reg_plot %>%
 
 
 
-```{r}
+```{r }
 reg_plot %>% 
-  filter(duration <= 360) %>% 
   ggplot(aes(x = duration, y = fare_amount)) +
   geom_point(alpha = 0.3, color = 'red')
 ```
 
 
-
-```{r}
-tip_plot = reg_sample %>% 
-  filter(payment_type == 1, do_boro == 'Manhattan', pu_boro == 'Manhattan', do_zone != 'Unknown', pu_zone != 'Unknown') %>% 
-mutate(do_zone = forcats::fct_reorder(do_zone, tip_percent),
-       pu_zone = forcats::fct_reorder(pu_zone, tip_percent)) %>% 
-  drop_na(do_zone, pu_zone)
-
-tip_plot %>% 
-    ggplot(aes(x = do_zone, y = tip_percent,color = do_zone)) +
-  geom_boxplot(na.rm = TRUE, outlier.size = 0.1) +
-  scale_y_continuous(
-    limits = c(0,0.4)
-  ) +
-  theme(axis.text.x = element_text(angle = 70, hjust = 1), 
-        legend.position = "none") +
-  viridis::scale_color_viridis(discrete = TRUE)
-
-```
-
-```{r}
-
-tip_plot %>% 
-    ggplot(aes(x = pu_zone, y = tip_percent, color = pu_zone)) +
-  geom_boxplot(na.rm = TRUE, outlier.size = 0.1) +
-  scale_y_continuous(
-    limits = c(0,0.4)
-  ) +
-  theme(axis.text.x = element_text(angle = 70, hjust = 1),
-        legend.position = "none") +
-  viridis::scale_color_viridis(discrete = TRUE)
-```
-
-```{r}
-lm = lm(fare_amount ~ duration + trip_distance , data = reg_sample ) %>% 
+```{r }
+fit1 = lm(fare_amount ~ duration + trip_distance , data = reg_sample ) %>% 
   broom::tidy() %>% 
   janitor::clean_names() %>% 
   mutate(p = round(p_value,3))
 
-lm = lm(fare_amount ~ duration + trip_distance , data = reg_sample ) %>%
-  broom::glance()
+fit1 = lm(fare_amount ~ duration + trip_distance , data = reg_sample ) 
+summary(fit1)
+```
+
+
+```{r}
+par(mfrow=c(2,2))
+plot(fit1)
+
+```
+
+```{r }
+diagnostics = reg_sample %>% 
+  select(-trip_distance, -duration)
+X = diagnostics[(,c(1.2))] 
+
+library(mctest)
+omcdiag(X,reg_sample$fare_amount)
+```
+The calculated value of the Chi-square test statistic is found to be 63761.5711 and it is highly significant thereby implying the presence of multicollinearity in the model specification.
+
+This induces us to go for the next step of Farrar – Glauber test (F – test) for the location of the multicollinearity.
+```{r }
+
+imcdiag(X, diagnostics$fare_amount)
+```
+
+The VIF, TOL and Wi columns provide the diagnostic output for variance inflation factor, tolerance and Farrar-Glauber F-test respectively. 
+```{r }
+library(ppcor)
+pcor(X, method = "pearson")
+
 ```
 
