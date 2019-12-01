@@ -10,9 +10,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Yuqing Xue" />
 
+<meta name="date" content="2019-11-30" />
 
-<title>NYC Yellow Cab</title>
+<title>weather and drive amount</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -20,9 +22,6 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -251,63 +250,6 @@ $(document).ready(function () {
 
 
 
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
-
-
 
 </head>
 
@@ -315,16 +257,6 @@ div.tocify {
 
 
 <div class="container-fluid main-container">
-
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -374,23 +306,150 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">NYC Yellow Cab</h1>
+<h1 class="title toc-ignore">weather and drive amount</h1>
+<h4 class="author">Yuqing Xue</h4>
+<h4 class="date">11/30/2019</h4>
 
 </div>
 
 
-<div id="this-is-nyc" class="section level1">
-<h1>This is NYC</h1>
-<div class="figure">
-<img src="images/taxi.png" />
+<p>read in data</p>
+<pre class="r"><code>pilot=read_csv(file = &quot;./data/pilot.csv&quot;)</code></pre>
+<pre><code>## Warning: Missing column names filled in: &#39;X1&#39; [1]</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   store_and_fwd_flag = col_character(),
+##   pu_boro = col_character(),
+##   pu_zone = col_character(),
+##   do_boro = col_character(),
+##   do_zone = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<p>plot O</p>
+<pre class="r"><code> plot_df=pilot%&gt;%
+  mutate(
+  average_temp=(tmin+tmax)/2)
 
-</div>
-</div>
+cab=pilot%&gt;%
+  group_by(month)%&gt;%count(pu_date)%&gt;%
+  mutate(daily_drive=n)%&gt;%
+  ungroup(month)</code></pre>
+<p>join dataset</p>
+<pre class="r"><code>plot_data = 
+  left_join(plot_df, cab, by = c(&quot;month&quot;,&quot;pu_date&quot;))%&gt;%
+  select(month, pu_date,average_temp, daily_drive,prcp)%&gt;%
+  mutate(month=as.factor(month),
+         month=recode_factor(month, &#39;1&#39;=&quot;January&quot;, &#39;2&#39;=&quot;Feburary&quot;,&#39;3&#39;=&quot;March&quot;,&#39;4&#39;=&#39;April&#39;,&#39;5&#39;=&#39;May&#39;,&#39;6&#39;=&#39;June&#39;,&#39;7&#39;=&#39;July&#39;,&#39;8&#39;=&#39;August&#39;,&#39;9&#39;=&#39;September&#39;,&#39;10&#39;=&#39;October&#39;,&#39;11&#39;=&#39;November&#39;,&#39;12&#39;=&#39;December&#39;))</code></pre>
+<pre class="r"><code>weather_drive=plot_data%&gt;%
+  ggplot(aes(x=average_temp, y=daily_drive, frame_vars(month)))+
+  geom_point(aes(size=prcp,colour = month))+
+   labs(title = &#39;Month: {closest_state}&#39;,
+       x = &#39;Daily average temperature for year 2018&#39;, 
+       y = &#39;Daily drive amount&#39;,
+       colour = &#39;Month&#39;,
+       size=&#39;precipitation&#39;
+       ) +
+  transition_states(month,2,1)+
+  enter_appear()+
+  exit_fade()
+   
+animate(weather_drive, duration=7)</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<p><img src="weather_and_drive_files/figure-html/unnamed-chunk-4-1.gif" /><!-- --></p>
+<p>precipitaiton and drive amout</p>
+<pre class="r"><code>precipitation=
+  left_join(pilot, cab, by = c(&quot;month&quot;,&quot;pu_date&quot;))%&gt;%
+  select(month, pu_date, prcp, daily_drive)%&gt;%
+  mutate(month=as.factor(month),
+         month=recode_factor(month, &#39;1&#39;=&quot;January&quot;, &#39;2&#39;=&quot;Feburary&quot;,&#39;3&#39;=&quot;March&quot;,&#39;4&#39;=&#39;April&#39;,&#39;5&#39;=&#39;May&#39;,&#39;6&#39;=&#39;June&#39;,&#39;7&#39;=&#39;July&#39;,&#39;8&#39;=&#39;August&#39;,&#39;9&#39;=&#39;September&#39;,&#39;10&#39;=&#39;October&#39;,&#39;11&#39;=&#39;November&#39;,&#39;12&#39;=&#39;December&#39;))</code></pre>
+<p>making plot</p>
+<pre class="r"><code>prcp_drive=precipitation%&gt;%
+  ggplot(aes(x=prcp, y=daily_drive, frame_vars(month)))+
+  geom_point(aes(colour = month))+
+   labs(title = &#39;Month: {closest_state}&#39;,
+       x = &#39;Daily precipitation for year 2018&#39;, 
+       y = &#39;Daily drive amount&#39;,
+       colour = &#39;Month&#39;
+       ) +
+  transition_states(month,2,1)+
+  enter_appear()+
+  exit_fade()
+   
+animate(prcp_drive, duration=7)</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).
+
+## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<p><img src="weather_and_drive_files/figure-html/unnamed-chunk-6-1.gif" /><!-- --> ```</p>
 
 
 
-</div>
-</div>
 
 </div>
 
@@ -423,32 +482,6 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

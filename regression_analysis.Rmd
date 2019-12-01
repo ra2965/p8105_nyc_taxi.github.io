@@ -90,6 +90,5 @@ lm = lm(fare_amount ~ duration + trip_distance + duration*trip_distance, data = 
   mutate(p = round(p_value,3))
   data_frame()
 
-
 ```
 

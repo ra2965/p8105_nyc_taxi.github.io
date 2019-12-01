@@ -8,9 +8,7 @@ navbar:
           - text: "Regression  Analysis"
             href: regression_analysis.html
           - text: "Weather and Drive"
-            href: weather-and-drive.html
-          - text: "Heatmap"
-            href: heatmap.html
+            href: weather_and_drive.html
           - text: "Heatmap Time Desitination"
             href: heatmap_time_destination.html
           - text: "Merge"

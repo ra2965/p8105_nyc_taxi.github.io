@@ -9,3 +9,4 @@ output:
 
 # This is NYC
 
+![](images/taxi.png)
