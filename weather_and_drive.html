@@ -287,14 +287,7 @@ $(document).ready(function () {
       <a href="regression_analysis.html">Regression  Analysis</a>
     </li>
     <li>
-<<<<<<< HEAD
       <a href="weather_and_drive.html">Weather and Drive</a>
-=======
-      <a href="weather-and-drive.html">Weather and Drive</a>
-    </li>
-    <li>
-      <a href="heatmap.html">Heatmap</a>
->>>>>>> b83a986b160e1efb4ad535f4fe7ba260400ba644
     </li>
     <li>
       <a href="heatmap_time_destination.html">Heatmap Time Desitination</a>
@@ -320,30 +313,12 @@ $(document).ready(function () {
 </div>
 
 
-<<<<<<< HEAD
-=======
 <pre class="r"><code>knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(gganimate)
 library(ggplot2)</code></pre>
-<<<<<<< HEAD
 <p>In this part, we want to see whether there is a trend between weather and yellow cab use. We use the weather data including temperature and precipitation data in 2018. For temperature, we use average temperature as the mean of maximum temperarure and miniminum temperature in each day.</p>
-=======
->>>>>>> b83a986b160e1efb4ad535f4fe7ba260400ba644
-<p>read in data</p>
->>>>>>> f9f3ceb84f5566689f4a51d2c7971ed208e135bb
 <pre class="r"><code>pilot=read_csv(file = &quot;./data/pilot.csv&quot;)</code></pre>
-<pre><code>## Warning: Missing column names filled in: &#39;X1&#39; [1]</code></pre>
-<pre><code>## Parsed with column specification:
-## cols(
-##   .default = col_double(),
-##   store_and_fwd_flag = col_character(),
-##   pu_boro = col_character(),
-##   pu_zone = col_character(),
-##   do_boro = col_character(),
-##   do_zone = col_character()
-## )</code></pre>
-<pre><code>## See spec(...) for full column specifications.</code></pre>
 <pre class="r"><code> plot_df=pilot%&gt;%
   mutate(
   average_temp=(tmin+tmax)/2)
@@ -372,42 +347,7 @@ cab=pilot%&gt;%
   exit_fade()
    
 animate(weather_drive, duration=7)</code></pre>
-<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).
-
-## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
-<p><img src="weather_and_drive_files/figure-html/unnamed-chunk-4-1.gif" /><!-- --></p>
+<p><img src="weather_and_drive_files/figure-html/unnamed-chunk-5-1.gif" /><!-- --></p>
 <p>We then want to further look at the association between precipitation, as we guess that people might take more taxi in rainy days. This time, we make a panel of scatterplot for each month in 2018, with precipitation as x-axis and daily drive amount in y-axis. Still, there is no obvious difference in the taxi use.</p>
 <pre class="r"><code>precipitation=
   left_join(pilot, cab, by = c(&quot;month&quot;,&quot;pu_date&quot;))%&gt;%
@@ -424,8 +364,7 @@ animate(weather_drive, duration=7)</code></pre>
        ) +
   facet_grid(month ~ .)
 prcp_drive</code></pre>
-<pre><code>## Warning: Removed 2 rows containing missing values (geom_point).</code></pre>
-<p><img src="weather_and_drive_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="weather_and_drive_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 
 
 
