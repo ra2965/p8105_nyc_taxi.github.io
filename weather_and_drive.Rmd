@@ -5,21 +5,22 @@ date: "11/30/2019"
 output: html_document
 ---
 
-```{r message = FALSE, warning = FALSE}
+```{r echo=FALSE, message = FALSE, warning = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(gganimate)
 library(ggplot2)
 ```
+# Temperature and Taxi Use
 
 In this part, we want to see whether there is a trend between weather and yellow cab use. We use the weather data including temperature and precipitation data in 2018. For temperature, we use average temperature as the mean of maximum temperarure and miniminum temperature in each day. 
 
-```{r message = FALSE, warning = FALSE}
+```{r echo=FALSE, message = FALSE, warning = FALSE}
 pilot=read_csv(file = "./data/pilot.csv")
 ```
 
 
-```{r message = FALSE, warning = FALSE}
+```{r echo=FALSE, message = FALSE, warning = FALSE}
  plot_df=pilot%>%
   mutate(
   average_temp=(tmin+tmax)/2)
@@ -32,7 +33,7 @@ cab=pilot%>%
 ```
 
 
-```{r message = FALSE, warning = FALSE}
+```{r echo=FALSE, message = FALSE, warning = FALSE}
 plot_data = 
   left_join(plot_df, cab, by = c("month","pu_date"))%>%
   select(month, pu_date,average_temp, daily_drive,prcp)%>%
@@ -42,9 +43,11 @@ plot_data =
 
 ```
 
-Here we make an animation plot to show the daily drive amount and average daily temperature for each month. Although we hypothesis that cold weather and hot weather might have more taxi use, there is no obvious difference for different daily temperature. There is a slightly increase daily taxi usage in Feburary.
+Here we make an animation plot to show the daily drive amount and average daily temperature for each month.The size of the dots shows the precipitaiton for that day which help to identify whether rainy weather also increase taxi use. 
 
-```{r message = FALSE, warning = FALSE}
+Although we hypothesis that cold weather and hot weather might have more taxi use, there is no obvious difference for different daily temperature. There is a slightly increase daily taxi usage in Feburary.
+
+```{r echo=FALSE, message = FALSE, warning = FALSE}
 weather_drive=plot_data%>%
   ggplot(aes(x=average_temp, y=daily_drive, frame_vars(month)))+
   geom_point(aes(size=prcp,colour = month))+
@@ -61,9 +64,12 @@ weather_drive=plot_data%>%
 animate(weather_drive, duration=7)
 ```
 
+# Precipitation and Taxi Use
+
 We then want to further look at the association between precipitation, as we guess that people might take more taxi in rainy days. This time, we make a panel of scatterplot for each month in 2018, with precipitation as x-axis and daily drive amount in y-axis. 
+
 Still, there is no obvious difference in the taxi use. 
-```{r message = FALSE, warning = FALSE}
+```{r echo=FALSE, message = FALSE, warning = FALSE}
 precipitation=
   left_join(pilot, cab, by = c("month","pu_date"))%>%
   select(month, pu_date, prcp, daily_drive)%>%
@@ -73,16 +79,15 @@ precipitation=
   
 ```
 
-```{r message = FALSE, warning = FALSE}
+```{r echo=FALSE, message = FALSE, warning = FALSE}
 prcp_drive=precipitation%>%
   ggplot(aes(x=prcp, y=daily_drive, color=month))+
   geom_point(aes(colour = month))+
-   labs(title = 'Month: {closest_state}',
+   labs(title = 'Precipitation and Taxi Use in 2018',
        x = 'Daily precipitation for year 2018', 
        y = 'Daily drive amount',
        colour = 'Month'
-       ) +
-  facet_grid(month ~ .)
+       ) 
 prcp_drive
 
 ```
