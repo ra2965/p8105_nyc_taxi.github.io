@@ -12,6 +12,7 @@ library(tidyverse)
 library(ggplot2)
 library(PerformanceAnalytics)
 library(mctest)
+library(ppcor)
 
 pilot = read.csv("./data/pilot.csv")
 taxi_zone_lookup = read.csv("./data/taxi_zone_lookup.csv")
@@ -72,24 +73,30 @@ plot(fit1)
 
 ```{r }
 diagnostics = reg_sample %>% 
-  select(-trip_distance, -duration)
-X = diagnostics[(,c(1.2))] 
+  select(trip_distance, duration, fare_amount)
+X = diagnostics %>% 
+  select(trip_distance, duration)
 
-library(mctest)
 omcdiag(X,reg_sample$fare_amount)
 ```
 The calculated value of the Chi-square test statistic is found to be 63761.5711 and it is highly significant thereby implying the presence of multicollinearity in the model specification.
 
+
 This induces us to go for the next step of Farrar – Glauber test (F – test) for the location of the multicollinearity.
 ```{r }
-
 imcdiag(X, diagnostics$fare_amount)
+
 ```
 
 The VIF, TOL and Wi columns provide the diagnostic output for variance inflation factor, tolerance and Farrar-Glauber F-test respectively. 
 ```{r }
-library(ppcor)
 pcor(X, method = "pearson")
 
-```
+```  
+  
+
+
+
+
+
 
