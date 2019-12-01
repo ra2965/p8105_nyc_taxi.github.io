@@ -35,7 +35,7 @@ reg_plot %>%
   geom_point()
 ```
 
-![](regression_analysis_files/figure-markdown_github/unnamed-chunk-1-1.png)
+![](regression_analysis_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
 
 ``` r
 reg_plot %>% 
@@ -44,7 +44,7 @@ reg_plot %>%
   geom_point()
 ```
 
-![](regression_analysis_files/figure-markdown_github/unnamed-chunk-2-1.png)
+![](regression_analysis_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
 ``` r
 tip_plot = reg_sample %>% 
@@ -64,7 +64,7 @@ tip_plot %>%
   viridis::scale_color_viridis(discrete = TRUE)
 ```
 
-![](regression_analysis_files/figure-markdown_github/unnamed-chunk-3-1.png)
+![](regression_analysis_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
 ``` r
 tip_plot %>% 
@@ -78,4 +78,77 @@ tip_plot %>%
   viridis::scale_color_viridis(discrete = TRUE)
 ```
 
-![](regression_analysis_files/figure-markdown_github/unnamed-chunk-4-1.png)
+![](regression_analysis_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
+``` r
+label_data <- tip_plot %>% 
+  distinct(pu_zone) %>% 
+  mutate(id = seq(1,64), 
+         individual = pu_zone, 
+         value = sample(0, 1), 64, replace = FALSE)
+
+number_of_bar <- nrow(label_data)
+angle <-  90 - 360 * (label_data$id-0.5) /number_of_bar
+      
+ 
+# calculate the alignment of labels: right or left
+label_data$hjust<-ifelse( angle < -90, 1, 0)
+ 
+# flip angle BY to make them readable
+label_data$angle<-ifelse(angle < -90, angle+180, angle)
+```
+
+``` r
+p <- ggplot(tip_plot, aes(x=pu_zone, y=tip_percent)) +
+  geom_bar(stat = "identity", fill = alpha("skyblue", 0.7)) +
+ylim(-100, 120) +
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    panel.grid = element_blank(),
+    plot.margin = unit(rep(-1,4), "cm")
+  ) +
+  coord_polar(start = 0) +
+geom_text(data=label_data, aes(x=id, y = value, label= individual, hjust=hjust), color="black", fontface="bold",alpha=0.6, size=2.5, angle= label_data$angle, inherit.aes = FALSE ) 
+  
+p
+```
+
+    ## Warning: Removed 41103 rows containing missing values (geom_bar).
+
+![](regression_analysis_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+``` r
+do_label_data <- tip_plot %>% 
+  distinct(do_zone) %>% 
+  mutate(id = seq(1,66), 
+         individual = do_zone, 
+         value = sample(0, 1), 66, replace = FALSE)
+
+number_of_bar <- nrow(do_label_data)
+angle <-  90 - 360 * (do_label_data$id-0.5) /number_of_bar
+do_label_data$hjust<-ifelse( angle < -90, 1, 0)
+ 
+# flip angle BY to make them readable
+do_label_data$angle<-ifelse(angle < -90, angle+180, angle)
+
+p <- ggplot(tip_plot, aes(x=do_zone, y=tip_percent)) +
+  geom_bar(stat = "identity", fill = alpha("skyblue", 0.7)) +
+ylim(-100, 120) +
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    panel.grid = element_blank(),
+    plot.margin = unit(rep(-1,4), "cm")
+  ) +
+  coord_polar(start = 0) +
+geom_text(data=do_label_data, aes(x=id, y = value, label= individual, hjust=hjust), color="black", fontface="bold",alpha=0.6, size=2.5, angle= do_label_data$angle, inherit.aes = FALSE ) 
+  
+p
+```
+
+    ## Warning: Removed 38687 rows containing missing values (geom_bar).
+
+![](regression_analysis_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
