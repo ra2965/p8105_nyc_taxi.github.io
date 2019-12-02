@@ -3,4 +3,9 @@
 .RData
 .Ruserdata
 p8105_nyc_taxi.github.io.Rproj
+<<<<<<< HEAD
 .DS_Store
+=======
+/raw_data
+exploratory.Rmd
+>>>>>>> 70188fd82d2d98951dcfd06421124c81420424c8

@@ -1,0 +1,116 @@
+---
+title: "10 Year Overall Analysis"
+author: "Xun Wang"
+date: "12/2/2019"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+
+knitr::opts_chunk$set(
+	echo = TRUE,
+	warning = FALSE,
+	fig.width = 8, 
+  fig.height = 6,
+  out.width = "90%"
+)
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+```
+
+### 1. Data Import and Tidy
+
+The code chunk below imports and tidies the overall datasets from 2009 to 2018.
+
+```{r overall_df, message=FALSE}
+file_name = list.files(path = "data/yearly_summary", pattern = "_taxi_trip_summary")
+
+overall_df_raw = map(.x = file_name, ~ read_csv(str_c("data/yearly_summary/", .x))) 
+
+overall_df = 
+  overall_df_raw %>% 
+  bind_rows() %>%
+  mutate(
+    time = str_remove(file, "yellow_tripdata_"),
+    time = str_remove(time, ".csv"),
+    total_ride_million = total_ride/1000000,
+    total_passenger_million = total_passenger/1000000,
+    total_fare_million = total_fare/1000000) %>% 
+  separate(time, into = c("year", "month"), sep = "_", remove = TRUE) %>%
+  #filter(year != 2018) %>% 
+  select(year, month, total_ride_million, total_passenger_million, total_fare_million, mean_fare, median_fare)
+
+overall_df
+```
+
+### 2. 10-Year Overall Analysis
+
+To study changes of NYC yellow taxi usage in the past ten years, we analyze total rides, total passenger numbers, total income and average income for one trip between 2009 and 2018. The plots are as below.
+
+The code chunk below plots **how the NYC yellow taxi total rides change with time**.
+
+```{r total_ride_plot}
+total_ride_plot = 
+  overall_df %>% 
+  ggplot(aes(year, weight = total_ride_million, fill = month)) +
+  geom_bar(position="stack") +
+  labs(title="NYC Yellow Taxi Total Rides vs. Time", 
+       y = "total rides (million)",
+       caption = "Data from the NYC TLC Data")
+
+total_ride_plot
+```
+
+The code chunk below plots **how the NYC yellow taxi total passengers change with time**.
+
+```{r total_passenger_plot}
+total_passenger_plot = 
+  overall_df %>% 
+  ggplot(aes(x= month, y = total_passenger_million, color = year, group = year)) +
+  geom_line(size = 2) +
+  labs(title="NYC Yellow Taxi Passenger vs. Time", 
+       y = "total passenger (million)",
+       caption = "Data from the NYC TLC Data")
+
+total_passenger_plot
+```
+
+The code chunk below plots **how the NYC yellow taxi total income change with time**.
+
+```{r total_fare_plot}
+total_fare_plot = 
+  overall_df %>% 
+  ggplot(aes(year, weight = total_fare_million, fill = month)) +
+  geom_bar(position="stack") +
+  labs(title="NYC Yellow Taxi Total Income vs. Time", 
+       y = "total income (million US dollar)",
+       caption = "Data from the NYC TLC Data")
+
+total_fare_plot
+```
+
+The code chunk below plots **how the NYC yellow taxi average fare for a single trip change with time**.
+
+```{r ave_fare_plot}
+ave_fare_plot = 
+  overall_df %>% 
+  ggplot(aes(x= month, y = mean_fare, color = year, group = year)) +
+  geom_line(size = 2) +
+  labs(title="NYC Yellow Taxi Average Fare vs. Time", 
+       y = "average fare for one trip (US dollar)",
+       caption = "Data from the NYC TLC Data")
+
+ave_fare_plot
+```
+
+
+
