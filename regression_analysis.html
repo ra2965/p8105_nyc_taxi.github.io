@@ -11,11 +11,11 @@
 
 
 
-<title>Regression Analysis</title>
+<title>regression analysis</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/simplex.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -102,33 +102,33 @@ summary {
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
-  padding-top: 41px;
+  padding-top: 51px;
   padding-bottom: 40px;
 }
 /* offset scroll position for anchor links (for fixed navbar)  */
 .section h1 {
-  padding-top: 46px;
-  margin-top: -46px;
+  padding-top: 56px;
+  margin-top: -56px;
 }
 .section h2 {
-  padding-top: 46px;
-  margin-top: -46px;
+  padding-top: 56px;
+  margin-top: -56px;
 }
 .section h3 {
-  padding-top: 46px;
-  margin-top: -46px;
+  padding-top: 56px;
+  margin-top: -56px;
 }
 .section h4 {
-  padding-top: 46px;
-  margin-top: -46px;
+  padding-top: 56px;
+  margin-top: -56px;
 }
 .section h5 {
-  padding-top: 46px;
-  margin-top: -46px;
+  padding-top: 56px;
+  margin-top: -56px;
 }
 .section h6 {
-  padding-top: 46px;
-  margin-top: -46px;
+  padding-top: 56px;
+  margin-top: -56px;
 }
 .dropdown-submenu {
   position: relative;
@@ -287,6 +287,12 @@ $(document).ready(function () {
     <li>
       <a href="weather_and_drive.html">Weather and Drive</a>
     </li>
+    <li>
+      <a href="heatmap_time_destination.html">Heatmap Time Desitination</a>
+    </li>
+    <li>
+      <a href="merge_pilot.html">Merge</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -298,121 +304,129 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Regression Analysis</h1>
+<h1 class="title toc-ignore">regression analysis</h1>
 
 </div>
 
 
-<div id="motivation" class="section level1">
-<h1>Motivation</h1>
-<div id="fare-amount" class="section level2">
-<h2>Fare Amount</h2>
-<p>The initial charge of NYC Yellow Cab is 2.5 dollars. However, the rule of standard metered fair is too complicated. It is difficult for a passenger to estimate the fare amount refering to such complext instructions.</p>
-<div class="figure">
-<embed src="https://www1.nyc.gov/site/tlc/passengers/taxi-fare.page" />
-<p class="caption">NYC Taxi Fare</p>
-</div>
-<p>According to the codebook from the TLC website, the fare amount is defined as “The time-and-distance fare calculated by the meter”. Therefore, we hope to explore the association between fare amount and trip distance and duration. If possible, we also want to roughly predict the fare amount by duration and distance.</p>
-<p>Data was queried from year 2018. The duration is calculated from drop-off time and pick-up time.</p>
-<div id="scatterplot-of-fare-amount" class="section level3">
-<h3>Scatterplot of fare amount</h3>
-<p><img src="regression_analysis_files/figure-html/unnamed-chunk-1-1.png" width="672" /> According to the scatterplots, there is a positive relationship among trip distance and fare amount. trip duration is also positively associated with fare amount.</p>
-</div>
-<div id="building-linear-regression-model-of-fare-amount" class="section level3">
-<h3>Building linear regression model of fare amount</h3>
-<p>The outcome of linear regression model is fare amount, and the predictors include trip distance and duration.</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left">term</th>
-<th align="right">estimate</th>
-<th align="right">std.error</th>
-<th align="right">statistic</th>
-<th align="right">p.value</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="right">2.0619564</td>
-<td align="right">0.0116049</td>
-<td align="right">177.6801</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">duration</td>
-<td align="right">0.3339642</td>
-<td align="right">0.0010225</td>
-<td align="right">326.6167</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">trip_distance</td>
-<td align="right">2.0691460</td>
-<td align="right">0.0034875</td>
-<td align="right">593.3077</td>
-<td align="right">0</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr class="header">
-<th align="right">r.squared</th>
-<th align="right">adj.r.squared</th>
-<th align="right">sigma</th>
-<th align="right">statistic</th>
-<th align="right">p.value</th>
-<th align="right">df</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">0.9384185</td>
-<td align="right">0.9384174</td>
-<td align="right">2.344449</td>
-<td align="right">874705.2</td>
-<td align="right">0</td>
-<td align="right">3</td>
-</tr>
-<tr class="even">
-<td align="right">The p-value</td>
-<td align="right">of the two coeff</td>
-<td align="right">icients are</td>
-<td align="right">both &lt; 0.05</td>
-<td align="right">. It is se</td>
-<td align="right">en that both variables (duration, trip_distance) are statistically significant at 5 % level of significance.</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div id="diagnostics" class="section level2">
-<h2>Diagnostics</h2>
-<p>Further we can plot the model diagnostic checking for other problems such as normality of error term, heteroscedasticity etc. <img src="regression_analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<p>The plots indicate a lot of outliers, which make the model violate the linear regression assumptions.</p>
-<p>In addition, we realized that the duration will increase if the trip distance increased. Therefore, possibly there is multicollinearity problem in this model as well. For further diagnosis of the problem, let us first look at the pair-wise correlation among the explanatory variables.</p>
+<pre class="r"><code>library(tidyverse)
+library(ggplot2)
+
+pilot = read.csv(&quot;./data/pilot.csv&quot;)
+taxi_zone_lookup = read.csv(&quot;./data/taxi_zone_lookup.csv&quot;)
+weather_nyc_2018 = read.csv(&quot;./data/weather_nyc_2018.csv&quot;)
+
+
+  
+reg_sample = pilot %&gt;% 
+  mutate(
+    duration = case_when(
+    pu_date != do_date ~ do_min - pu_min + (60 *(do_hour - pu_hour + 24)),
+    pu_date == do_date ~ do_min - pu_min + (60 *(do_hour - pu_hour) )
+
+  ),
+      tip_percent = tip_amount/fare_amount
+  ) %&gt;% 
+  filter(fare_amount != 0,
+         fare_amount != 52,#We find that there might be an entry error since all records that fare_amount is 52 have different distance and duration#
+         tip_amount != 0,
+         duration &lt;= 360)
+
+reg_plot = reg_sample %&gt;% 
+  sample_frac(size = 0.1, replace = FALSE)
+ 
+reg_plot %&gt;% 
+  ggplot(aes(x = trip_distance, y = fare_amount)) +
+  geom_point(alpha = 0.3, color = &#39;blue&#39;) </code></pre>
+<p><img src="regression_analysis_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<pre class="r"><code>reg_plot %&gt;% 
+  ggplot(aes(x = duration, y = fare_amount)) +
+  geom_point(alpha = 0.3, color = &#39;red&#39;)</code></pre>
+<p><img src="regression_analysis_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<<<<<<< HEAD
+<pre class="r"><code>fit1 = lm(fare_amount ~ duration + trip_distance , data = reg_sample ) %&gt;% 
+  broom::tidy() %&gt;% 
+  janitor::clean_names() %&gt;% 
+  mutate(p = round(p_value,3))
+
+fit1 = lm(fare_amount ~ duration + trip_distance , data = reg_sample ) 
+summary(fit1)</code></pre>
 <pre><code>## 
 ## Call:
-## omcdiag(x = pred, y = reg$fare_amount)
+## lm(formula = fare_amount ~ duration + trip_distance, data = reg_sample)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -62.920  -0.445  -0.068   0.280 205.534 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   2.040888   0.015310   133.3   &lt;2e-16 ***
+## duration      0.326338   0.001346   242.5   &lt;2e-16 ***
+## trip_distance 2.119713   0.004615   459.3   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.453 on 76072 degrees of freedom
+## Multiple R-squared:  0.9301, Adjusted R-squared:  0.9301 
+## F-statistic: 5.059e+05 on 2 and 76072 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>library(PerformanceAnalytics)
+library(mctest)
+diagnostics = reg_sample %&gt;% 
+  select(trip_distance, duration, fare_amount)</code></pre>
+<pre class="r"><code>par(mfrow=c(2,2))
+plot(fit1)</code></pre>
+<p><img src="regression_analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code>X = diagnostics %&gt;% select(trip_distance, duration)
+library(mctest)
+omcdiag(X,diagnostics$fare_amount)</code></pre>
+<pre><code>## 
+## Call:
+## omcdiag(x = X, y = diagnostics$fare_amount)
 ## 
 ## 
 ## Overall Multicollinearity Diagnostics
 ## 
 ##                        MC Results detection
-## Determinant |X&#39;X|:         0.4295         0
-## Farrar Chi-Square:     97015.0331         1
-## Red Indicator:             0.7553         1
-## Sum of Lambda Inverse:     4.6563         0
-## Theil&#39;s Method:            0.2025         0
-## Condition Number:          5.0686         0
+## Determinant |X&#39;X|:         0.4325         0
+## Farrar Chi-Square:     63761.5711         1
+## Red Indicator:             0.7533         1
+## Sum of Lambda Inverse:     4.6243         0
+## Theil&#39;s Method:            0.2049         0
+## Condition Number:          5.2044         0
 ## 
 ## 1 --&gt; COLLINEARITY is detected by the test 
 ## 0 --&gt; COLLINEARITY is not detected by the test</code></pre>
+<p>The calculated value of the Chi-square test statistic is found to be 63761.5711 and it is highly significant thereby implying the presence of multicollinearity in the model specification.</p>
+<p>This induces us to go for the next step of Farrar – Glauber test (F – test) for the location of the multicollinearity.</p>
+<pre class="r"><code>imcdiag(X, diagnostics$fare_amount)</code></pre>
+<pre><code>## 
+## Call:
+## imcdiag(x = X, y = diagnostics$fare_amount)
+## 
+## 
+## All Individual Multicollinearity Diagnostics Result
+## 
+##                  VIF    TOL       Wi  Fi Leamer    CVIF Klein IND1 IND2
+## trip_distance 2.3121 0.4325 99817.54 Inf 0.6576 -0.2641     0    0    1
+## duration      2.3121 0.4325 99817.54 Inf 0.6576 -0.2641     0    0    1
+## 
+## 1 --&gt; COLLINEARITY is detected by the test 
+## 0 --&gt; COLLINEARITY is not detected by the test
+## 
+## * all coefficients have significant t-ratios
+## 
+## R-square of y on all x: 0.9301 
+## 
+## * use method argument to check which regressors may be the reason of collinearity
+## ===================================</code></pre>
+<p>The VIF, TOL and Wi columns provide the diagnostic output for variance inflation factor, tolerance and Farrar-Glauber F-test respectively.</p>
+<pre class="r"><code>library(ppcor)
+pcor(X, method = &quot;pearson&quot;)</code></pre>
 <pre><code>## $estimate
 ##               trip_distance  duration
-## trip_distance     1.0000000 0.7552958
-## duration          0.7552958 1.0000000
+## trip_distance     1.0000000 0.7533247
+## duration          0.7533247 1.0000000
 ## 
 ## $p.value
 ##               trip_distance duration
@@ -421,53 +435,105 @@ $(document).ready(function () {
 ## 
 ## $statistic
 ##               trip_distance duration
-## trip_distance        0.0000 390.4774
-## duration           390.4774   0.0000
+## trip_distance        0.0000 315.9391
+## duration           315.9391   0.0000
 ## 
 ## $n
-## [1] 114804
+## [1] 76075
 ## 
 ## $gp
 ## [1] 0
 ## 
 ## $method
 ## [1] &quot;pearson&quot;</code></pre>
-<pre><code>## 
-## Call:
-## imcdiag(x = pred, y = reg$fare_amount)
-## 
-## 
-## All Individual Multicollinearity Diagnostics Result
-## 
-##                  VIF    TOL       Wi  Fi Leamer    CVIF Klein IND1 IND2
-## trip_distance 2.3281 0.4295 152472.6 Inf 0.6554 -0.2273     0    0    1
-## duration      2.3281 0.4295 152472.6 Inf 0.6554 -0.2273     0    0    1
-## 
-## 1 --&gt; COLLINEARITY is detected by the test 
-## 0 --&gt; COLLINEARITY is not detected by the test
-## 
-## * all coefficients have significant t-ratios
-## 
-## R-square of y on all x: 0.9384 
-## 
-## * use method argument to check which regressors may be the reason of collinearity
-## ===================================</code></pre>
-<p>The VIF, TOL and Wi columns provide the diagnostic output for variance inflation factor, tolerance and Farrar-Glauber F-test respectively. Since VIF&lt;10 and TOL&gt;0.1, there is no multicolinearity in the regression model.</p>
-</div>
-<div id="tip-percent" class="section level2">
-<h2>Tip percent</h2>
-<p>In addition ot fare amount, we are also interested in the factors that may effect tip percent in each trip.</p>
-<p><img src="regression_analysis_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-<pre><code>## 
-## Call:
-## lm(formula = tip_percent ~ passenger_count, data = reg_plot %&gt;% 
-##     filter(payment_type == 1))
-## 
-## Coefficients:
-##     (Intercept)  passenger_count  
-##       0.2118804        0.0001772</code></pre>
-</div>
-</div>
+=======
+<pre class="r"><code>tip_plot = reg_sample %&gt;% 
+  filter(payment_type == 1, do_boro == &#39;Manhattan&#39;, pu_boro == &#39;Manhattan&#39;, do_zone != &#39;Unknown&#39;, pu_zone != &#39;Unknown&#39;) %&gt;% 
+mutate(do_zone = forcats::fct_reorder(do_zone, tip_percent),
+       pu_zone = forcats::fct_reorder(pu_zone, tip_percent)) %&gt;% 
+  drop_na(do_zone, pu_zone)
+
+tip_plot %&gt;% 
+    ggplot(aes(x = do_zone, y = tip_percent,color = do_zone)) +
+  geom_boxplot(na.rm = TRUE, outlier.size = 0.1) +
+  scale_y_continuous(
+    limits = c(0,0.4)
+  ) +
+  theme(axis.text.x = element_text(angle = 70, hjust = 1), 
+        legend.position = &quot;none&quot;) +
+  viridis::scale_color_viridis(discrete = TRUE)</code></pre>
+<p><img src="regression_analysis_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>tip_plot %&gt;% 
+    ggplot(aes(x = pu_zone, y = tip_percent, color = pu_zone)) +
+  geom_boxplot(na.rm = TRUE, outlier.size = 0.1) +
+  scale_y_continuous(
+    limits = c(0,0.4)
+  ) +
+  theme(axis.text.x = element_text(angle = 70, hjust = 1),
+        legend.position = &quot;none&quot;) +
+  viridis::scale_color_viridis(discrete = TRUE)</code></pre>
+<p><img src="regression_analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code>label_data &lt;- tip_plot %&gt;% 
+  distinct(pu_zone) %&gt;% 
+  mutate(id = seq(1,64), 
+         individual = pu_zone, 
+         value = sample(0, 1), 64, replace = FALSE)
+
+number_of_bar &lt;- nrow(label_data)
+angle &lt;-  90 - 360 * (label_data$id-0.5) /number_of_bar
+      
+ 
+# calculate the alignment of labels: right or left
+label_data$hjust&lt;-ifelse( angle &lt; -90, 1, 0)
+ 
+# flip angle BY to make them readable
+label_data$angle&lt;-ifelse(angle &lt; -90, angle+180, angle)</code></pre>
+<pre class="r"><code>p &lt;- ggplot(tip_plot, aes(x=pu_zone, y=tip_percent)) +
+  geom_bar(stat = &quot;identity&quot;, fill = alpha(&quot;skyblue&quot;, 0.7)) +
+ylim(-100, 120) +
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    panel.grid = element_blank(),
+    plot.margin = unit(rep(-1,4), &quot;cm&quot;)
+  ) +
+  coord_polar(start = 0) +
+geom_text(data=label_data, aes(x=id, y = value, label= individual, hjust=hjust), color=&quot;black&quot;, fontface=&quot;bold&quot;,alpha=0.6, size=2.5, angle= label_data$angle, inherit.aes = FALSE ) 
+  
+p</code></pre>
+<pre><code>## Warning: Removed 41103 rows containing missing values (geom_bar).</code></pre>
+<p><img src="regression_analysis_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<pre class="r"><code>do_label_data &lt;- tip_plot %&gt;% 
+  distinct(do_zone) %&gt;% 
+  mutate(id = seq(1,66), 
+         individual = do_zone, 
+         value = sample(0, 1), 66, replace = FALSE)
+
+number_of_bar &lt;- nrow(do_label_data)
+angle &lt;-  90 - 360 * (do_label_data$id-0.5) /number_of_bar
+do_label_data$hjust&lt;-ifelse( angle &lt; -90, 1, 0)
+ 
+# flip angle BY to make them readable
+do_label_data$angle&lt;-ifelse(angle &lt; -90, angle+180, angle)
+
+p &lt;- ggplot(tip_plot, aes(x=do_zone, y=tip_percent)) +
+  geom_bar(stat = &quot;identity&quot;, fill = alpha(&quot;skyblue&quot;, 0.7)) +
+ylim(-100, 120) +
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    panel.grid = element_blank(),
+    plot.margin = unit(rep(-1,4), &quot;cm&quot;)
+  ) +
+  coord_polar(start = 0) +
+geom_text(data=do_label_data, aes(x=id, y = value, label= individual, hjust=hjust), color=&quot;black&quot;, fontface=&quot;bold&quot;,alpha=0.6, size=2.5, angle= do_label_data$angle, inherit.aes = FALSE ) 
+  
+p</code></pre>
+<pre><code>## Warning: Removed 38687 rows containing missing values (geom_bar).</code></pre>
+<p><img src="regression_analysis_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+>>>>>>> 2e270cc3e923e1bd15c1a9141f97c5969490b994
 
 
 

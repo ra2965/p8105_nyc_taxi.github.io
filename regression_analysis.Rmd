@@ -1,30 +1,30 @@
 ---
-title: "Regression Analysis"
+title: "regression analysis"
 output: html_document
 ---
+# Motivation
 
-## Fare Amount
-The initial charge of NYC Yellow Cab is 2.5 dollars. However, the rule of standard metered fair is too complicated. It is difficult for a passenger to estimate the fare amount refering to such complext instructions.
+According to the codebook from the TLC website, the fare amount is defined as "The time-and-distance fare calculated by the meter". Therefore, we hope to explore the association between fare amount and trip distance and duration.  
 
-![NYC Taxi Fare](https://www1.nyc.gov/site/tlc/passengers/taxi-fare.page)
-
-According to the codebook from the TLC website, the fare amount is defined as "The time-and-distance fare calculated by the meter". Therefore, we hope to explore the association between fare amount and trip distance and duration. If possible, we also want to roughly predict the fare amount by duration and distance.
-
-Data was queried from year 2018. The duration is calculated from drop-off time and pick-up time.
-
-```{r setup, include=FALSE, echo=FALSE}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
 library(ggplot2)
 library(PerformanceAnalytics)
 library(mctest)
 library(ppcor)
-library(patchwork)
 
 pilot = read.csv("./data/pilot.csv")
 taxi_zone_lookup = read.csv("./data/taxi_zone_lookup.csv")
 weather_nyc_2018 = read.csv("./data/weather_nyc_2018.csv")
+```
 
+# Tidy the data
+
+First of all, we meed to clean the dataset:
+By 
+```{r }
 reg = pilot %>% 
   mutate(
     duration = case_when(
@@ -33,24 +33,15 @@ reg = pilot %>%
   ),
       tip_percent = tip_amount/fare_amount
   ) %>% 
-  filter(duration != 0,
-         fare_amount != 52,#There might be data entry error since all records that fare_amount is 52 have different distance and duration#
-         duration <= 360, #There are some points gathering with a long duration without long distance, which can be miscoding or influntial outliers, so we should exclude these data.#
-         fare_amount >= 2.5 #There can be data entry error since the initial charge of NYC taxi is $2.5, so we exclude those with fare amount < $2.5.#
-         ) 
- 
-set.seed(1)
+  filter(fare_amount != 0,
+         fare_amount != 52,#We find that there might be an entry error since all records that fare_amount is 52 have different distance and duration#
+         tip_amount != 0,
+         duration <= 360)
+
 reg_plot = reg %>% 
   sample_frac(size = 0.1, replace = FALSE)
-
-```
-
-
-### Scatterplot of fare amount 
-
-```{r echo=FALSE}
  
-fare_distance = reg_plot %>% 
+reg_plot %>% 
   ggplot(aes(x = trip_distance, y = fare_amount)) +
   geom_point(alpha = 0.3, color = 'skyblue') +
   labs(
@@ -59,7 +50,14 @@ fare_distance = reg_plot %>%
     y = "Fare Amount"
   )
 
-fare_duration = reg_plot %>% 
+
+
+```
+
+
+
+```{r }
+reg_plot %>% 
   ggplot(aes(x = duration, y = fare_amount)) +
   geom_point(alpha = 0.3, color = 'red') +
   labs(
@@ -67,102 +65,50 @@ fare_duration = reg_plot %>%
     x = "Trip Duration",
     y = "Fare Amount"
   )
-
-fare_distance + fare_duration
 ```
-According to the scatterplots, there is a positive relationship among trip distance and fare amount. trip duration is also positively associated with fare amount.
 
-### Building linear regression model of fare amount
 
-The outcome of linear regression model is fare amount, and the predictors include trip distance and duration.
-```{r echo=FALSE}
+
+```{r }
 fit1 = lm(fare_amount ~ duration + trip_distance , data = reg) %>% 
   broom::tidy() %>% 
   janitor::clean_names() %>% 
   mutate(p = round(p_value,3))
 
 fit1 = lm(fare_amount ~ duration + trip_distance , data = reg ) 
-summary(fit1) %>% broom::tidy() %>% knitr::kable()
+summary(fit1)
 ```
-```{r echo=FALSE}
-summary(fit1) %>% broom::glance() %>% knitr::kable()
+```{r}
+pred = reg %>% dplyr::select(trip_distance, duration)
+omcdiag(pred,reg$fare_amount)
 ```
-The p-value of the two coefficients are both < 0.05. It is seen that both variables (duration, trip_distance) are statistically significant at 5 % level of significance.
 
-## Diagnostics
-Further we can plot the model diagnostic checking for other problems such as normality of error term, heteroscedasticity etc.
-```{r echo=FALSE}
+
+```{r}
 par(mfrow=c(2,2))
 plot(fit1)
 
 ```
 
-The plots indicate a lot of outliers, which make the model violate the linear regression assumptions.
-
-In addition, we realized that the duration will increase if the trip distance increased. Therefore, possibly there is multicollinearity problem in this model as well. For further diagnosis of the problem, let us first look at the pair-wise correlation among the explanatory variables.
-```{r echo=FALSE}
-pred = reg %>% dplyr::select(trip_distance, duration)
-omcdiag(pred,reg$fare_amount)
-```
-
-```{r echo=FALSE}
+```{r }
 pcor(pred, method = "pearson")
 
 ```  
 
 
-```{r echo=FALSE}
+```{r }
 
 imcdiag(pred, reg$fare_amount)
 
 
 ```
 
-The VIF, TOL and Wi columns provide the diagnostic output for variance inflation factor, tolerance and Farrar-Glauber F-test respectively. Since VIF<10 and TOL>0.1, there is no multicolinearity in the regression model.
-
-## Tip percent
-
-In addition ot fare amount, we are also interested in the factors that may effect tip percent in each trip.
+The VIF, TOL and Wi columns provide the diagnostic output for variance inflation factor, tolerance and Farrar-Glauber F-test respectively. We find that 
 
 
-```{r echo=FALSE}
-tip_distance = reg_plot %>% 
-  filter(payment_type == 1) %>% 
-  ggplot(aes(x = trip_distance, y = tip_percent)) +
-  geom_point(alpha = 0.3, color = 'skyblue') +
-  labs(
-    title = "The distribution of tip percent by trip distance",
-    x = "Trip Distance",
-    y = "Tip Percent"
-  )
-
-tip_passenger = reg_plot %>% 
-  filter(payment_type == 1) %>% 
-  ggplot(aes(x = passenger_count, y = fare_amount)) +
-  geom_point(alpha = 0.3, color = 'red') +
-  labs(
-    title = "The distribution of tip percent by passenger count",
-    x = "Passenger Count",
-    y = "Tip Percent"
-  )
-
-tip_prcp = reg_plot %>% 
-  filter(payment_type == 1) %>% 
-  ggplot(aes(x = prcp, y = tip_percent)) +
-  geom_point(alpha = 0.3, color = 'green') +
-  labs(
-    title = "The distribution of tip percent by daily precipitation",
-    x = "Precipitation",
-    y = "Tip Percent"
-  )
-
-tip_distance + tip_passenger + tip_prcp
-```
 
 
-```{r echo=FALSE}
-lm(tip_percent ~ passenger_count, reg_plot %>% 
-  filter(payment_type == 1))
-```
-There is no clear pattern among tip percent and the three predictors. Therefore, we will not conduct regression analysis about tip percent.
+
+
+
 
