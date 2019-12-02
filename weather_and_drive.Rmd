@@ -16,7 +16,7 @@ library(ggplot2)
 Previous work has shown that there are relationships between taxi ridership and weather events.“During adverse weather, taxi drivers tend to make more money” (Kamga et al., 2013). Kamga et al. also found that during days when adverse weather took place, there was a higher demand for taxis in Manhattan compared to the other boroughs, and that more people were prone to take shorter taxi trips.
 
 
-In this part, we want to see whether there is a trend between weather and yellow cab use using our data. We use the weather data including temperature and precipitation data in 2018 and their corresponding yellow taxi use data. For temperature, we use average temperature as the mean of maximum temperarure and miniminum temperature in each day. 
+In this part, we want to see whether there is a trend between weather and yellow cab within and between months use using our data. We use the weather data including temperature and precipitation data in 2018 and their corresponding yellow taxi use data. For temperature, we use average temperature as the mean of maximum temperarure and miniminum temperature in each day. 
 
 
 ```{r echo=FALSE, message = FALSE, warning = FALSE}
@@ -36,37 +36,51 @@ cab=pilot%>%
 
 ```
 
+```{r}
+weather_tot=read_csv(file = "./data/weather_nyc_2018.csv")%>%
+  mutate(date = as.character(date)) %>%
+  separate(date, into = c("year","month","pu_date"), sep = "-", convert = TRUE)%>%
+  mutate(
+  average_temp=(tmin+tmax)/2)
+  
 
-```{r echo=FALSE, message = FALSE, warning = FALSE}
-plot_data = 
-  left_join(plot_df, cab, by = c("month","pu_date"))%>%
+yellowcab=read_csv(file = "./data/yearly_summary/2018_taxi_trip_daily_summary.csv")%>%
+  mutate(date = as.character(vars),
+         daily_drive=n) %>%
+  separate(date, into = c("year","month","pu_date"), sep = "-", convert = TRUE)%>%
+  select(-vars,-year)
+
+cab_weather=
+  left_join(weather_tot,yellowcab, by=c("month","pu_date"))%>%
   select(month, pu_date,average_temp, daily_drive,prcp)%>%
   mutate(month=as.factor(month),
          month=recode_factor(month, '1'="January", '2'="Feburary",'3'="March",'4'='April','5'='May','6'='June','7'='July','8'='August','9'='September','10'='October','11'='November','12'='December'))
-
-
 ```
 
 Here we make an animation plot to show the daily drive amount and average daily temperature for each month.The size of the dots shows the precipitaiton for that day which help to identify whether rainy weather also increase taxi use. 
 
-Although we hypothesis that cold weather and hot weather might have more taxi use, there is no obvious difference for different daily temperature. There is a slightly increase daily taxi usage in Feburary.
+Although we hypothesis that cold weather and hot weather might have more taxi use, there is no obvious difference taxi useage for different daily temperature and no interaction between month and average temperature being observed. However, there is a slightly higher daily taxi usage in Feburary. Also, due to the limitation of pilot dataset which is generated from the raw dataset, we can't investigate the pattern between month and daily taxi usage. 
 
-```{r echo=FALSE, message = FALSE, warning = FALSE}
-weather_drive=plot_data%>%
+```{r}
+weather_plot=cab_weather%>%
   ggplot(aes(x=average_temp, y=daily_drive, frame_vars(month)))+
   geom_point(aes(size=prcp,colour = month))+
    labs(title = 'Month: {closest_state}',
-       x = 'Daily average temperature for year 2018', 
+       x = 'Daily average temperature for year 2018 ℃', 
        y = 'Daily drive amount',
        colour = 'Month',
-       size='precipitation'
+       size='Precipitation'
        ) +
   transition_states(month,2,1)+
   enter_appear()+
   exit_fade()
    
-animate(weather_drive, duration=7)
+animate(weather_plot, duration=12)
 ```
+
+
+
+
 
 # Precipitation and Taxi Use
 
