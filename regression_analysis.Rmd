@@ -89,7 +89,7 @@ summary(fit1) %>% broom::glance() %>% knitr::kable()
 ```
 The p-value of the two coefficients are both < 0.05. It is seen that both variables (duration, trip_distance) are statistically significant at 5 % level of significance.
 
-## Diagnostics
+### Diagnostics
 Further we can plot the model diagnostic checking for other problems such as normality of error term, heteroscedasticity etc.
 ```{r echo=FALSE}
 par(mfrow=c(2,2))
@@ -123,7 +123,6 @@ The VIF, TOL and Wi columns provide the diagnostic output for variance inflation
 ## Tip percent
 
 In addition ot fare amount, we are also interested in the factors that may effect tip percent in each trip.
-
 
 ```{r echo=FALSE}
 tip_distance = reg_plot %>% 
