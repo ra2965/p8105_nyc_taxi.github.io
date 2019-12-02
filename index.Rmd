@@ -45,7 +45,6 @@ what we found:
 * Even thogh we hypothesized that the tip percent may be associated with trip distance, passenger count and daily precipitation, the scatterplot shows little relevance amont these factors. 
 
 ## Data sources:
->>>>>>> b4f4253fc7f5b2c046427a60b391fbff766bd3b4
 
 * [NYC TLC Trip Record Data](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page)
 * [NYC RNOAA](https://data.nodc.noaa.gov/cgi-bin/iso?id=gov.noaa.ncdc:C00861

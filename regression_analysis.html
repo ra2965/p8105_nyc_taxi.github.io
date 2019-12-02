@@ -11,7 +11,7 @@
 
 
 
-<title>Regression Analysis</title>
+<title>Regression Analysis of Fare Amount and Trip Distance and Duration</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -298,25 +298,21 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Regression Analysis</h1>
+<h1 class="title toc-ignore">Regression Analysis of Fare Amount and Trip Distance and Duration</h1>
 
 </div>
 
 
-<div id="motivation" class="section level1">
-<h1>Motivation</h1>
+<p>We are interested in the factors that potentially effect the revenue of each taxi trip. The total amount is calculated by</p>
 <div id="fare-amount" class="section level2">
 <h2>Fare Amount</h2>
-<p>The initial charge of NYC Yellow Cab is 2.5 dollars. However, the rule of standard metered fair is too complicated. It is difficult for a passenger to estimate the fare amount refering to such complext instructions.</p>
-<div class="figure">
-<embed src="https://www1.nyc.gov/site/tlc/passengers/taxi-fare.page" />
-<p class="caption">NYC Taxi Fare</p>
-</div>
+<p>The initial charge of NYC Yellow Cab is 2.5 dollars. However, the rule of standard metered <a href="https://www1.nyc.gov/site/tlc/passengers/taxi-fare.page">taxi fare</a> is too complicated. It is difficult for a passenger to estimate the fare amount refering to such complext instructions.</p>
 <p>According to the codebook from the TLC website, the fare amount is defined as “The time-and-distance fare calculated by the meter”. Therefore, we hope to explore the association between fare amount and trip distance and duration. If possible, we also want to roughly predict the fare amount by duration and distance.</p>
 <p>Data was queried from year 2018. The duration is calculated from drop-off time and pick-up time.</p>
 <div id="scatterplot-of-fare-amount" class="section level3">
 <h3>Scatterplot of fare amount</h3>
-<p><img src="regression_analysis_files/figure-html/unnamed-chunk-1-1.png" width="672" /> According to the scatterplots, there is a positive relationship among trip distance and fare amount. trip duration is also positively associated with fare amount.</p>
+<p><img src="regression_analysis_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>According to the scatterplots, there is a positive relationship among trip distance and fare amount. Trip duration is also positively associated with fare amount.</p>
 </div>
 <div id="building-linear-regression-model-of-fare-amount" class="section level3">
 <h3>Building linear regression model of fare amount</h3>
@@ -375,21 +371,14 @@ $(document).ready(function () {
 <td align="right">0</td>
 <td align="right">3</td>
 </tr>
-<tr class="even">
-<td align="right">The p-value</td>
-<td align="right">of the two coeff</td>
-<td align="right">icients are</td>
-<td align="right">both &lt; 0.05</td>
-<td align="right">. It is se</td>
-<td align="right">en that both variables (duration, trip_distance) are statistically significant at 5 % level of significance.</td>
-</tr>
 </tbody>
 </table>
+<p>The p-value of the two coefficients are both &lt; 0.05. It is seen that both variables (duration, trip_distance) are statistically significant at 5 % level of significance.</p>
 </div>
-</div>
-<div id="diagnostics" class="section level2">
-<h2>Diagnostics</h2>
-<p>Further we can plot the model diagnostic checking for other problems such as normality of error term, heteroscedasticity etc. <img src="regression_analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<div id="diagnostics" class="section level3">
+<h3>Diagnostics</h3>
+<p>Further we can plot the model diagnostic checking for other problems such as normality of error term, heteroscedasticity etc.</p>
+<p><img src="regression_analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>The plots indicate a lot of outliers, which make the model violate the linear regression assumptions.</p>
 <p>In addition, we realized that the duration will increase if the trip distance increased. Therefore, possibly there is multicollinearity problem in this model as well. For further diagnosis of the problem, let us first look at the pair-wise correlation among the explanatory variables.</p>
 <pre><code>## 
@@ -454,19 +443,12 @@ $(document).ready(function () {
 ## ===================================</code></pre>
 <p>The VIF, TOL and Wi columns provide the diagnostic output for variance inflation factor, tolerance and Farrar-Glauber F-test respectively. Since VIF&lt;10 and TOL&gt;0.1, there is no multicolinearity in the regression model.</p>
 </div>
+</div>
 <div id="tip-percent" class="section level2">
 <h2>Tip percent</h2>
 <p>In addition ot fare amount, we are also interested in the factors that may effect tip percent in each trip.</p>
 <p><img src="regression_analysis_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-<pre><code>## 
-## Call:
-## lm(formula = tip_percent ~ passenger_count, data = reg_plot %&gt;% 
-##     filter(payment_type == 1))
-## 
-## Coefficients:
-##     (Intercept)  passenger_count  
-##       0.2118804        0.0001772</code></pre>
-</div>
+<p>There is no clear pattern among tip percent and the three predictors. Therefore, we will not conduct regression analysis about tip percent.</p>
 </div>
 
 
