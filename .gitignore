@@ -3,3 +3,5 @@
 .RData
 .Ruserdata
 p8105_nyc_taxi.github.io.Rproj
+/raw_data
+exploratory.Rmd
