@@ -3,7 +3,9 @@ title: "Tip Manhattan"
 output: html_document
 ---
 
-## Tipping Behavoir
+## Cab Tipping in Manhattan
+
+We are curious what's tipping cab drivers is like in Manhattan, where supposedly the most cab services are called.
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 
