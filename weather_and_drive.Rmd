@@ -61,8 +61,13 @@ Here we make an animation plot to show the daily drive amount and average daily 
 
 Although we hypothesis that cold weather and hot weather might have more taxi use, there is no obvious difference taxi useage for different daily temperature and no interaction between month and average temperature being observed. However, there is a slightly higher daily taxi usage in Feburary. Also, due to the limitation of pilot dataset which is generated from the raw dataset, we can't investigate the pattern between month and daily taxi usage. 
 
+<<<<<<< HEAD
 ```{r}
 weather_plot=cab_weather%>%
+=======
+```{r echo=FALSE, message = FALSE, warning = FALSE}
+weather_drive=plot_data %>%
+>>>>>>> c312ad197f0f02e0cb5fb721919c8caf2ee7f7d5
   ggplot(aes(x=average_temp, y=daily_drive, frame_vars(month)))+
   geom_point(aes(size=prcp,colour = month))+
    labs(title = 'Month: {closest_state}',
@@ -71,11 +76,22 @@ weather_plot=cab_weather%>%
        colour = 'Month',
        size='Precipitation'
        ) +
+  theme(
+    axis.text.y  = element_blank(),
+    
+  )+
+  scale_y_continuous(breaks = c(0,400), 
+                     labels=c("low","high")
+)+
   transition_states(month,2,1)+
   enter_appear()+
   exit_fade()
    
+<<<<<<< HEAD
 animate(weather_plot, duration=12)
+=======
+animate(weather_drive, duration=12)
+>>>>>>> c312ad197f0f02e0cb5fb721919c8caf2ee7f7d5
 ```
 
 
