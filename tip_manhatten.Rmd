@@ -3,6 +3,7 @@ title: "Tip Manhattan"
 output: html_document
 ---
 
+## Tipping Behavoir
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 
@@ -16,8 +17,8 @@ weather_nyc_2018 = read.csv("./data/weather_nyc_2018.csv")
 
 ```
 
-```{r}
- boxplot = pilot %>%
+```{r echo = FALSE}
+ boxplot <- pilot %>%
   filter(fare_amount != 0,
          fare_amount != 52 #We find that there might be an entry error since all records that fare_amount is 52 have different distance and duration#
          ) %>% 
@@ -33,29 +34,16 @@ weather_nyc_2018 = read.csv("./data/weather_nyc_2018.csv")
 
 
 
-```{r message=FALSE}
-tip_plot = boxplot %>% 
+```{r echo = FALSE}
+tip_plot <-  boxplot %>% 
   filter(payment_type == 1, do_boro == 'Manhattan', pu_boro == 'Manhattan', do_zone != 'Unknown', pu_zone != 'Unknown') %>% 
   mutate(do_zone = forcats::fct_reorder(do_zone, tip_percent),
        pu_zone = forcats::fct_reorder(pu_zone, tip_percent)) %>% 
   drop_na(do_zone, pu_zone)
-
-do_plot <- tip_plot %>%
-  mutate(do_median = median(tip_percent)) %>% 
-  mutate(text = str_c("Drop Off Zone: ", do_zone , "\nTip Percent: ", tip_percent, "\nMedian Percentage:", tip_percent)) %>%
-    ggplot(aes(x = do_zone, y = tip_percent,color = do_zone)) +
-  geom_boxplot(na.rm = TRUE, outlier.size = 0.00001) +
-  scale_y_continuous(
-    limits = c(0,0.4)
-  ) +
-  theme(axis.text.x = element_text(angle = 70, hjust = 1), 
-        legend.position = "none") +
-  viridis::scale_color_viridis(discrete = TRUE)  
-
-ggplotly(do_plot, tooltip = "text")
 ```
+
 ## Drop-off Zone
-```{r}
+```{r echo = FALSE}
 # plotly for do_zone
 f1 <- list(
   family = "Arial, sans-serif",
@@ -89,26 +77,44 @@ b <- list(
 )
 tip_plot %>% 
   mutate(do_zone = forcats::fct_reorder(do_zone, tip_percent),
-       pu_zone = forcats::fct_reorder(pu_zone, tip_percent)) %>% 
+       pu_zone = forcats::fct_reorder(pu_zone, tip_percent),
+       do_median = median(tip_percent),
+       text = str_c("Drop Off Zone: ", do_zone , "\nTip Percent: ", tip_percent, "\nMedian Percentage:", do_median) )%>% 
   drop_na(do_zone, pu_zone) %>% 
-  plot_ly(y = ~tip_percent, color = ~do_zone, type = "box", colors = "Set2") %>% 
+  plot_ly(y = ~tip_percent, color = ~do_zone, text = ~text, type = "box",  colors = "Set2") %>% 
   layout(xaxis = b, yaxis = a)
 ```
 
 ## Pick up Zone
-```{r}
+```{r echo = FALSE}
 tip_plot %>% 
   mutate(do_zone = forcats::fct_reorder(do_zone, tip_percent),
-       pu_zone = forcats::fct_reorder(pu_zone, tip_percent)) %>% 
+       pu_zone = forcats::fct_reorder(pu_zone, tip_percent),
+       pu_median = median(tip_percent),
+       text = str_c("Pick Up Zone: ", do_zone , "\nTip Percent: ", tip_percent, "\nMedian Percentage:", pu_median) )%>% 
   drop_na(do_zone, pu_zone) %>% 
   plot_ly(y = ~tip_percent, color = ~pu_zone, type = "box", colors = "Set2") %>% 
   layout(xaxis = b, yaxis = a)
 ```
 
 
-```{r message=FALSE}
+```{r include = FALSE}
 
-tip_plot %>% 
+do_plot <- tip_plot %>%
+  mutate(do_median = median(tip_percent)) %>% 
+  mutate(text = str_c("Drop Off Zone: ", do_zone , "\nTip Percent: ", tip_percent, "\nMedian Percentage:", tip_percent)) %>%
+    ggplot(aes(x = do_zone, y = tip_percent,color = do_zone)) +
+  geom_boxplot(na.rm = TRUE, outlier.size = 0.00001) +
+  scale_y_continuous(
+    limits = c(0,0.4)
+  ) +
+  theme(axis.text.x = element_text(angle = 70, hjust = 1), 
+        legend.position = "none") +
+  viridis::scale_color_viridis(discrete = TRUE)  
+
+ggplotly(do_plot, tooltip = "text")
+
+pu_plot <- tip_plot %>% 
     ggplot(aes(x = pu_zone, y = tip_percent, color = pu_zone)) +
   geom_boxplot(na.rm = TRUE, outlier.size = 0.1) +
   scale_y_continuous(
@@ -117,6 +123,7 @@ tip_plot %>%
   theme(axis.text.x = element_text(angle = 70, hjust = 1),
         legend.position = "none") +
   viridis::scale_color_viridis(discrete = TRUE)
+ggplotly(pu_plot, tooltip = "text")
 ```
 
 
