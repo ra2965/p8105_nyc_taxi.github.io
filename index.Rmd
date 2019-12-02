@@ -40,10 +40,11 @@ what we found:
 
 * Heatmap:
 
-* We also fitted a linear regression model to further analyze the asssociation between fare amount/tip percent and travel time and distance.   
+* We also fitted a linear regression model to further analyze the asssociation between fare amount and travel time and distance. There is positive association between fare amount and travel time and distance. The coefficient of travel duration is 0.33 (p<0.0001), and the coefficient of travel distance is 2.07 (p<0.0001). However, the results of model diagnostics indicate that the model violate some assumptions of linear regression. Therefore, it can only be used as a rough reference for fare amount estimation. 
+
+* Even thogh we hypothesized that the tip percent may be associated with trip distance, passenger count and daily precipitation, the scatterplot shows little relevance amont these factors. 
 
 ## Data sources:
->>>>>>> b4f4253fc7f5b2c046427a60b391fbff766bd3b4
 
 * [NYC TLC Trip Record Data](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page)
 * [NYC RNOAA](https://data.nodc.noaa.gov/cgi-bin/iso?id=gov.noaa.ncdc:C00861
