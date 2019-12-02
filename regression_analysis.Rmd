@@ -2,11 +2,11 @@
 title: "Regression Analysis of Fare Amount and Trip Distance and Duration"
 output: html_document
 ---
-We are interested in the factors that potentially effect the revenue of each taxi trip. The total amount is calculated by fare amount, tax, tip amount, tolls amount and [improvement surcharge](https://www1.nyc.gov/site/tlc/about/taxi-improvement-fund.page). Since tax 
+We are interested in the factors that potentially effect the revenue of each taxi trip. The total amount is the sum of fare amount, tax, tip amount, tolls amount and [improvement surcharge](https://www1.nyc.gov/site/tlc/about/taxi-improvement-fund.page). Tolls amount is fixed. Since tax and tip are dependent on fare amount, we are interested in fare amount. In addition, even though most of time the tip percent will fall between 15% and 20% in NYC, it still vary
 
 
 ## Fare Amount
-The initial charge of NYC Yellow Cab is 2.5 dollars. However, the rule of standard metered [taxi fare](https://www1.nyc.gov/site/tlc/passengers/taxi-fare.page) is too complicated. It is difficult for a passenger to estimate the fare amount refering to such complext instructions.
+The initial charge of NYC Yellow Cab is 2.5 dollars. However, the rule of standard metered taxi fare is too [complicated](https://www1.nyc.gov/site/tlc/passengers/taxi-fare.page) . It is difficult for a passenger to estimate the fare amount refering to such complext instructions.
 
 According to the codebook from the TLC website, the fare amount is defined as "The time-and-distance fare calculated by the meter". Therefore, we hope to explore the association between fare amount and trip distance and duration. If possible, we also want to roughly predict the fare amount by duration and distance.
 
@@ -134,7 +134,7 @@ tip_distance = reg_plot %>%
   ggplot(aes(x = trip_distance, y = tip_percent)) +
   geom_point(alpha = 0.3, color = 'skyblue', size = 0.1) +
   labs(
-    title = "The distribution of tip percent by trip distance",
+    title = "Tip percent by trip distance",
     x = "Trip Distance",
     y = "Tip Percent"
   )
@@ -144,7 +144,7 @@ tip_passenger = reg_plot %>%
   ggplot(aes(x = passenger_count, y = fare_amount)) +
   geom_point(alpha = 0.3, color = 'red', size = 0.1) +
   labs(
-    title = "The distribution of tip percent by passenger count",
+    title = "Tip percent by passenger count",
     x = "Passenger Count",
     y = "Tip Percent"
   )
@@ -154,7 +154,7 @@ tip_prcp = reg_plot %>%
   ggplot(aes(x = prcp, y = tip_percent)) +
   geom_point(alpha = 0.3, color = 'green', size = 0.1) +
   labs(
-    title = "The distribution of tip percent by daily precipitation",
+    title = "Tip percent by daily precipitation",
     x = "Precipitation",
     y = "Tip Percent"
   )

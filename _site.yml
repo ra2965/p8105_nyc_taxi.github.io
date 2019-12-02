@@ -3,14 +3,11 @@ output_dir: "."
 navbar:
   title: "Home"
   right:
-    - text: "Analysis"
-      menu:
-          - text: "Regression  Analysis"
-            href: regression_analysis.html
-          - text: "Weather and Drive"
-            href: weather_and_drive.html
+         - text: "Regression  Analysis"
+           href: regression_analysis.html
+         - text: "Weather and Drive"
+           href: weather_and_drive.html
 output:
   html_document:
     theme: simplex
     
-

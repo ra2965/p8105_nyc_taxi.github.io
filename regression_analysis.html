@@ -274,20 +274,11 @@ $(document).ready(function () {
         
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Analysis
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="regression_analysis.html">Regression  Analysis</a>
-    </li>
-    <li>
-      <a href="weather_and_drive.html">Weather and Drive</a>
-    </li>
-  </ul>
+        <li>
+  <a href="regression_analysis.html">Regression  Analysis</a>
+</li>
+<li>
+  <a href="weather_and_drive.html">Weather and Drive</a>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -303,12 +294,12 @@ $(document).ready(function () {
 </div>
 
 
-<p>We are interested in the factors that potentially effect the revenue of each taxi trip. The total amount is calculated by</p>
+<p>We are interested in the factors that potentially effect the revenue of each taxi trip. The total amount is calculated by fare amount, tax, tip amount, tolls amount and <a href="https://www1.nyc.gov/site/tlc/about/taxi-improvement-fund.page">improvement surcharge</a>. Tolls amount is fixed. Since tax and tip are dependent on fare amount, we are interested in fare amount</p>
 <div id="fare-amount" class="section level2">
 <h2>Fare Amount</h2>
 <p>The initial charge of NYC Yellow Cab is 2.5 dollars. However, the rule of standard metered <a href="https://www1.nyc.gov/site/tlc/passengers/taxi-fare.page">taxi fare</a> is too complicated. It is difficult for a passenger to estimate the fare amount refering to such complext instructions.</p>
 <p>According to the codebook from the TLC website, the fare amount is defined as “The time-and-distance fare calculated by the meter”. Therefore, we hope to explore the association between fare amount and trip distance and duration. If possible, we also want to roughly predict the fare amount by duration and distance.</p>
-<p>Data was queried from year 2018. The duration is calculated from drop-off time and pick-up time.</p>
+<p>Data was queried from year 2018. The duration is calculated from drop-off time and pick-up time. There might be data entry error since all records that fare_amount is 52 have different distance and duration</p>
 <div id="scatterplot-of-fare-amount" class="section level3">
 <h3>Scatterplot of fare amount</h3>
 <p><img src="regression_analysis_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
