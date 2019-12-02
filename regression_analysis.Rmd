@@ -134,7 +134,7 @@ tip_distance = reg_plot %>%
   ggplot(aes(x = trip_distance, y = tip_percent)) +
   geom_point(alpha = 0.3, color = 'skyblue', size = 0.1) +
   labs(
-    title = "Tip percent by trip distance",
+    title = "Tip percent by Trip Distance, Passenger Count, Precipitation",
     x = "Trip Distance",
     y = "Tip Percent"
   )
@@ -142,9 +142,8 @@ tip_distance = reg_plot %>%
 tip_passenger = reg_plot %>% 
   filter(payment_type == 1) %>% 
   ggplot(aes(x = passenger_count, y = fare_amount)) +
-  geom_point(alpha = 0.3, color = 'red', size = 0.1) +
+  geom_point(alpha = 0.3, color = 'palevioletred2', size = 0.1) +
   labs(
-    title = "Tip percent by passenger count",
     x = "Passenger Count",
     y = "Tip Percent"
   )
@@ -152,9 +151,8 @@ tip_passenger = reg_plot %>%
 tip_prcp = reg_plot %>% 
   filter(payment_type == 1) %>% 
   ggplot(aes(x = prcp, y = tip_percent)) +
-  geom_point(alpha = 0.3, color = 'green', size = 0.1) +
+  geom_point(alpha = 0.3, color = 'palegreen3', size = 0.1) +
   labs(
-    title = "Tip percent by daily precipitation",
     x = "Precipitation",
     y = "Tip Percent"
   )
