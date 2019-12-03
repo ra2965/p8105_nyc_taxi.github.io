@@ -11,14 +11,12 @@ navbar:
     menu:
     - text: Overall Analysis across 10 Years
       href: 10_year_overall_analysis.html
-    - text: Trip Pattern
+    - text: Trip Pattern Analysis
       href: 2018_Trip_Pattern.html
-    - text: Overall Analysis across 10 Years
-      href: 10_year_overall_analysis.html
+    - text: Regression Analysis
+      href: regression_analysis.html
   - text: Project Report
     href: project_report.html
-  - icon: fa-taxi fa-lg
-    href: regression_analysis.html
   - icon: fa-envelope fa-lg
     href: mailto:<ra2965@cumc.columbia.edu>
   - icon: fa-github
