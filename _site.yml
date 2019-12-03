@@ -17,6 +17,8 @@ navbar:
       href: 10_year_overall_analysis.html
   - text: Project Report
     href: project_report.html
+  - icon: fa-taxi fa-lg
+    href: regression_analysis.html
   - icon: fa-envelope fa-lg
     href: mailto:<ra2965@cumc.columbia.edu>
   - icon: fa-github
