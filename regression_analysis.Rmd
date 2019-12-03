@@ -153,9 +153,11 @@ fit1 = lm(fare_amount ~ duration + trip_distance , data = reg )
 summary(fit1) %>% broom::tidy() %>% knitr::kable(digit = 2)
 ```
 
-```{r }
+```{r, eval = FALSE}
 summary(fit1) %>% broom::glance() %>% knitr::kable(digit = 2)
 ```
+
+![](regression_analysis_files/figure-html/unnamed-chunk-5-1.png)
 
 The p-value of the two coefficients are both < 0.05. It is seen that both variables (duration, trip_distance) are statistically significant at 5 % level of significance.
 
@@ -261,7 +263,7 @@ boxplot <- pilot %>%
     pu_date == do_date ~ do_min - pu_min + (60 *(do_hour - pu_hour) )
 
   ),
-      tip_percent = round(tip_amount/fare_amount, 4))
+    tip_percent = round(tip_amount/fare_amount, 4))
 
 ```
 
@@ -319,11 +321,13 @@ c <- list(
   exponntformat = "E"
 )
 
-tip_plot %>% 
+set.seed(1)
+tip_plot %>%
+  sample_frac(size = 0.1, replace = FALSE) %>% 
   mutate(do_zone = forcats::fct_reorder(do_zone, tip_percent),
        pu_zone = forcats::fct_reorder(pu_zone, tip_percent),
        do_median = median(tip_percent),
-       text = str_c("Drop Off Zone: ", do_zone , "\nTip Percent: ", tip_percent, "\nMedian Percentage:", do_median) ) %>% 
+       text = str_c("Drop Off Zone: ", do_zone , "\nTip Percent: ",      tip_percent, "\nMedian Percentage:", do_median) ) %>% 
   drop_na(do_zone, pu_zone) %>% 
   plot_ly(y = ~tip_percent, color = ~do_zone, text = ~text, type = "box",  colors = "Set2", marker = list(size = 2)) %>% 
   layout(xaxis = b, yaxis = a) 
@@ -342,11 +346,14 @@ We can see that of all 64 drop-off neighborhoods, Highbridge Park has the lowest
 
 
 ```{r echo = FALSE}
-tip_plot %>% 
-mutate(do_zone = forcats::fct_reorder(do_zone, tip_percent),
-pu_zone = forcats::fct_reorder(pu_zone, tip_percent),
-pu_median = median(tip_percent),
-text = str_c("Pick Up Zone: ", pu_zone , "\nTip Percent: ", tip_percent, "\nMedian Percentage:", pu_median) ) %>%
+set.seed(1)
+tip_plot %>%
+  sample_frac(size = 0.1, replace = FALSE) %>% 
+  mutate(do_zone = forcats::fct_reorder(do_zone, tip_percent),
+         pu_zone = forcats::fct_reorder(pu_zone, tip_percent),
+         pu_median = median(tip_percent),
+         text = str_c("Pick Up Zone: ", pu_zone , "\nTip Percent: ",
+                      tip_percent, "\nMedian Percentage:", pu_median) ) %>%
 drop_na(do_zone, pu_zone) %>%
 plot_ly(y = ~tip_percent, color = ~pu_zone, type = "box", colors = "Set2", marker = list(size = 2)) %>%
 layout(xaxis = c, yaxis = a)
