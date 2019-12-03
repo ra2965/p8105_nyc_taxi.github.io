@@ -379,6 +379,12 @@ div.tocify {
   <a href="project_report.html">Project Report</a>
 </li>
 <li>
+  <a href="regression_analysis.html">
+    <span class="fa fa-taxi fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="mailto:&lt;ra2965@cumc.columbia.edu&gt;">
     <span class="fa fa-envelope fa-lg"></span>
      
@@ -414,10 +420,10 @@ div.tocify {
 <h2>Initial Questions</h2>
 <p>In this report, we ask the question, NYC taxicabs, besides being part of the NYC signature look, do we still need them around? Our goal is to provide data-driven insights into the taxicab operation in NYC and determine if and why NYC cabs should still be around for a while.</p>
 <ul>
-<li>How many passengers have NYC taxies picked up over the past couple of years?</li>
-<li>How much does weather affect the cab business?</li>
-<li>what factors might affect the tips given?</li>
-<li>How did time and distance affect fare amount based on the codebook on the NYC Taxi Website?</li>
+<li>What is the overview of NYC yellow cab operations over the past 10 years?</li>
+<li>How did weather (i.e. temperature and precipitation) affect the use of yellow cab?</li>
+<li>What factors might affect the tips given?</li>
+<li>How did duration and distance affect fare amount?</li>
 </ul>
 </div>
 <div id="what-we-found" class="section level2">
@@ -426,7 +432,7 @@ div.tocify {
 <li><p>We made plots showing Yellow Taxi usage over the past 10 years and specifically, trend in 2018.</p></li>
 <li><p>In the overall description part, we found that:</p></li>
 <li><p>We found no significant association between weather and Taxi drives. However, Cold months from Feburary to April did have higher daily taxi usage compared to other months, we concluded that extreme bad weather in cold months did sitimulate taxi service in New York City. No obvious association between precipitation and daily drive amount was observed in 2018.</p></li>
-<li><p>Heatmap:</p></li>
+<li><p>Peak hour of yellow cab trips to different boroughs (plus Newark) had different patterns. Trips to Newark had a clear peak in the afternoon hours. In Staten Island, Bronx, or Brroklyn, there were more trips at night (8pm - 1am). Trips to Queens were relatively evenly spread out across 24 hours, while trips to Manhattan were more likely to be in the daytime.</p></li>
 <li><p>We also fitted a linear regression model to further analyze the asssociation between fare amount and travel time and distance. There is positive association between fare amount and travel time and distance. The coefficient of travel duration is 0.33 (p&lt;0.0001), and the coefficient of travel distance is 2.07 (p&lt;0.0001). However, the results of model diagnostics indicate that the model violate some assumptions of linear regression. Therefore, it can only be used as a rough reference for fare amount estimation.</p></li>
 <li><p>Even thogh we hypothesized that the tip percent may be associated with trip distance, passenger count and daily precipitation, the scatterplot shows little relevance amont these factors.</p></li>
 </ul>
