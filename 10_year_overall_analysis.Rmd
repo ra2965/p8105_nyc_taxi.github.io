@@ -126,5 +126,3 @@ total_fare_plot
 ## Conclusion
 
 From the analysis of overall data of the NYC yellow cab in the past 10 years, we know that with time goes by, fewer and fewer people are using the NYC yellow cab. Even though the fare for a single trip is increasing, the total income from these cute cabs is decreasing and almost 1 billion dollars vanished in 2018 compared with 2013. Therefore, the future of the NYC yellow cab is not very bright. Good luck! 
-
-
