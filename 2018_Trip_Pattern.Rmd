@@ -150,7 +150,7 @@ We also looked at the yellow cab trip pattern across 24 hours in a day in the fi
    
 ```{r}
 ax_1 <- list(
-  title = "Hour in Day",
+  title = "Hour of Day",
   type = 'category',
   showticklabels = TRUE)
 
