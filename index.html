@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
 
 <meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
@@ -234,7 +235,6 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
-  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -263,12 +263,6 @@ $(document).ready(function () {
 }
 }
 
-@media print {
-.toc-content {
-  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
-  float: right;
-}
-}
 
 .toc-content {
   padding-left: 30px;
@@ -350,20 +344,11 @@ div.tocify {
         
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Analysis
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="regression_analysis.html">Regression  Analysis</a>
-    </li>
-    <li>
-      <a href="weather_and_drive.html">Weather and Drive</a>
-    </li>
-  </ul>
+        <li>
+  <a href="regression_analysis.html">Regression  Analysis</a>
+</li>
+<li>
+  <a href="weather_and_drive.html">Weather and Drive</a>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -381,10 +366,7 @@ div.tocify {
 
 <div id="do-we-still-need-yellow-green-cabs-in-nyc" class="section level1">
 <h1>Do we still need Yellow / Green Cabs in NYC?</h1>
-<div class="figure">
-<img src="images/taxi.png" />
-
-</div>
+<p><img src="images/taxi.png" /></p>
 <div id="motivation" class="section level2">
 <h2>Motivation:</h2>
 <p>Taxicab service has been around New York City for as early as the late 1890s and has since been a major player in the NYC transportation system. In 2011, the ridesharing company Uber went alive in New York City, and disrupted the taxicab business tremendously. Since the emergence of Uber, taxi usage and profits have gone down, causing the value of NYC taxi medallion to go down by more than 80%. In NYC, there are more rideshare vehicles than taxi medallion vehicles. In addition, with the increasing prevalence of smartphones, more people choose to order and pay for their rides via ride-sharing apps. <img src="images/taxi_uber_lyft.jpg" /> ## Initial questions:</p>
@@ -402,7 +384,7 @@ div.tocify {
 </ul>
 <p>** In the overall description part, we found that:</p>
 <ul>
-<li><p>We found no significant association between weather and Taxi drives. However, Feburary did have more daily taxi usage compared to other month, we concluded that extreme bad weather in Feburary did sitimulate taxi service in New York City.</p></li>
+<li><p>We found no significant association between weather and Taxi drives. However, Cold months from Feburary to April did have higher daily taxi usage compared to other months, we concluded that extreme bad weather in cold months did sitimulate taxi service in New York City. No obvious association between precipitation and daily drive amount was observed in 2018.</p></li>
 <li><p>Heatmap:</p></li>
 <li><p>We also fitted a linear regression model to further analyze the asssociation between fare amount and travel time and distance. There is positive association between fare amount and travel time and distance. The coefficient of travel duration is 0.33 (p&lt;0.0001), and the coefficient of travel distance is 2.07 (p&lt;0.0001). However, the results of model diagnostics indicate that the model violate some assumptions of linear regression. Therefore, it can only be used as a rough reference for fare amount estimation.</p></li>
 <li><p>Even thogh we hypothesized that the tip percent may be associated with trip distance, passenger count and daily precipitation, the scatterplot shows little relevance amont these factors.</p></li>
@@ -410,21 +392,6 @@ div.tocify {
 </div>
 <div id="data-sources" class="section level2">
 <h2>Data sources:</h2>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>b4f4253fc7f5b2c046427a60b391fbff766bd3b4</p>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
 <ul>
 <li><a href="https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page">NYC TLC Trip Record Data</a></li>
 <li><a href="https://data.nodc.noaa.gov/cgi-bin/iso?id=gov.noaa.ncdc:C00861">NYC RNOAA</a></li>
@@ -432,7 +399,7 @@ div.tocify {
 </div>
 <div id="discussion" class="section level2">
 <h2>Discussion</h2>
-<p>For 2018, although we hypothesis that adverse weather event like low and high average daily temperature and precipitation will increase taxi usage, we did find an obvious trend. This can be due to the limitation of sample size, as we only generate 12000 observation from the larger database. Also, facotrs like travel distance and time might affect taxi use, as people might only choose taxi drive for shorter distance.</p>
+<p>For 2018, although we hypothesized that adverse weather events like low and high average daily temperature and precipitation will increase taxi usage, we did find an obvious trend. This can be due to facotrs like travel distance and time, as people might only choose taxi drive for shorter distance and barely stayed at home in bad weathers.</p>
 </div>
 </div>
 
