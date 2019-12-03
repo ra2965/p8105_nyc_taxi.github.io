@@ -1,0 +1,6 @@
+---
+title: "NYC Yellow Cab Project Report"
+author: "Ran An, Xintao Ding, Xun Wang, Yuqing Xue, Xinyu Yang"
+date: "12/2/2019"
+output: html_document
+---
