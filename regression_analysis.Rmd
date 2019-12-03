@@ -348,16 +348,18 @@ tip_plot %>%
    filter(do_zone == "Randalls Island") %>% 
    mutate(do_median = median(tip_percent))
 ```
+We can see that of all 64 drop-off neighborhoods, Highbridge Park has the lowest median tip percentage at 10.73%, wehre Randalls Island has the highest median tip percentage at 25.46%. Overall, we do see that if the lower the cab go into Manhattan, the higher the percentage of tip is given.
 
 
-```{r include = FALSE}
- tip_plot %>% 
-  filter(do_zone == "Highbridge Park") %>% 
-  mutate(do_median = median(tip_percent))
-
- tip_plot %>% 
-   filter(do_zone == "Randalls Island") %>% 
-   mutate(do_median = median(tip_percent))
+```{r echo = FALSE}
+tip_plot %>% 
+mutate(do_zone = forcats::fct_reorder(do_zone, tip_percent),
+pu_zone = forcats::fct_reorder(pu_zone, tip_percent),
+pu_median = median(tip_percent),
+text = str_c("Pick Up Zone: ", pu_zone , "\nTip Percent: ", tip_percent, "\nMedian Percentage:", pu_median) )%>%
+drop_na(do_zone, pu_zone) %>%
+plot_ly(y = ~tip_percent, color = ~pu_zone, type = "box", colors = "Set2", marker = list(size = 2)) %>%
+layout(xaxis = c, yaxis = a)
 ```
 
 ```{r include = FALSE}
