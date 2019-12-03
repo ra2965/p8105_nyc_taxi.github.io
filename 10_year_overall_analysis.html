@@ -283,6 +283,9 @@ $(document).ready(function () {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
+  <a href="about.html">About</a>
+</li>
+<li>
   <a href="raw_data_tidy.html">Data</a>
 </li>
 <li class="dropdown">
@@ -296,7 +299,7 @@ $(document).ready(function () {
       <a href="10_year_overall_analysis.html">Overall Analysis across 10 Years</a>
     </li>
     <li>
-      <a href="10_year_overall_analysis.html">Overall Analysis across 10 Years</a>
+      <a href="2018_Trip_Pattern.html">Trip Pattern</a>
     </li>
     <li>
       <a href="10_year_overall_analysis.html">Overall Analysis across 10 Years</a>
@@ -334,39 +337,39 @@ $(document).ready(function () {
 </div>
 
 
-<div id="introduction" class="section level4">
-<h4>1. Introduction</h4>
+<div id="introduction" class="section level2">
+<h2>1. Introduction</h2>
 <p>With the development of shared traveling methods such as Uber, Lyft, VIA etc., what will the demands for NYC yellow taxi change? Will we still need these cute yellow cabs in the future? In this section, we analyze the usage of NYC yellow taxi in the past 10 years, trying to shed light on the future of the yellow cab in NYC.</p>
 </div>
-<div id="data-import-and-tidy" class="section level4">
-<h4>2. Data Import and Tidy</h4>
+<div id="data-import-and-tidy" class="section level2">
+<h2>2. Data Import and Tidy</h2>
 <p>To analyze the overall change of NYC yellow taxi usage, we import and tidy yearly summary datasets from 2009 to 2018 in the folder <em>data/yearly_summary</em>. It combines information of rides, passenger numbers, fares in 2009, 2011, 2013, 2015, 2017, 2018 to form a <code>overall_df</code>.</p>
 </div>
-<div id="year-overall-analysis" class="section level4">
-<h4>3. 10-Year Overall Analysis</h4>
+<div id="year-overall-analysis" class="section level2">
+<h2>3. 10-Year Overall Analysis</h2>
 <p>To study changes of NYC yellow taxi usage in the past ten years, we analyze total rides, total passenger numbers, total income and median income for one trip in 2009, 2011, 2013, 2015, 2017, 2018.</p>
-<div id="nyc-yellow-cab-ride-and-passenger-numbers-are-decreasing" class="section level5">
-<h5>3.1 NYC yellow cab ride and passenger numbers are decreasing</h5>
+<div id="nyc-yellow-cab-ride-and-passenger-numbers-are-decreasing" class="section level4">
+<h4>3.1 NYC yellow cab ride and passenger numbers are decreasing</h4>
 <p>First, we look at how the NYC yellow cab <strong>ride number (Fig. 1)</strong> and the <strong>passenger number (Fig. 2)</strong> change with time. From Figure 1, we can see that the total number of taxi rides starts to decrease since 2011 and has decreased by more than <strong>40%</strong> in the past 10 years, and monthly ride numbers are decreasing comparing two adjacent years. Figure 2 shows how the total passenger numbers change with time. When comparing within a single year, one interesting result is that fewer people take yellow taxis during the summer (July, August and September) even more tourists are in NYC then. When comparing among different years, the total passenger number has been also decreasing since 2011, and has also decreased by more than <strong>40%</strong> in the past 10 years.</p>
 <p>Therefore, in the past 10 years, <strong>NYC yellow cab has had fewer and fewer usage and customers!!!</strong></p>
 <p><img src="10_year_overall_analysis_files/figure-html/total_ride_plot-1.png" width="90%" /></p>
 <p><img src="10_year_overall_analysis_files/figure-html/total_passenger_plot-1.png" width="90%" /></p>
 </div>
-<div id="nyc-yellow-cab-is-more-expensive-for-a-single-ride" class="section level5">
-<h5>3.2 NYC yellow cab is more expensive for a single ride</h5>
+<div id="nyc-yellow-cab-is-more-expensive-for-a-single-ride" class="section level4">
+<h4>3.2 NYC yellow cab is more expensive for a single ride</h4>
 <p>Second, we look at how the price of taking a yellow cub changes with time and plot the relationship between media fare for a single trip and time time as Figure 3. From Figure 3, we can see that the median fare for a single trip is increasing within a year and among different years with time goes by. For a single trip, the median fare has increased by about <strong>45%</strong>.</p>
 <p>Therefore, in the past 10 years, <strong>NYC yellow cab has become more and more expensive!!!</strong></p>
 <p><img src="10_year_overall_analysis_files/figure-html/median_fare_plot-1.png" width="90%" /></p>
 </div>
-<div id="nyc-yellow-cab-gets-lower-income" class="section level5">
-<h5>3.3 NYC yellow cab gets lower income</h5>
+<div id="nyc-yellow-cab-gets-lower-income" class="section level4">
+<h4>3.3 NYC yellow cab gets lower income</h4>
 <p>At last, we look at how the gross income from the NYC yellow cab changes with time. We plot the relationship between total income and time as Figure 4. From Figure 4, we can see that the total income from the NYC yellow cab reaches to the peak in 2013. This might because the customer number didn’t decrease too much while the median fare for a single trip increased a lot in 2013 compared with 2012. However, the total income has decreased by about <strong>30%</strong> (amost 1 billion dollars!) in the past 5 years.</p>
 <p>Therefore, <strong>the total income from the NYC yellow cab has been decreasing since 2013</strong>.</p>
 <p><img src="10_year_overall_analysis_files/figure-html/total_fare_plot-1.png" width="90%" /></p>
 </div>
 </div>
-<div id="conclusion" class="section level4">
-<h4>4. Conclusion</h4>
+<div id="conclusion" class="section level2">
+<h2>4. Conclusion</h2>
 <p>From the analysis of overall data of the NYC yellow cab in the past 10 years, we know that with time goes by, fewer and fewer people are using the NYC yellow cab. Even though the fare for a single trip is increasing, the total income from these cute cabs is decreasing and almost 1 billion dollars vanished in 2018 compared with 2013. Therefore, the future of the NYC yellow cab is not very bright. Good luck!</p>
 </div>
 

@@ -365,18 +365,24 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="10_year_overall_analysis.html">Overall</a>
-    </li>
-    <li>
-      <a href="2018_Trip_Pattern.html">Trip Pattern</a>
-    </li>
-    <li>
       <a href="10_year_overall_analysis.html">Overall Analysis across 10 Years</a>
+    </li>
+    <li>
+      <a href="2018_Trip_Pattern.html">Trip Pattern Analysis</a>
+    </li>
+    <li>
+      <a href="regression_analysis.html">Regression Analysis</a>
     </li>
   </ul>
 </li>
 <li>
   <a href="project_report.html">Project Report</a>
+</li>
+<li>
+  <a href="regression_analysis.html">
+    <span class="fa fa-taxi fa-lg"></span>
+     
+  </a>
 </li>
 <li>
   <a href="mailto:&lt;ra2965@cumc.columbia.edu&gt;">
@@ -404,22 +410,20 @@ div.tocify {
 </div>
 
 
-<div id="do-new-yorkers-still-need-these-cute-yellow-cabs" class="section level1">
-<h1>Do New Yorkers still need these cute yellow cabs?</h1>
-<p><br><br><img src="images/taxi.png" alt="logo" style="width:80%; margin:5px"><br></p>
+<p><br><br><img src="images/taxi_2.jpg" alt="logo" style="width:70%; margin:5px"><br></p>
 <div id="motivation" class="section level2">
 <h2>Motivation:</h2>
 <p>Taxicab service has been around New York City for as early as the late 1890s and has since been a major player in the NYC transportation system. In 2011, the ridesharing company Uber went alive in New York City, and disrupted the taxicab business tremendously. Since the emergence of Uber, taxi usage and profits have gone down, causing the value of NYC taxi medallion to go down by more than 80%. In NYC, there are more rideshare vehicles than taxi medallion vehicles. In addition, with the increasing prevalence of smartphones, more people choose to order and pay for their rides via ride-sharing apps.</p>
-<p><br><br><img src="images/taxi_uber_lyft.jpg" alt="logo" style="width:80%"><br></p>
+<p><br><br><img src="images/taxi_uber_lyft.jpg" alt="logo" style="width:50%"><br></p>
 </div>
 <div id="initial-questions" class="section level2">
 <h2>Initial Questions</h2>
 <p>In this report, we ask the question, NYC taxicabs, besides being part of the NYC signature look, do we still need them around? Our goal is to provide data-driven insights into the taxicab operation in NYC and determine if and why NYC cabs should still be around for a while.</p>
 <ul>
-<li>How many passengers have NYC taxies picked up over the past couple of years?</li>
-<li>How much does weather affect the cab business?</li>
-<li>what factors might affect the tips given?</li>
-<li>How did time and distance affect fare amount based on the codebook on the NYC Taxi Website?</li>
+<li>What is the overview of NYC yellow cab operations over the past 10 years?</li>
+<li>How did weather (i.e. temperature and precipitation) affect the use of yellow cab?</li>
+<li>What factors might affect the tips given?</li>
+<li>How did duration and distance affect fare amount?</li>
 </ul>
 </div>
 <div id="what-we-found" class="section level2">
@@ -428,7 +432,7 @@ div.tocify {
 <li><p>We made plots showing Yellow Taxi usage over the past 10 years and specifically, trend in 2018.</p></li>
 <li><p>In the overall description part, we found that:</p></li>
 <li><p>We found no significant association between weather and Taxi drives. However, Cold months from Feburary to April did have higher daily taxi usage compared to other months, we concluded that extreme bad weather in cold months did sitimulate taxi service in New York City. No obvious association between precipitation and daily drive amount was observed in 2018.</p></li>
-<li><p>Heatmap:</p></li>
+<li><p>Peak hour of yellow cab trips to different boroughs (plus Newark) had different patterns. Trips to Newark had a clear peak in the afternoon hours. In Staten Island, Bronx, or Brroklyn, there were more trips at night (8pm - 1am). Trips to Queens were relatively evenly spread out across 24 hours, while trips to Manhattan were more likely to be in the daytime.</p></li>
 <li><p>We also fitted a linear regression model to further analyze the asssociation between fare amount and travel time and distance. There is positive association between fare amount and travel time and distance. The coefficient of travel duration is 0.33 (p&lt;0.0001), and the coefficient of travel distance is 2.07 (p&lt;0.0001). However, the results of model diagnostics indicate that the model violate some assumptions of linear regression. Therefore, it can only be used as a rough reference for fare amount estimation.</p></li>
 <li><p>Even thogh we hypothesized that the tip percent may be associated with trip distance, passenger count and daily precipitation, the scatterplot shows little relevance amont these factors.</p></li>
 </ul>
@@ -443,7 +447,6 @@ div.tocify {
 <div id="discussion" class="section level2">
 <h2>Discussion</h2>
 <p>For 2018, although we hypothesized that adverse weather events like low and high average daily temperature and precipitation will increase taxi usage, we did find an obvious trend. This can be due to facotrs like travel distance and time, as people might only choose taxi drive for shorter distance and barely stayed at home in bad weathers.</p>
-</div>
 </div>
 
 <br><br>
