@@ -166,11 +166,6 @@ The p-value of the two coefficients are both < 0.05. It is seen that both variab
 ### Diagnostics
 Further we can plot the model diagnostic checking for other problems such as normality of error term, heteroscedasticity etc.
 
-```{r }
-par(mfrow=c(2,2))
-plot(fit1)
-
-```
 
 The plots indicate a lot of outliers, which make the model violate the linear regression assumptions.
 
@@ -279,102 +274,5 @@ tip_plot <-  boxplot %>%
   drop_na(do_zone, pu_zone)
 
 ```
-
-
-We look at rides that are either picked-up at and dropped-off at a neighborhood in Manhattan. 
-
-## Drop-off Zone
-```{r echo = FALSE}
-# plotly for do_zone
-f1 <- list(
-  family = "Arial, sans-serif",
-  size = 18,
-  color = "grey"
-)
-f2 <- list(
-  family = "Old Standard TT, serif",
-  size = 14,
-  color = "black"
-)
-a <- list(
-  title = "Tip Percentage",
-  titlefont = f1,
-  showticklabels = TRUE,
-  tickangle = 45,
-  tickfont = f2,
-  exponentformat = "E",
-  range = c(0,1)
-)
-
-
-
-b <- list(
-  title = "Drop off Manhanttan Neighborhoods",
-  titlefont = f1, 
-  showticklabels = TRUE,
-  tickangle = 45,
-  tickfont = f2,
-  exponntformat = "E"
-)
-
-c <- list(
-  title = "Pick up Manhanttan Neighborhoods",
-  titlefont = f1, 
-  showticklabels = TRUE,
-  tickangle = 45,
-  tickfont = f2,
-  exponntformat = "E"
-)
-
-
-
-tip_plot %>% 
-  mutate(do_zone = forcats::fct_reorder(do_zone, tip_percent),
-       pu_zone = forcats::fct_reorder(pu_zone, tip_percent),
-       do_median = median(tip_percent),
-       text = str_c("Drop Off Zone: ", do_zone , "\nTip Percent: ", tip_percent, "\nMedian Percentage:", do_median) )%>% 
-  drop_na(do_zone, pu_zone) %>% 
-  plot_ly(y = ~tip_percent, color = ~do_zone, text = ~text, type = "box",  colors = "Set2", marker = list(size = 2))%>% 
-  layout(xaxis = b, yaxis = a) 
-
-```
-
-```{r include = FALSE}
- tip_plot %>% 
-  filter(do_zone == "Highbridge Park") %>% 
-  mutate(do_median = median(tip_percent))
-
- tip_plot %>% 
-   filter(do_zone == "Randalls Island") %>% 
-   mutate(do_median = median(tip_percent))
-```
-We can see that of all 64 drop-off neighborhoods, Highbridge Park has the lowest median tip percentage at 10.73%, wehre Randalls Island has the highest median tip percentage at 25.46%. Overall, we do see that if the lower the cab go into Manhattan, the higher the percentage of tip is given.
-
-
-```{r echo = FALSE}
-tip_plot %>% 
-mutate(do_zone = forcats::fct_reorder(do_zone, tip_percent),
-pu_zone = forcats::fct_reorder(pu_zone, tip_percent),
-pu_median = median(tip_percent),
-text = str_c("Pick Up Zone: ", pu_zone , "\nTip Percent: ", tip_percent, "\nMedian Percentage:", pu_median) )%>%
-drop_na(do_zone, pu_zone) %>%
-plot_ly(y = ~tip_percent, color = ~pu_zone, type = "box", colors = "Set2", marker = list(size = 2)) %>%
-layout(xaxis = c, yaxis = a)
-```
-
-```{r include = FALSE}
-tip_plot %>% 
-  filter(pu_zone == "Marble Hill") %>% 
-   mutate(do_median = median(tip_percent))
-
- tip_plot %>% 
-   filter(pu_zone == "Roosevelt Island") %>% 
-   mutate(do_median = median(tip_percent))
-```
-
-We can see that of all 66 pick-up neighborhoods, Marble Hill has the lowest median tip percentage at 10.0%, wehre Roosevelt Island has the highest median tip percentage at 21.88%. HOwever, only 8 rides and 15 ride were recorded for Marble Hill and Roosevelt Island respectively. Therefore, the result is not quite representative. However, considering that how restricted public transportation to Roosevelt Island is, I'm not surprised that passengers picked up from there feel generous towards their driver. Overall, we see a similiar trend to the drop-off neighborhoods, if cab driver wants a bigger tip, they should wait around lower Manhattan. 
-
-
-
 
 
