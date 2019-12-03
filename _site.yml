@@ -9,7 +9,7 @@ navbar:
     href: raw_data_tidy.html
   - text: Data Analysis
     menu:
-    - text: Overall
+    - text: Overall Analysis across 10 Years
       href: 10_year_overall_analysis.html
     - text: Trip Pattern
       href: 2018_Trip_Pattern.html
