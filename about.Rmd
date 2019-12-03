@@ -6,8 +6,6 @@ output:
     toc_float: true
 ---
 
-# Do New Yorkers still need these cute yellow cabs?
-
 <br><br><img src="images/taxi.png" alt="logo" style="width:80%; margin:5px"><br>
 
 ## Motivation:
