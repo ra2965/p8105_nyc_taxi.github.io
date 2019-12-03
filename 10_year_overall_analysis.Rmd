@@ -1,5 +1,5 @@
 ---
-title: "10 Year Overall Analysis"
+title: "10-Year Overall Analysis of NYC Yellow Taxi Usage"
 author: "Xun Wang"
 date: "12/2/2019"
 output: github_document
@@ -27,11 +27,15 @@ scale_fill_discrete = scale_fill_viridis_d
 theme_set(theme_minimal() + theme(legend.position = "bottom"))
 ```
 
-### 1. Data Import and Tidy
+#### 1. Introduction
 
-The code chunk below imports and tidies the overall datasets from 2009 to 2018.
+With the development of shared traveling methods such as Uber, Lyft, VIA etc., what will the demands for NYC yellow taxi change? Will we still need these cute yellow cabs in the future? In this section, we analyze the usage of NYC yellow taxi in the past 10 years, trying to shed light on the future of the yellow cab in NYC.
 
-```{r overall_df, message=FALSE}
+#### 2. Data Import and Tidy
+
+To analyze the overall change of NYC yellow taxi usage, we import and tidy yearly summary datasets from 2009 to 2018 in the folder *data/yearly_summary*. It combines information of rides, passenger numbers, fares in 2009, 2011, 2013, 2015, 2017, 2018 to form a `overall_df`.
+
+```{r overall_df, include = FALSE}
 file_name = list.files(path = "data/yearly_summary", pattern = "_taxi_trip_summary")
 
 overall_df_raw = map(.x = file_name, ~ read_csv(str_c("data/yearly_summary/", .x))) 
@@ -48,69 +52,80 @@ overall_df =
   separate(time, into = c("year", "month"), sep = "_", remove = TRUE) %>%
   #filter(year != 2018) %>% 
   select(year, month, total_ride_million, total_passenger_million, total_fare_million, mean_fare, median_fare)
-
-overall_df
 ```
 
-### 2. 10-Year Overall Analysis
+#### 3. 10-Year Overall Analysis
 
-To study changes of NYC yellow taxi usage in the past ten years, we analyze total rides, total passenger numbers, total income and average income for one trip between 2009 and 2018. The plots are as below.
+To study changes of NYC yellow taxi usage in the past ten years, we analyze total rides, total passenger numbers, total income and median income for one trip in 2009, 2011, 2013, 2015, 2017, 2018.
 
-The code chunk below plots **how the NYC yellow taxi total rides change with time**.
+##### 3.1 NYC yellow cab ride and passenger numbers are decreasing
 
-```{r total_ride_plot}
+First, we look at how the NYC yellow cab **ride number (Fig. 1)** and the **passenger number (Fig. 2)** change with time. From Figure 1, we can see that the total number of taxi rides starts to decrease since 2011 and has decreased by more than **40%** in the past 10 years, and monthly ride numbers are decreasing comparing two adjacent years. Figure 2 shows how the total passenger numbers change with time. When comparing within a single year, one interesting result is that fewer people take yellow taxis during the summer (July, August and September) even more tourists are in NYC then. When comparing among different years, the total passenger number has been also decreasing since 2011, and has also decreased by more than **40%** in the past 10 years.
+
+Therefore, in the past 10 years, **NYC yellow cab has had fewer and fewer usage and customers!!!**
+
+```{r total_ride_plot, echo = FALSE}
 total_ride_plot = 
   overall_df %>% 
   ggplot(aes(year, weight = total_ride_million, fill = month)) +
-  geom_bar(position="stack") +
-  labs(title="NYC Yellow Taxi Total Rides vs. Time", 
+  geom_bar(position = "stack") +
+  labs(title = "Figure 1. NYC Yellow Taxi Total Rides vs. Time", 
        y = "total rides (million)",
        caption = "Data from the NYC TLC Data")
 
 total_ride_plot
 ```
 
-The code chunk below plots **how the NYC yellow taxi total passengers change with time**.
-
-```{r total_passenger_plot}
+```{r total_passenger_plot, echo = FALSE}
 total_passenger_plot = 
   overall_df %>% 
-  ggplot(aes(x= month, y = total_passenger_million, color = year, group = year)) +
+  ggplot(aes(x = month, y = total_passenger_million, color = year, group = year)) +
   geom_line(size = 2) +
-  labs(title="NYC Yellow Taxi Passenger vs. Time", 
+  labs(title = "Figure 2. NYC Yellow Taxi Passenger vs. Time", 
        y = "total passenger (million)",
        caption = "Data from the NYC TLC Data")
 
 total_passenger_plot
 ```
 
-The code chunk below plots **how the NYC yellow taxi total income change with time**.
+##### 3.2 NYC yellow cab is more expensive for a single ride 
 
-```{r total_fare_plot}
+Second, we look at how the price of taking a yellow cub changes with time and plot the relationship between media fare for a single trip and time time as Figure 3. From Figure 3, we can see that the median fare for a single trip is increasing within a year and among different years with time goes by. For a single trip, the median fare has increased by about **45%**.
+
+Therefore, in the past 10 years, **NYC yellow cab has become more and more expensive!!!**
+
+```{r median_fare_plot, echo = FALSE}
+median_fare_plot =
+  overall_df %>% 
+  ggplot(aes(x = month, y = mean_fare, color = year, group = year)) +
+  geom_line(size = 2) +
+  labs(title = "Figure 3. NYC Yellow Taxi Median Fare vs. Time", 
+       y = "median fare for one trip (US dollar)",
+       caption = "Data from the NYC TLC Data")
+
+median_fare_plot
+```
+
+##### 3.3 NYC yellow cab gets lower income 
+
+At last, we look at how the gross income from the NYC yellow cab changes with time. We plot the relationship between total income and time as Figure 4. From Figure 4, we can see that the total income from the NYC yellow cab reaches to the peak in 2013. This might because the customer number didn't decrease too much while the median fare for a single trip increased a lot in 2013 compared with 2012. However, the total income has decreased by about **30%** (amost 1 billion dollars!) in the past 5 years. 
+
+Therefore, **the total income from the NYC yellow cab has been decreasing since 2013**. 
+
+```{r total_fare_plot, echo = FALSE}
 total_fare_plot = 
   overall_df %>% 
   ggplot(aes(year, weight = total_fare_million, fill = month)) +
-  geom_bar(position="stack") +
-  labs(title="NYC Yellow Taxi Total Income vs. Time", 
+  geom_bar(position = "stack") +
+  labs(title = "Figure 4. NYC Yellow Taxi Total Income vs. Time", 
        y = "total income (million US dollar)",
        caption = "Data from the NYC TLC Data")
 
 total_fare_plot
 ```
 
-The code chunk below plots **how the NYC yellow taxi average fare for a single trip change with time**.
+#### 4. Conclusion
 
-```{r ave_fare_plot}
-ave_fare_plot = 
-  overall_df %>% 
-  ggplot(aes(x= month, y = mean_fare, color = year, group = year)) +
-  geom_line(size = 2) +
-  labs(title="NYC Yellow Taxi Average Fare vs. Time", 
-       y = "average fare for one trip (US dollar)",
-       caption = "Data from the NYC TLC Data")
-
-ave_fare_plot
-```
-
+From the analysis of overall data of the NYC yellow cab in the past 10 years, we know that with time goes by, fewer and fewer people are using the NYC yellow cab. Even though the fare for a single trip is increasing, the total income from these cute cabs is decreasing and almost 1 billion dollars vanished in 2018 compared with 2013. Therefore, the future of the NYC yellow cab is not very bright. Good luck! 
 
 
