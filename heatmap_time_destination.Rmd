@@ -109,7 +109,7 @@ heatmap %>%
   arrange(do_boro, pu_hour) %>% 
     plot_ly(
     x = ~pu_hour, y = ~do_boro,
-    height = 400, width = 1400) %>%
+    height = 300, width = 900) %>%
   add_heatmap(
     z = ~percent,
     text = ~paste(

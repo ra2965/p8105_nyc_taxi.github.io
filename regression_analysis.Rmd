@@ -1,10 +1,11 @@
 ---
-title: "Regression Analysis of Fare Amount and Trip Distance and Duration"
+title: "Exploration of potential factors that impact fare amount and tip percent"
 output: html_document
 ---
 We are interested in the factors that potentially effect the revenue of each taxi trip. The total amount is the sum of fare amount, tax, tip amount, tolls amount and [improvement surcharge](https://www1.nyc.gov/site/tlc/about/taxi-improvement-fund.page). Tolls amount is fixed. Since tax and tip are dependent on fare amount, we are interested in fare amount. In addition, even though most of time the tip percent will fall between 15% and 20% in NYC, it still varies across difference trips. We also hope to explore the reasons for higher tip percent. 
 
 ## Fare Amount
+
 The rule of standard metered taxi fare is too [complicated](https://www1.nyc.gov/site/tlc/passengers/taxi-fare.page) . It is difficult for a passenger to estimate the fare amount refering to such complext instructions.
 
 According to the codebook from the TLC website, the fare amount is defined as "The time-and-distance fare calculated by the meter". Therefore, we hope to explore the association between fare amount and trip distance and duration. If possible, we also want to roughly predict the fare amount by duration and distance.
@@ -111,23 +112,23 @@ reg_plot = reg %>%
  
 fare_distance = reg_plot %>% 
   ggplot(aes(x = trip_distance, y = fare_amount)) +
-  geom_point(alpha = 0.3, color = 'skyblue') +
+  geom_point(alpha = 0.3, color = 'skyblue',size = 0.3) +
   labs(
-    title = "The distribution of fare amount by trip distance",
+    title = "The distribution of fare amount by trip distance and duration",
     x = "Trip Distance",
     y = "Fare Amount"
   )
 
 fare_duration = reg_plot %>% 
   ggplot(aes(x = duration, y = fare_amount)) +
-  geom_point(alpha = 0.3, color = 'red') +
+  geom_point(alpha = 0.3, color = 'red', size = 0.3) +
   labs(
-    title = "The distribution of fare amount by trip distance",
     x = "Trip Duration",
     y = "Fare Amount"
   )
 
 fare_distance + fare_duration
+
 ```
 
 According to the scatterplots, there is a positive relationship among trip distance and fare amount. Trip duration is also positively associated with fare amount.
@@ -143,11 +144,11 @@ fit1 = lm(fare_amount ~ duration + trip_distance , data = reg) %>%
   mutate(p = round(p_value,3))
 
 fit1 = lm(fare_amount ~ duration + trip_distance , data = reg ) 
-summary(fit1) %>% broom::tidy() %>% knitr::kable()
+summary(fit1) %>% broom::tidy() %>% knitr::kable(digit = 2)
 ```
 
 ```{r echo=FALSE}
-summary(fit1) %>% broom::glance() %>% knitr::kable()
+summary(fit1) %>% broom::glance() %>% knitr::kable(digit = 2)
 ```
 
 The p-value of the two coefficients are both < 0.05. It is seen that both variables (duration, trip_distance) are statistically significant at 5 % level of significance.
@@ -162,6 +163,17 @@ plot(fit1)
 ```
 
 The plots indicate a lot of outliers, which make the model violate the linear regression assumptions.
+
+```{r}
+reg_plot %>% 
+  ggplot(aes(x=fare_amount)) +
+  geom_histogram(bins = 100) +
+  labs(
+    title = "Distribution of fare amount",
+    x = "Fare Amount",
+    y = " "
+  )
+```
 
 In addition, we realized that the duration will increase if the trip distance increased. Therefore, possibly there is multicollinearity problem in this model as well. For further diagnosis of the problem, let us first look at the pair-wise correlation among the explanatory variables.
 
