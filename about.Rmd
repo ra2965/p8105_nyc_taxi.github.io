@@ -27,18 +27,19 @@ In this report, we ask the question, NYC taxicabs, besides being part of the NYC
 
 * We made plots showing Yellow Taxi usage over the past 10 years and specifically, trend in 2018. 
 
-* In the overall description part, we found that:
+* In the overall description part, we found that with time goes by, fewer and fewer people are using the NYC yellow cab. Even though the fare for a single trip is increasing, the total income from these cabs is decreasing and almost 1 billion dollars vanished in 2018 compared with 2013.  
 
-
-* We found no significant association between weather and Taxi drives. However, Cold months from Feburary to April did have higher daily taxi usage compared to other months, we concluded that extreme bad weather in cold months did sitimulate taxi service in New York City. No obvious association between precipitation and daily drive amount was observed in 2018. 
+* We found no significant association between weather and taxi usage. However, cold months from Feburary to April did have higher daily taxi usage compared to other months, we concluded that extreme bad weather in cold months did sitimulate taxi service in New York City. No obvious association between precipitation and daily drive amount was observed in 2018. 
 
 * Peak hour of yellow cab trips to different boroughs (plus Newark) had different patterns. Trips to Newark had a clear peak in the afternoon hours. In Staten Island, Bronx, or Brooklyn, there were more trips at night (8pm - 1am). Trips to Queens were relatively evenly spread out across 24 hours, while trips to Manhattan were more likely to be in the daytime. 
 
-* We also fitted a linear regression model to further analyze the asssociation between fare amount and travel time and distance. There is positive association between fare amount and travel time and distance. The coefficient of travel duration is 0.33 (p<0.0001), and the coefficient of travel distance is 2.07 (p<0.0001). However, the results of model diagnostics indicate that the model violate some assumptions of linear regression. Therefore, it can only be used as a rough reference for fare amount estimation. 
+* We also fitted a linear regression model to further analyze the asssociation between fare amount and travel duration and distance. There is positive association between fare amount and travel duration and distance. The coefficient of travel duration is 0.35 (p<0.0001), and the coefficient of travel distance is 2.00 (p<0.0001). However, the results of model diagnostics indicate that the model violate some assumptions of linear regression. Therefore, it can only be used as a rough reference for fare amount estimation. 
 
-* Even thogh we hypothesized that the tip percent may be associated with trip distance, passenger count and daily precipitation, the scatterplot shows little relevance amont these factors. 
+* Even thogh we hypothesized that the tip percent may be associated with trip distance, passenger count and daily precipitation, the scatterplot shows little relevance amont these factors. We did, however, find that within Manhattan, for both pickup and drop-off, downtown riders pay more than uptown riders.
 
 ## Data sources
+
+The two data sources we use are as follows. Detailed information about the raw data can be found from the *Data* tab on the top.
 
 * [NYC TLC Trip Record Data](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page)
 * [NYC RNOAA](https://data.nodc.noaa.gov/cgi-bin/iso?id=gov.noaa.ncdc:C00861
@@ -46,5 +47,5 @@ In this report, we ask the question, NYC taxicabs, besides being part of the NYC
 
 ## Discussion
 
-For 2018, although we hypothesized that adverse weather events like low and high average daily temperature and precipitation will increase taxi usage, we did find an obvious trend. This can be due to facotrs like travel distance and time, as people might only choose taxi drive for shorter distance and barely stayed at home in bad weathers. 
+In our study, we find some interesting points about NYC yellow cab usage: New Yorkers use yellow cabs less during the summer; and they take yellow cabs to different NYC boros at different time; New Yorkers don't give more tips even with longer trip distance, more passengers or heavier daily precipitation. However, from previous studies, people proposed negative effects from shared traveling on NYC yellow cab usage. Our results shows a tremendous decrease of yellow cab usage in the past 10 years, in both customer numbers and income. From our findings, it seems the future of the NYC yellow cab is not very bright. Good luck NYC yellow cabs!
 
