@@ -8,7 +8,7 @@ output:
 
 <br><br><img src="images/taxi_2.jpg" alt="logo" style="width:70%; margin:5px"><br>
 
-## Motivation:
+## Motivation
 
 Taxicab service has been around New York City for as early as the late 1890s and has since been a major player in the NYC transportation system. In 2011, the ridesharing company Uber went alive in New York City, and disrupted the taxicab business tremendously. Since the emergence of Uber, taxi usage and profits have gone down, causing the value of NYC taxi medallion to go down by more than 80%. In NYC, there are more rideshare vehicles than taxi medallion vehicles. In addition, with the increasing prevalence of smartphones, more people choose to order and pay for their rides via ride-sharing apps. 
 
@@ -32,13 +32,13 @@ In this report, we ask the question, NYC taxicabs, besides being part of the NYC
 
 * We found no significant association between weather and Taxi drives. However, Cold months from Feburary to April did have higher daily taxi usage compared to other months, we concluded that extreme bad weather in cold months did sitimulate taxi service in New York City. No obvious association between precipitation and daily drive amount was observed in 2018. 
 
-* Peak hour of yellow cab trips to different boroughs (plus Newark) had different patterns. Trips to Newark had a clear peak in the afternoon hours. In Staten Island, Bronx, or Brroklyn, there were more trips at night (8pm - 1am). Trips to Queens were relatively evenly spread out across 24 hours, while trips to Manhattan were more likely to be in the daytime. 
+* Peak hour of yellow cab trips to different boroughs (plus Newark) had different patterns. Trips to Newark had a clear peak in the afternoon hours. In Staten Island, Bronx, or Brooklyn, there were more trips at night (8pm - 1am). Trips to Queens were relatively evenly spread out across 24 hours, while trips to Manhattan were more likely to be in the daytime. 
 
 * We also fitted a linear regression model to further analyze the asssociation between fare amount and travel time and distance. There is positive association between fare amount and travel time and distance. The coefficient of travel duration is 0.33 (p<0.0001), and the coefficient of travel distance is 2.07 (p<0.0001). However, the results of model diagnostics indicate that the model violate some assumptions of linear regression. Therefore, it can only be used as a rough reference for fare amount estimation. 
 
 * Even thogh we hypothesized that the tip percent may be associated with trip distance, passenger count and daily precipitation, the scatterplot shows little relevance amont these factors. 
 
-## Data sources:
+## Data sources
 
 * [NYC TLC Trip Record Data](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page)
 * [NYC RNOAA](https://data.nodc.noaa.gov/cgi-bin/iso?id=gov.noaa.ncdc:C00861

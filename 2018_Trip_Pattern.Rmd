@@ -189,4 +189,4 @@ heatmap %>%
 
 Each square in the heatmap represents a unique combination of destination boroughs and 24 hours in a day, and the color represents the percent of trip amount out of the total trip amount in that  borough,  with brighter color represents higher percent.
    
-We can see that in boroughs like Staten Island, Bronx, or Brroklyn, there were more trips to these places in night or late night (8pm - 1am) than in the day time. Trips to Queens were relatively evenly spread out across hours in a day and trips to Manhattan were more likely to be in the day  rather than in the night. Trips to Newark had a clear peak in the afternoon hours.
+We can see that in boroughs like Staten Island, Bronx, or Brooklyn, there were more trips to these places in night or late night (8pm - 1am) than in the day time. Trips to Queens were relatively evenly spread out across hours in a day and trips to Manhattan were more likely to be in the day  rather than in the night. Trips to Newark had a clear peak in the afternoon hours.
