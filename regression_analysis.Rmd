@@ -29,7 +29,6 @@ library(patchwork)
 library(tidyverse)
 library(plotly)
 
-
 weather <-
   read_csv("./data/weather_nyc_2018.csv") %>% 
   mutate(date = as.character(date)) %>%
@@ -115,11 +114,9 @@ reg_plot = reg %>%
 
 ```
 
-
 ### Scatterplot of fare amount by distance and duration
 
 ```{r }
- 
 fare_distance = reg_plot %>% 
   ggplot(aes(x = trip_distance, y = fare_amount)) +
   geom_point(alpha = 0.3, color = 'skyblue',size = 0.3) +
@@ -138,7 +135,6 @@ fare_duration = reg_plot %>%
   )
 
 fare_distance + fare_duration
-
 ```
 
 According to the scatterplots, there is a positive relationship among trip distance and fare amount. Trip duration is also positively associated with fare amount.
@@ -167,9 +163,8 @@ The p-value of the two coefficients are both < 0.05. It is seen that both variab
 Further we can plot the model diagnostic checking for other problems such as normality of error term, heteroscedasticity etc.
 
 ```{r }
-par(mfrow=c(2,2))
+par(mfrow = c(2,2))
 plot(fit1)
-
 ```
 
 The plots indicate a lot of outliers, which make the model violate the linear regression assumptions.
@@ -178,7 +173,7 @@ It can be the result of the skewed distribution of fare amount.
 
 ```{r}
 reg_plot %>% 
-  ggplot(aes(x=fare_amount)) +
+  ggplot(aes(x = fare_amount)) +
   geom_histogram(bins = 100) +
   labs(
     title = "Distribution of fare amount",
@@ -306,8 +301,6 @@ a <- list(
   range = c(0,1)
 )
 
-
-
 b <- list(
   title = "Drop off Manhanttan Neighborhoods",
   titlefont = f1, 
@@ -326,17 +319,14 @@ c <- list(
   exponntformat = "E"
 )
 
-
-
 tip_plot %>% 
   mutate(do_zone = forcats::fct_reorder(do_zone, tip_percent),
        pu_zone = forcats::fct_reorder(pu_zone, tip_percent),
        do_median = median(tip_percent),
-       text = str_c("Drop Off Zone: ", do_zone , "\nTip Percent: ", tip_percent, "\nMedian Percentage:", do_median) )%>% 
+       text = str_c("Drop Off Zone: ", do_zone , "\nTip Percent: ", tip_percent, "\nMedian Percentage:", do_median) ) %>% 
   drop_na(do_zone, pu_zone) %>% 
-  plot_ly(y = ~tip_percent, color = ~do_zone, text = ~text, type = "box",  colors = "Set2", marker = list(size = 2))%>% 
+  plot_ly(y = ~tip_percent, color = ~do_zone, text = ~text, type = "box",  colors = "Set2", marker = list(size = 2)) %>% 
   layout(xaxis = b, yaxis = a) 
-
 ```
 
 ```{r include = FALSE}
@@ -356,7 +346,7 @@ tip_plot %>%
 mutate(do_zone = forcats::fct_reorder(do_zone, tip_percent),
 pu_zone = forcats::fct_reorder(pu_zone, tip_percent),
 pu_median = median(tip_percent),
-text = str_c("Pick Up Zone: ", pu_zone , "\nTip Percent: ", tip_percent, "\nMedian Percentage:", pu_median) )%>%
+text = str_c("Pick Up Zone: ", pu_zone , "\nTip Percent: ", tip_percent, "\nMedian Percentage:", pu_median) ) %>%
 drop_na(do_zone, pu_zone) %>%
 plot_ly(y = ~tip_percent, color = ~pu_zone, type = "box", colors = "Set2", marker = list(size = 2)) %>%
 layout(xaxis = c, yaxis = a)
