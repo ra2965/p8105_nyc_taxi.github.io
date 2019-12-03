@@ -27,16 +27,11 @@ library(gifski)
    
 #### Background
 
-Previous work has shown that there are relationships between taxi ridership and weather events.“During adverse weather, taxi drivers tend to make more money” (Kamga et al., 2013). Kamga et al. also found that during days when adverse weather took place, there was a higher demand for taxis in Manhattan compared to the other boroughs, and that more people were prone to take shorter taxi trips.
+Previous work have shown that there are relationships between taxi ridership and weather events.“During adverse weather, taxi drivers tend to make more money” (Kamga et al., 2013). Kamga et al. also found that during days when adverse weather took place, there was a higher demand for taxis in Manhattan compared to the other boroughs, and that more people were prone to take shorter taxi trips.
 
 #### Data Tidy
 
-In this part, we want to see whether there is a trend between weather and yellow cab within and between months use using our data. We use the weather data including temperature and precipitation data in 2018 and their corresponding yellow taxi use data. For temperature, we use average temperature `average_temp ` as the mean of maximum temperarure and miniminum temperature in each day. For yellow cab data, we use the raw data for 2018 from NYC Taxi Website, count the daily taxi usage by `pick_up_data` and then join the weather dataset by month and date.
-
-
-```{r echo=FALSE, message = FALSE, warning = FALSE}
-pilot=read_csv(file = "./data/pilot.csv")
-```
+In this part, we wanted to see whether there is a trend between weather and yellow cab within and between months use using our data. We used the weather data including temperature and precipitation data in 2018 and their corresponding yellow taxi use data. For temperature, we used average temperature `average_temp ` as the mean of maximum temperarure and miniminum temperature in each day. For yellow cab data, we used the raw data for 2018 from NYC Taxi Website, counted the daily taxi usage by `pick_up_data` and then joined the weather dataset by month and date.
 
 
 ```{r message = FALSE, warning = FALSE}
@@ -62,9 +57,9 @@ cab_weather=
 
 #### Plot for the association between Weather and Daily Taxi Usage
 
-Here we make an animation plot to show the daily drive amount and average daily temperature for each month.The size of the dots shows the precipitaiton for that day which help to identify whether rainy weather also increase taxi use. 
+Here we made an animation plot to show the daily drive amount and average daily temperature for each month.The size of the dots showed the precipitaiton for that day which help to identify whether rainy weather also increase taxi use. 
 
-Although we hypothesis that cold weather and hot weather might have more taxi use, there is no obvious usage increase in summer time. While, we do observed high daily drive amount in Feburary, March, April which are the four coldest month in NYC. Also,no interaction between month and average temperature being observed. In terms of the influence of precipitation, we didn't observe a significant pattern. Contrast to what we guess before, instead of increase daily drive amount, rainy days had lower drive amount. This might due to the reason that people would just stay at home during days with heavy rain or snow. Also, if we adjust for distance, there might be a significant association between precipitation and short distance drive. 
+Although we hypothesized that cold weather and hot weather might have more taxi use, there was no obvious usage increase in summer time. While, we did observed high daily drive amount in Feburary, March and April which are the four coldest months in NYC. Also, no interaction between month and average temperature was being observed. In terms of the influence of precipitation, we didn't observe a significant pattern. Contrast to what we guessed before, instead of increase daily drive amount, rainy days had lower drive amount. This might due to the reason that people would just stay at home during days with heavy rain or snow. Also, if we adjustded for distance, there might be a significant association between precipitation and short distance drive. 
 
 ```{r message = FALSE, warning = FALSE}
 weather_plot=cab_weather %>%
