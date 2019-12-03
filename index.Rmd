@@ -3,8 +3,9 @@ title: "Yellow Cabs in the Big Apple"
 output: html_document
 ---
 
-# Do New Yorkers still need these cute yellow cabs?
+## What do we know about these cute yellow cabs?
+<br>
 
-### Ran An, Xintao Ding, Xun Wang, Yuqing Xue, Xinyu Yang
+#### Ran An, Xintao Ding, Xun Wang, Yuqing Xue, Xinyu Yang
 
 <br><br><img src="images/taxi.png" alt="logo" style="width:100%; margin:0px"><br>
