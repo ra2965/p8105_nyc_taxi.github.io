@@ -6,7 +6,7 @@ output:
     toc_float: true
 ---
 
-<br><br><img src="images/taxi.png" alt="logo" style="width:80%; margin:5px"><br>
+<br><br><img src="images/taxi_2.jpg" alt="logo" style="width:70%; margin:5px"><br>
 
 ## Motivation:
 
