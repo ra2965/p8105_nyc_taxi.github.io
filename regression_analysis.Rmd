@@ -1,7 +1,8 @@
 ---
 title: "Exploration of potential factors that impact fare amount and tip percent"
-output: html_document
-        code_folding: hide
+output: 
+  html_document:
+    code_folding: hide
 ---
 
 We are interested in the factors that potentially effect the revenue of each taxi trip. The total amount is the sum of fare amount, tax, tip amount, tolls amount and [improvement surcharge](https://www1.nyc.gov/site/tlc/about/taxi-improvement-fund.page). Tolls amount is fixed. Since tax and tip are dependent on fare amount, we are interested in fare amount. 
@@ -26,6 +27,8 @@ library(mctest)
 library(ppcor)
 library(patchwork)
 library(tidyverse)
+library(plotly)
+
 
 weather <-
   read_csv("./data/weather_nyc_2018.csv") %>% 
