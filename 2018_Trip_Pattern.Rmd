@@ -33,7 +33,6 @@ Previous work have shown that there are relationships between taxi ridership and
 
 In this part, we wanted to see whether there is a trend between weather and yellow cab within and between months use using our data. We used the weather data including temperature and precipitation data in 2018 and their corresponding yellow taxi use data. For temperature, we used average temperature `average_temp ` as the mean of maximum temperarure and miniminum temperature in each day. For yellow cab data, we used the raw data for 2018 from NYC Taxi Website, counted the daily taxi usage by `pick_up_data` and then joined the weather dataset by month and date.
 
-
 ```{r message = FALSE, warning = FALSE}
 weather_tot=read_csv(file = "./data/weather_nyc_2018.csv")%>%
   mutate(date = as.character(date)) %>%
@@ -151,7 +150,7 @@ We also looked at the yellow cab trip pattern across 24 hours in a day in the fi
    
 ```{r}
 ax_1 <- list(
-  title = "Hour in Day",
+  title = "Hour of Day",
   type = 'category',
   showticklabels = TRUE)
 
@@ -175,7 +174,7 @@ heatmap %>%
   arrange(do_boro, pu_hour) %>% 
     plot_ly(
     x = ~pu_hour, y = ~do_boro,
-    height = 400, width = 1400) %>%
+    height = 250, width = 900) %>%
   add_heatmap(
     z = ~percent,
     text = ~paste(

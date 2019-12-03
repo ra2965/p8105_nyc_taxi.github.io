@@ -1,12 +1,15 @@
 ---
-title: "Yellow Cabs in the Big Apple"
+title: "About"
 output: html_document
+output: 
+  html_document:
+    toc: true
+    toc_float: true
 ---
 
-<<<<<<< HEAD
-# Do we still need Yellow Cabs in NYC?
+# Does New Yorkers still need the Yellow Cabs?
 
-![](images/taxi.png)
+<br><br><img src="images/taxi.png" alt="logo" style="width:80%; margin:50px"><br>
 
 ## Motivation:
 
@@ -16,25 +19,24 @@ Taxicab service has been around New York City for as early as the late 1890s and
    
 In this report, we ask the question, NYC taxicabs, besides being part of the NYC signature look, do we still need them around? Our goal is to provide data-driven insights into the taxicab operation in NYC and determine if and why NYC cabs should still be around for a while. 
 
-**  How many passengers have NYC taxies picked up over the past couple of years? 
-**  How much does weather affect the cab business? 
-**  what factors might affect the tips given?
-**  How did time and distance affect fare amount based on the codebook on the NYC Taxi Website?
+* How many passengers have NYC taxies picked up over the past couple of years? 
+* How much does weather affect the cab business? 
+* what factors might affect the tips given?
+* How did time and distance affect fare amount based on the codebook on the NYC Taxi Website?
    
 <<<<<<< HEAD
-
-
+## The anticipated data sources are
 =======
 ## Exploratory analysis:
 
 what we found:
 
-**  We made plots showing Yellow Taxi usage over the past 10 years and specifically, trend in 2018. 
+* We made plots showing Yellow Taxi usage over the past 10 years and specifically, trend in 2018. 
 
-**  In the overall description part, we found that:
+** In the overall description part, we found that:
 
 
-**  We found no significant association between weather and Taxi drives. However, Cold months from Feburary to April did have higher daily taxi usage compared to other months, we concluded that extreme bad weather in cold months did sitimulate taxi service in New York City. No obvious association between precipitation and daily drive amount was observed in 2018. 
+* We found no significant association between weather and Taxi drives. However, Cold months from Feburary to April did have higher daily taxi usage compared to other months, we concluded that extreme bad weather in cold months did sitimulate taxi service in New York City. No obvious association between precipitation and daily drive amount was observed in 2018. 
 
 * Heatmap:
 
@@ -51,10 +53,4 @@ what we found:
 ## Discussion
 
 For 2018, although we hypothesized that adverse weather events like low and high average daily temperature and precipitation will increase taxi usage, we did find an obvious trend. This can be due to facotrs like travel distance and time, as people might only choose taxi drive for shorter distance and barely stayed at home in bad weathers. 
-=======
-# Do New Yorkers still need these cute yellow cabs?
 
-### Ran An, Xintao Ding, Xun Wang, Yuqing Xue, Xinyu Yang
->>>>>>> 58c738773da5d6d8ddcfb00ff6c5e5aa6824fff3
-
-<br><br><img src="images/taxi.png" alt="logo" style="width:100%; margin:0px"><br>

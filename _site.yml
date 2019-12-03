@@ -3,14 +3,16 @@ output_dir: "."
 navbar:
   title: "Home"
   right:
+  - text: About
+    href: about.html
   - text: Data
     href: raw_data_tidy.html
   - text: Data Analysis
     menu:
-    - text: Overall Analysis across 10 Years
+    - text: Overall
       href: 10_year_overall_analysis.html
-    - text: Overall Analysis across 10 Years
-      href: 10_year_overall_analysis.html
+    - text: Trip Pattern
+      href: 2018_Trip_Pattern.html
     - text: Overall Analysis across 10 Years
       href: 10_year_overall_analysis.html
   - text: Project Report
