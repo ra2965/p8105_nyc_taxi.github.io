@@ -65,7 +65,7 @@ weather_plot=cab_weather %>%
   ggplot(aes(x=average_temp, y=daily_drive, frame_vars(month)))+
   geom_point(aes(size=prcp,colour = month))+
    labs(title = 'Month: {closest_state}',
-       x = 'Daily Average Temperature for Year 2018 &#8451;', 
+       x = 'Daily Average Temperature for Year 2018', 
        y = 'Daily Drive Amount',
        colour = 'Month',
        size='Precipitation'
@@ -160,7 +160,7 @@ ax_2 <- list(
 
 heatmap %>% 
   filter(do_boro != "Unknown") %>% 
-  select (do_boro, pu_hour) %>% 
+  select(do_boro, pu_hour) %>% 
   mutate(
     do_boro = fct_infreq(do_boro)
   ) %>% 
@@ -189,4 +189,4 @@ heatmap %>%
 
 Each square in the heatmap represents a unique combination of destination boroughs and 24 hours in a day, and the color represents the percent of trip amount out of the total trip amount in that  borough,  with brighter color represents higher percent.
    
-We can see that in boroughs like Staten Island, Bronx, or Brooklyn, there were more trips to these places in night or late night (8pm - 1am) than in the day time. Trips to Queens were relatively evenly spread out across hours in a day and trips to Manhattan were more likely to be in the day  rather than in the night. Trips to Newark had a clear peak in the afternoon hours.
+We can see that in boroughs like Staten Island, Bronx, or Brooklyn, there were more trips to these places at night or late night (8pm - 1am) than in the day time. Trips to Queens were relatively evenly spread out across hours in a day and trips to Manhattan were more likely to be in the day rather than at night. Trips to Newark had a clear peak in the afternoon hours.
