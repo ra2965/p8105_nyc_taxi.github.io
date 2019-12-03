@@ -180,14 +180,15 @@ reg_plot %>%
 In addition, we realized that the duration will increase if the trip distance increased. Therefore, possibly there is multicollinearity problem in this model as well. For further diagnosis of the problem, let us first look at the pair-wise correlation among the explanatory variables.
 
 ```{r }
-pcor(pred, method = "pearson") 
+corr = reg %>% dplyr::select(trip_distance, duration)
+pcor(corr, method = "pearson") 
 ```  
 
 The correlation between trip distance and duration is 0.74. The p-value is smaller than 0.05, therefore, at 5% level of significance,  trip distance and duration is related to each other. 
 
 ```{r }
 
-imcdiag(pred, reg$fare_amount)
+imcdiag(corr, reg$fare_amount)
 
 ```
 
