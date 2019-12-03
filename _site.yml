@@ -1,13 +1,26 @@
-name: "NYC Yellow Cab"
+name: "Does NYC still need the yellow cab?"
 output_dir: "."
 navbar:
   title: "Home"
   right:
-         - text: "Regression  Analysis"
-           href: regression_analysis.html
-         - text: "Weather and Drive"
-           href: weather_and_drive.html
+  - text: Data
+    href: raw_data_tidy.html
+  - text: Data Analysis
+    menu:
+    - text: Overall Analysis Across 10 Years
+      href: 10_year_overall_analysis.html
+  - icon: fa-envelope fa-lg
+    href: mailto:<ra2965@cumc.columbia.edu>
+  - icon: fa-github
+    href: https://github.com/ra2965/p8105_nyc_taxi.github.io
+    
 output:
   html_document:
-    theme: simplex
+    theme: journal
+    include:
+      in_header: header.html
+      after_body: footer.html
+    css: styles.css
+    lib_dir: site_libs
+    self_contained: no
     
