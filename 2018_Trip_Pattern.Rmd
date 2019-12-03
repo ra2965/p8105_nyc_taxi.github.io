@@ -19,6 +19,7 @@ library(tidyverse)
 library(gganimate)
 library(ggplot2)
 library(plotly)
+library(gifski)
 ```
    
      
@@ -38,7 +39,7 @@ pilot=read_csv(file = "./data/pilot.csv")
 ```
 
 
-```{r}
+```{r message = FALSE, warning = FALSE}
 weather_tot=read_csv(file = "./data/weather_nyc_2018.csv")%>%
   mutate(date = as.character(date)) %>%
   separate(date, into = c("year","month","pu_date"), sep = "-", convert = TRUE)%>%
@@ -65,7 +66,7 @@ Here we make an animation plot to show the daily drive amount and average daily 
 
 Although we hypothesis that cold weather and hot weather might have more taxi use, there is no obvious usage increase in summer time. While, we do observed high daily drive amount in Feburary, March, April which are the four coldest month in NYC. Also,no interaction between month and average temperature being observed. In terms of the influence of precipitation, we didn't observe a significant pattern. Contrast to what we guess before, instead of increase daily drive amount, rainy days had lower drive amount. This might due to the reason that people would just stay at home during days with heavy rain or snow. Also, if we adjust for distance, there might be a significant association between precipitation and short distance drive. 
 
-```{r}
+```{r message = FALSE, warning = FALSE}
 weather_plot=cab_weather %>%
   ggplot(aes(x=average_temp, y=daily_drive, frame_vars(month)))+
   geom_point(aes(size=prcp,colour = month))+
@@ -145,7 +146,7 @@ heatmap <-
 
 <br>   
 
-## Destination, Time, and Trip Use
+## Destination, Time, and Taxi Use
    
 #### Background and Data
    
