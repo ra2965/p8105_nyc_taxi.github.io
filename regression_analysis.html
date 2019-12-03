@@ -11,17 +11,23 @@
 
 
 
-<title>Regression Analysis of Fare Amount and Trip Distance and Duration</title>
+<title>Exploration of potential factors that impact fare amount and tip percent</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/simplex.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
+<script defer src="https://use.fontawesome.com/releases/v5.0.3/js/all.js"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.0.0/js/v4-shims.js"></script>
+<link rel="shortcut icon" href="tiny_taxi.png">
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -68,6 +74,7 @@ h6 {
 }
 </style>
 
+<link rel="stylesheet" href="styles.css" type="text/css" />
 
 
 
@@ -102,33 +109,33 @@ summary {
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
-  padding-top: 41px;
+  padding-top: 61px;
   padding-bottom: 40px;
 }
 /* offset scroll position for anchor links (for fixed navbar)  */
 .section h1 {
-  padding-top: 46px;
-  margin-top: -46px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h2 {
-  padding-top: 46px;
-  margin-top: -46px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h3 {
-  padding-top: 46px;
-  margin-top: -46px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h4 {
-  padding-top: 46px;
-  margin-top: -46px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h5 {
-  padding-top: 46px;
-  margin-top: -46px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h6 {
-  padding-top: 46px;
-  margin-top: -46px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .dropdown-submenu {
   position: relative;
@@ -275,10 +282,40 @@ $(document).ready(function () {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="regression_analysis.html">Regression  Analysis</a>
+  <a href="raw_data_tidy.html">Data</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Data Analysis
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="10_year_overall_analysis.html">Overall Analysis across 10 Years</a>
+    </li>
+    <li>
+      <a href="10_year_overall_analysis.html">Overall Analysis across 10 Years</a>
+    </li>
+    <li>
+      <a href="10_year_overall_analysis.html">Overall Analysis across 10 Years</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="weather_and_drive.html">Weather and Drive</a>
+  <a href="project_report.html">Project Report</a>
+</li>
+<li>
+  <a href="mailto:&lt;ra2965@cumc.columbia.edu&gt;">
+    <span class="fa fa-envelope fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://github.com/ra2965/p8105_nyc_taxi.github.io">
+    <span class="fa fa-github"></span>
+     
+  </a>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -289,25 +326,106 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Regression Analysis of Fare Amount and Trip Distance and Duration</h1>
+<h1 class="title toc-ignore">Exploration of potential factors that impact fare amount and tip percent</h1>
 
 </div>
 
 
-<p>We are interested in the factors that potentially effect the revenue of each taxi trip. The total amount is calculated by fare amount, tax, tip amount, tolls amount and <a href="https://www1.nyc.gov/site/tlc/about/taxi-improvement-fund.page">improvement surcharge</a>. Tolls amount is fixed. Since tax and tip are dependent on fare amount, we are interested in fare amount</p>
+<p>We are interested in the factors that potentially effect the revenue of each taxi trip. The total amount is the sum of fare amount, tax, tip amount, tolls amount and <a href="https://www1.nyc.gov/site/tlc/about/taxi-improvement-fund.page">improvement surcharge</a>. Tolls amount is fixed. Since tax and tip are dependent on fare amount, we are interested in fare amount. In addition, even though most of time the tip percent will fall between 15% and 20% in NYC, it still varies across difference trips. We also hope to explore the reasons for higher tip percent.</p>
 <div id="fare-amount" class="section level2">
 <h2>Fare Amount</h2>
-<p>The initial charge of NYC Yellow Cab is 2.5 dollars. However, the rule of standard metered <a href="https://www1.nyc.gov/site/tlc/passengers/taxi-fare.page">taxi fare</a> is too complicated. It is difficult for a passenger to estimate the fare amount refering to such complext instructions.</p>
+<p>The rule of standard metered taxi fare is too <a href="https://www1.nyc.gov/site/tlc/passengers/taxi-fare.page">complicated</a> . It is difficult for a passenger to estimate the fare amount refering to such complext instructions.</p>
 <p>According to the codebook from the TLC website, the fare amount is defined as “The time-and-distance fare calculated by the meter”. Therefore, we hope to explore the association between fare amount and trip distance and duration. If possible, we also want to roughly predict the fare amount by duration and distance.</p>
-<p>Data was queried from year 2018. The duration is calculated from drop-off time and pick-up time. There might be data entry error since all records that fare_amount is 52 have different distance and duration</p>
+<p>Data was queried from year 2018, covering all NYC boroughs. The duration is calculated from drop-off time and pick-up time. There might be data entry error since a large number of records with fare_amount of 52 have different distance and duration. We are also not interested in the trips with no time or a long duration, i.e. longer than 6 hours. The initial charge of NYC Yellow Cab is 2.5 dollars. Therefore, we exclude the data with duration longer than 360 or equals to 0, fare amount of 52 or less than 2.5.</p>
+<pre class="r"><code>pilot &lt;-
+  taxi_2018 %&gt;% 
+  filter(
+    passenger_count != 0,
+    trip_distance != 0,
+    total_amount &gt; 0,
+    fare_amount != 0
+  ) %&gt;% 
+  mutate(tpep_pickup_datetime = as.character(tpep_pickup_datetime),
+         tpep_dropoff_datetime = as.character(tpep_dropoff_datetime)) %&gt;%
+  separate(tpep_pickup_datetime, into = c(&quot;a&quot;,&quot;b&quot;), sep = &quot; &quot;) %&gt;%
+  separate(a, into = c(&quot;pick_year&quot;,&quot;pick_month&quot;,&quot;pu_date&quot;), sep = &quot;-&quot;) %&gt;%
+  separate(b, into = c(&quot;pu_hour&quot;,&quot;pu_min&quot;), sep = &quot;:&quot;) %&gt;%
+  separate(tpep_dropoff_datetime, into = c(&quot;c&quot;,&quot;d&quot;),sep = &quot; &quot;) %&gt;%
+  separate(c,into = c(&quot;drop_year&quot;,&quot;drop_month&quot;,&quot;do_date&quot;),sep = &quot;-&quot;) %&gt;%
+  separate(d, into = c(&quot;do_hour&quot;,&quot;do_min&quot;), sep = &quot;:&quot;) %&gt;%
+  dplyr::select(-pick_month,-drop_month,-pick_year,-drop_year) %&gt;% 
+  mutate(
+    month = as.integer(month),
+    pu_date = as.integer(pu_date),
+    pu_hour = as.integer(pu_hour),
+    pu_min = as.integer(pu_min),
+    do_date = as.integer(do_date),
+    do_hour = as.integer(do_hour),
+    do_min = as.integer(do_min)
+  ) %&gt;% 
+  left_join(weather, by = c(&quot;month&quot; = &quot;month&quot;, &quot;pu_date&quot; = &quot;day&quot;)) %&gt;% 
+  left_join(zone_lookup, by = c(&quot;pu_location_id&quot; = &quot;location_id&quot;)) %&gt;% 
+  rename(
+    pu_boro = borough,
+    pu_zone = zone
+  ) %&gt;% 
+  left_join(zone_lookup, by = c(&quot;do_location_id&quot; = &quot;location_id&quot;)) %&gt;% 
+  rename(
+    do_boro = borough,
+    do_zone = zone
+  ) %&gt;% 
+   dplyr::select(-pu_location_id, -do_location_id)
+
+reg = pilot %&gt;% 
+  mutate(
+    duration = case_when(
+    pu_date != do_date ~ do_min - pu_min + (60 *(do_hour - pu_hour + 24)),
+    pu_date == do_date ~ do_min - pu_min + (60 *(do_hour - pu_hour) )
+  ),
+      tip_percent = tip_amount/fare_amount
+  ) %&gt;% 
+  filter(duration != 0,
+         fare_amount != 52,#There might be data entry error since all records that fare_amount is 52 have different distance and duration#
+         duration &lt;= 360, #There are some points gathering with a long duration without long distance, which can be miscoding or influntial outliers, so we should exclude these data.#
+         fare_amount &gt;= 2.5 #There can be data entry error since the initial charge of NYC taxi is $2.5, so we exclude those with fare amount &lt; $2.5.#
+         ) 
+ 
+set.seed(1)
+reg_plot = reg %&gt;% 
+  sample_frac(size = 0.1, replace = FALSE)</code></pre>
 <div id="scatterplot-of-fare-amount" class="section level3">
 <h3>Scatterplot of fare amount</h3>
-<p><img src="regression_analysis_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<pre class="r"><code>fare_distance = reg_plot %&gt;% 
+  ggplot(aes(x = trip_distance, y = fare_amount)) +
+  geom_point(alpha = 0.3, color = &#39;skyblue&#39;,size = 0.3) +
+  labs(
+    title = &quot;The distribution of fare amount by trip distance and duration&quot;,
+    x = &quot;Trip Distance&quot;,
+    y = &quot;Fare Amount&quot;
+  )
+
+fare_duration = reg_plot %&gt;% 
+  ggplot(aes(x = duration, y = fare_amount)) +
+  geom_point(alpha = 0.3, color = &#39;red&#39;, size = 0.3) +
+  labs(
+    x = &quot;Trip Duration&quot;,
+    y = &quot;Fare Amount&quot;
+  )
+
+fare_distance + fare_duration</code></pre>
+<p><img src="regression_analysis_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p>According to the scatterplots, there is a positive relationship among trip distance and fare amount. Trip duration is also positively associated with fare amount.</p>
 </div>
 <div id="building-linear-regression-model-of-fare-amount" class="section level3">
 <h3>Building linear regression model of fare amount</h3>
 <p>The outcome of linear regression model is fare amount, and the predictors include trip distance and duration.</p>
+<pre class="r"><code>fit1 = lm(fare_amount ~ duration + trip_distance , data = reg) %&gt;% 
+  broom::tidy() %&gt;% 
+  janitor::clean_names() %&gt;% 
+  mutate(p = round(p_value,3))
+
+fit1 = lm(fare_amount ~ duration + trip_distance , data = reg ) 
+summary(fit1) %&gt;% broom::tidy() %&gt;% knitr::kable(digit = 2)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -321,27 +439,28 @@ $(document).ready(function () {
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="right">2.0619564</td>
-<td align="right">0.0116049</td>
-<td align="right">177.6801</td>
+<td align="right">2.02</td>
+<td align="right">0</td>
+<td align="right">503.87</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">duration</td>
-<td align="right">0.3339642</td>
-<td align="right">0.0010225</td>
-<td align="right">326.6167</td>
+<td align="right">0.35</td>
+<td align="right">0</td>
+<td align="right">1018.08</td>
 <td align="right">0</td>
 </tr>
 <tr class="odd">
 <td align="left">trip_distance</td>
-<td align="right">2.0691460</td>
-<td align="right">0.0034875</td>
-<td align="right">593.3077</td>
+<td align="right">2.00</td>
+<td align="right">0</td>
+<td align="right">1735.95</td>
 <td align="right">0</td>
 </tr>
 </tbody>
 </table>
+<pre class="r"><code>summary(fit1) %&gt;% broom::glance() %&gt;% knitr::kable(digit = 2)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -355,10 +474,10 @@ $(document).ready(function () {
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">0.9384185</td>
-<td align="right">0.9384174</td>
-<td align="right">2.344449</td>
-<td align="right">874705.2</td>
+<td align="right">0.93</td>
+<td align="right">0.93</td>
+<td align="right">2.58</td>
+<td align="right">7282469</td>
 <td align="right">0</td>
 <td align="right">3</td>
 </tr>
@@ -369,8 +488,19 @@ $(document).ready(function () {
 <div id="diagnostics" class="section level3">
 <h3>Diagnostics</h3>
 <p>Further we can plot the model diagnostic checking for other problems such as normality of error term, heteroscedasticity etc.</p>
-<p><img src="regression_analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code>par(mfrow=c(2,2))
+plot(fit1)</code></pre>
+<p><img src="regression_analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <p>The plots indicate a lot of outliers, which make the model violate the linear regression assumptions.</p>
+<pre class="r"><code>reg_plot %&gt;% 
+  ggplot(aes(x=fare_amount)) +
+  geom_histogram(bins = 100) +
+  labs(
+    title = &quot;Distribution of fare amount&quot;,
+    x = &quot;Fare Amount&quot;,
+    y = &quot; &quot;
+  )</code></pre>
+<p><img src="regression_analysis_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <p>In addition, we realized that the duration will increase if the trip distance increased. Therefore, possibly there is multicollinearity problem in this model as well. For further diagnosis of the problem, let us first look at the pair-wise correlation among the explanatory variables.</p>
 <pre><code>## 
 ## Call:
@@ -379,20 +509,21 @@ $(document).ready(function () {
 ## 
 ## Overall Multicollinearity Diagnostics
 ## 
-##                        MC Results detection
-## Determinant |X&#39;X|:         0.4295         0
-## Farrar Chi-Square:     97015.0331         1
-## Red Indicator:             0.7553         1
-## Sum of Lambda Inverse:     4.6563         0
-## Theil&#39;s Method:            0.2025         0
-## Condition Number:          5.0686         0
+##                         MC Results detection
+## Determinant |X&#39;X|:          0.4569         0
+## Farrar Chi-Square:     900176.8348         1
+## Red Indicator:              0.7369         1
+## Sum of Lambda Inverse:      4.3772         0
+## Theil&#39;s Method:             0.1593         0
+## Condition Number:           4.8743         0
 ## 
 ## 1 --&gt; COLLINEARITY is detected by the test 
 ## 0 --&gt; COLLINEARITY is not detected by the test</code></pre>
+<pre class="r"><code>pcor(pred, method = &quot;pearson&quot;)</code></pre>
 <pre><code>## $estimate
 ##               trip_distance  duration
-## trip_distance     1.0000000 0.7552958
-## duration          0.7552958 1.0000000
+## trip_distance     1.0000000 0.7369451
+## duration          0.7369451 1.0000000
 ## 
 ## $p.value
 ##               trip_distance duration
@@ -401,17 +532,18 @@ $(document).ready(function () {
 ## 
 ## $statistic
 ##               trip_distance duration
-## trip_distance        0.0000 390.4774
-## duration           390.4774   0.0000
+## trip_distance         0.000 1168.769
+## duration           1168.769    0.000
 ## 
 ## $n
-## [1] 114804
+## [1] 1149265
 ## 
 ## $gp
 ## [1] 0
 ## 
 ## $method
 ## [1] &quot;pearson&quot;</code></pre>
+<pre class="r"><code>imcdiag(pred, reg$fare_amount)</code></pre>
 <pre><code>## 
 ## Call:
 ## imcdiag(x = pred, y = reg$fare_amount)
@@ -419,16 +551,16 @@ $(document).ready(function () {
 ## 
 ## All Individual Multicollinearity Diagnostics Result
 ## 
-##                  VIF    TOL       Wi  Fi Leamer    CVIF Klein IND1 IND2
-## trip_distance 2.3281 0.4295 152472.6 Inf 0.6554 -0.2273     0    0    1
-## duration      2.3281 0.4295 152472.6 Inf 0.6554 -0.2273     0    0    1
+##                  VIF    TOL      Wi  Fi Leamer    CVIF Klein IND1 IND2
+## trip_distance 2.1886 0.4569 1366021 Inf  0.676 -0.2686     0    0    1
+## duration      2.1886 0.4569 1366021 Inf  0.676 -0.2686     0    0    1
 ## 
 ## 1 --&gt; COLLINEARITY is detected by the test 
 ## 0 --&gt; COLLINEARITY is not detected by the test
 ## 
 ## * all coefficients have significant t-ratios
 ## 
-## R-square of y on all x: 0.9384 
+## R-square of y on all x: 0.9269 
 ## 
 ## * use method argument to check which regressors may be the reason of collinearity
 ## ===================================</code></pre>
@@ -438,10 +570,44 @@ $(document).ready(function () {
 <div id="tip-percent" class="section level2">
 <h2>Tip percent</h2>
 <p>In addition ot fare amount, we are also interested in the factors that may effect tip percent in each trip.</p>
-<p><img src="regression_analysis_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<pre class="r"><code>tip_distance = reg_plot %&gt;% 
+  filter(payment_type == 1) %&gt;% 
+  ggplot(aes(x = trip_distance, y = tip_percent)) +
+  geom_point(alpha = 0.3, color = &#39;skyblue&#39;, size = 0.1) +
+  labs(
+    title = &quot;Tip percent by Trip Distance, Passenger Count, Precipitation&quot;,
+    x = &quot;Trip Distance&quot;,
+    y = &quot;Tip Percent&quot;
+  ) 
+
+tip_passenger = reg_plot %&gt;% 
+  filter(payment_type == 1) %&gt;% 
+  ggplot(aes(x = passenger_count, y = fare_amount)) +
+  geom_point(alpha = 0.3, color = &#39;palevioletred2&#39;, size = 0.1) +
+  labs(
+    x = &quot;Passenger Count&quot;,
+    y = &quot;Tip Percent&quot;
+  )
+
+tip_prcp = reg_plot %&gt;% 
+  filter(payment_type == 1) %&gt;% 
+  ggplot(aes(x = prcp, y = tip_percent)) +
+  geom_point(alpha = 0.3, color = &#39;palegreen3&#39;, size = 0.1) +
+  labs(
+    x = &quot;Precipitation&quot;,
+    y = &quot;Tip Percent&quot;
+  )
+
+tip_distance + tip_passenger + tip_prcp</code></pre>
+<p><img src="regression_analysis_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <p>There is no clear pattern among tip percent and the three predictors. Therefore, we will not conduct regression analysis about tip percent.</p>
 </div>
 
+<br><br>
+<footer>
+  <br>
+  <p class="copyright text-muted" align="center">Copyright &copy; 2019 Wang/Xue/An/Yang/Ding</p>
+</footer>
 
 
 
