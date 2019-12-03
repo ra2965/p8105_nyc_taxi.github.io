@@ -7,8 +7,14 @@ navbar:
     href: raw_data_tidy.html
   - text: Data Analysis
     menu:
-    - text: Overall Analysis Across 10 Years
+    - text: Overall Analysis across 10 Years
       href: 10_year_overall_analysis.html
+    - text: Overall Analysis across 10 Years
+      href: 10_year_overall_analysis.html
+    - text: Overall Analysis across 10 Years
+      href: 10_year_overall_analysis.html
+  - text: Project Report
+    href: project_report.html
   - icon: fa-envelope fa-lg
     href: mailto:<ra2965@cumc.columbia.edu>
   - icon: fa-github
