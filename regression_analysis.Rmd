@@ -2,15 +2,14 @@
 title: "Regression Analysis of Fare Amount and Trip Distance and Duration"
 output: html_document
 ---
-We are interested in the factors that potentially effect the revenue of each taxi trip. The total amount is the sum of fare amount, tax, tip amount, tolls amount and [improvement surcharge](https://www1.nyc.gov/site/tlc/about/taxi-improvement-fund.page). Tolls amount is fixed. Since tax and tip are dependent on fare amount, we are interested in fare amount. In addition, even though most of time the tip percent will fall between 15% and 20% in NYC, it still vary
-
+We are interested in the factors that potentially effect the revenue of each taxi trip. The total amount is the sum of fare amount, tax, tip amount, tolls amount and [improvement surcharge](https://www1.nyc.gov/site/tlc/about/taxi-improvement-fund.page). Tolls amount is fixed. Since tax and tip are dependent on fare amount, we are interested in fare amount. In addition, even though most of time the tip percent will fall between 15% and 20% in NYC, it still varies across difference trips. We also hope to explore the reasons for higher tip percent. 
 
 ## Fare Amount
-The initial charge of NYC Yellow Cab is 2.5 dollars. However, the rule of standard metered taxi fare is too [complicated](https://www1.nyc.gov/site/tlc/passengers/taxi-fare.page) . It is difficult for a passenger to estimate the fare amount refering to such complext instructions.
+The rule of standard metered taxi fare is too [complicated](https://www1.nyc.gov/site/tlc/passengers/taxi-fare.page) . It is difficult for a passenger to estimate the fare amount refering to such complext instructions.
 
 According to the codebook from the TLC website, the fare amount is defined as "The time-and-distance fare calculated by the meter". Therefore, we hope to explore the association between fare amount and trip distance and duration. If possible, we also want to roughly predict the fare amount by duration and distance.
 
-Data was queried from year 2018. The duration is calculated from drop-off time and pick-up time. There might be data entry error since all records that fare_amount is 52 have different distance and duration 
+Data was queried from year 2018, covering all NYC boroughs. The duration is calculated from drop-off time and pick-up time. There might be data entry error since a large number of records with fare_amount of 52 have different distance and duration. We are also not interested in the trips with no time or a long duration, i.e. longer than 6 hours. The initial charge of NYC Yellow Cab is 2.5 dollars. Therefore, we exclude the data with duration longer than 360 or equals to 0, fare amount of 52 or less than 2.5.
 
 ```{r setup, include=FALSE, echo=FALSE}
 
