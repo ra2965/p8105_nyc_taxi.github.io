@@ -53,4 +53,4 @@ In our study, we find some interesting points about NYC yellow cab usage: New Yo
 
 For a brief overview of our website, please view our screencast [here](https://youtu.be/Uu_z8SPygq8)
 
-<iframe width="560" height="315" src="https://youtu.be/Uu_z8SPygq8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Uu_z8SPygq8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> 
