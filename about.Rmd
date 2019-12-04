@@ -48,4 +48,9 @@ The two data sources we use are as follows. Detailed information about the raw d
 ## Discussion
 
 In our study, we find some interesting points about NYC yellow cab usage: New Yorkers use yellow cabs less during the summer; and they take yellow cabs to different NYC boros at different time; New Yorkers don't give more tips even with longer trip distance, more passengers or heavier daily precipitation. However, from previous studies, people proposed negative effects from shared traveling on NYC yellow cab usage. Our results shows a tremendous decrease of yellow cab usage in the past 10 years, in both customer numbers and income. From our findings, it seems the future of the NYC yellow cab is not very bright. Good luck NYC yellow cabs!
+   
+## Screencast
 
+For a brief overview of our website, please view our screencast [here](https://youtu.be/Uu_z8SPygq8)
+
+<iframe width="560" height="315" src="https://youtu.be/Uu_z8SPygq8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
