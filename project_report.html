@@ -825,7 +825,7 @@ summary(fit1) %&gt;% broom::tidy() %&gt;% knitr::kable(digit = 2)</code></pre>
 <p>Further we can plot the model diagnostic checking for other problems such as normality of error term, heteroscedasticity etc.</p>
 <pre class="r"><code>par(mfrow = c (2,2))
 plot(fit1)</code></pre>
-<p>After running the model diagnostics, the model violates the linear regression assumptions. It can be the result of the skewed distribution of fare amount.</p>
+<p><img src="regression_analysis_files/figure-html/unnamed-chunk-5-1.png" /> After running the model diagnostics, the model violates the linear regression assumptions. It can be the result of the skewed distribution of fare amount.</p>
 <pre class="r"><code>reg_plot %&gt;% 
   ggplot(aes(x = fare_amount)) +
   geom_histogram(bins = 100) +
@@ -928,7 +928,7 @@ a &lt;- list(
 )
 
 b &lt;- list(
-  title = &quot;Drop off Manhanttan Neighborhoods&quot;,
+  title = &quot;Drop off Manhattan Neighborhoods&quot;,
   titlefont = f1, 
   showticklabels = TRUE,
   tickangle = 45,
@@ -937,7 +937,7 @@ b &lt;- list(
 )
 
 c &lt;- list(
-  title = &quot;Pick up Manhanttan Neighborhoods&quot;,
+  title = &quot;Pick up Manhattan Neighborhoods&quot;,
   titlefont = f1, 
   showticklabels = TRUE,
   tickangle = 45,
@@ -968,7 +968,7 @@ pu_zone = forcats::fct_reorder(pu_zone, tip_percent),
 pu_median = median(tip_percent),
 text = str_c(&quot;Pick Up Zone: &quot;, pu_zone , &quot;\nTip Percent: &quot;, tip_percent, &quot;\nMedian Percentage:&quot;, pu_median) )%&gt;%
 drop_na(do_zone, pu_zone) %&gt;%
-plot_ly(y = ~tip_percent, color = ~pu_zone, type = &quot;box&quot;, colors = &quot;Set2&quot;, marker = list(size = 2)) %&gt;%
+plot_ly(y = ~tip_percent, color = ~pu_zone, text = ~text, type = &quot;box&quot;, colors = &quot;Set2&quot;, marker = list(size = 2)) %&gt;%
 layout(xaxis = c, yaxis = a)</code></pre>
 <p><img src="images/pickup.png" /></p>
 <pre class="r"><code>tip_plot %&gt;% 

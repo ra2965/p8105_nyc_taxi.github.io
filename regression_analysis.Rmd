@@ -1,5 +1,5 @@
 ---
-title: "Exploration of Potential Factors that Impact Fare amount and Tip percent"
+title: "Exploration of Potential Factors that Impact Fare amount and Tip Percent"
 output: 
   html_document:
     code_folding: hide
@@ -7,7 +7,7 @@ output:
 
 We are interested in the factors that potentially effect the revenue of each taxi trip. The total amount is the sum of fare amount, tax, tip amount, tolls amount and [improvement surcharge](https://www1.nyc.gov/site/tlc/about/taxi-improvement-fund.page). Tolls amount is fixed. Since tax and tip are dependent on fare amount, we are interested in fare amount. 
 
-According to a tipping guide that's published by The New York Times in their Travel section back in 2006, the tipping rate is 15-20% for taxi drivers. So much has chnanged since then. Uber, lyft and other ride-hailing service companies have entered the market; paying has never become easier now that you can pay through an app on your phone and choose how much you want to tip. Even though most of time the tip percent will fall between 15% and 20% in NYC, it still varies across difference trips. We also hope to explore the reasons for higher tip percent. 
+According to a tipping guide that's published by The New York Times in their Travel section back in 2006, the tipping rate is 15-20% for taxi drivers. So much has chnanged since then. Uber, lyft and other ride-hailing service companies have entered the market; paying has never become easier now that you can pay through an app on your phone and choose how much you want to tip. Even though most of time the tip percent will fall between 15% and 20% in NYC, it still varies across difference trips. We also hope to explore the reasons for higher percent tip.
 
 
 ![](images/tipping.jpg)
@@ -114,7 +114,7 @@ reg_plot = reg %>%
 
 ```
 
-### Scatterplot of fare amount by distance and duration
+### Scatterplot of Fare amount by Distance and Duration
 
 ```{r }
 fare_distance = reg_plot %>% 
@@ -139,7 +139,7 @@ fare_distance + fare_duration
 
 According to the scatterplots, there is a positive relationship among trip distance and fare amount. Trip duration is also positively associated with fare amount.
 
-### Building linear regression model of fare amount
+### Building Linear Regression Model of Fare Amount
 
 The outcome of linear regression model is fare amount, and the predictors include trip distance and duration.
 
@@ -153,24 +153,21 @@ fit1 = lm(fare_amount ~ duration + trip_distance , data = reg )
 summary(fit1) %>% broom::tidy() %>% knitr::kable(digit = 2)
 ```
 
-```{r, eval = FALSE}
+```{r}
 summary(fit1) %>% broom::glance() %>% knitr::kable(digit = 2)
 ```
-
-![](regression_analysis_files/figure-html/unnamed-chunk-5-1.png)
 
 The p-value of the two coefficients are both < 0.05. It is seen that both variables (duration, trip_distance) are statistically significant at 5 % level of significance.
 
 ### Diagnostics
 Further we can plot the model diagnostic checking for other problems such as normality of error term, heteroscedasticity etc.
 
-<<<<<<< HEAD:regression_analysis_files/regression_analysis copy.Rmd
-=======
-```{r }
+
+```{r eval = FALSE }
 par(mfrow = c(2,2))
 plot(fit1)
 ```
->>>>>>> aff86fe99e8e802561c4a709a899847537db2c01:regression_analysis.Rmd
+![](regression_analysis_files/figure-html/unnamed-chunk-5-1.png)
 
 The plots indicate a lot of outliers, which make the model violate the linear regression assumptions.
 
@@ -204,7 +201,7 @@ imcdiag(corr, reg$fare_amount)
 
 The VIF, TOL and Wi columns provide the diagnostic output for variance inflation factor, tolerance and Farrar-Glauber F-test respectively. Since VIF<10 and TOL>0.1, there is no multicolinearity in the regression model.
 
-## Tip percent
+## Tip Percent
 
 In addition ot fare amount, we are also interested in the factors that may effect tip percent in each trip.
 
@@ -281,10 +278,9 @@ tip_plot <-  boxplot %>%
 ```
 
 
-<<<<<<< HEAD:regression_analysis_files/regression_analysis copy.Rmd
-=======
 We look at rides that are either picked-up at and dropped-off at a neighborhood in Manhattan. 
 
+# Manhattan
 ## Drop-off Zone
 ```{r}
 # plotly for do_zone
@@ -349,7 +345,7 @@ tip_plot %>%
 ```
 We can see that of all 64 drop-off neighborhoods, Highbridge Park has the lowest median tip percentage at 10.73%, wehre Randalls Island has the highest median tip percentage at 25.46%. Overall, we do see that if the lower the cab go into Manhattan, the higher the percentage of tip is given.
 
-
+# Pick-up Zone
 ```{r}
 set.seed(1)
 tip_plot %>%
@@ -374,10 +370,9 @@ tip_plot %>%
    mutate(do_median = median(tip_percent))
 ```
 
-We can see that of all 66 pick-up neighborhoods, Marble Hill has the lowest median tip percentage at 10.0%, wehre Roosevelt Island has the highest median tip percentage at 21.88%. HOwever, only 8 rides and 15 ride were recorded for Marble Hill and Roosevelt Island respectively. Therefore, the result is not quite representative. However, considering that how restricted public transportation to Roosevelt Island is, I'm not surprised that passengers picked up from there feel generous towards their driver. Overall, we see a similiar trend to the drop-off neighborhoods, if cab driver wants a bigger tip, they should wait around lower Manhattan. 
+We can see that of all 66 pick-up neighborhoods, Marble Hill has the lowest median tip percentage at 10.0%, where Roosevelt Island has the highest median tip percentage at 21.88%. However, only 8 rides and 15 ride were recorded for Marble Hill and Roosevelt Island respectively. Therefore, the result is not quite representative. However, considering how restricted public transportation to Roosevelt Island is, I'm not surprised that passengers picked up from there feel generous towards their driver. Overall, we see a similiar trend to the drop-off neighborhoods: if cab driver wants a bigger tip, they should wait around lower Manhattan. 
 
 
 
 
 
->>>>>>> aff86fe99e8e802561c4a709a899847537db2c01:regression_analysis.Rmd
