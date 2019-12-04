@@ -1,5 +1,5 @@
 ---
-title: "Exploration of potential factors that impact fare amount and tip percent"
+title: "Exploration of Potential Factors that Impact Fare amount and Tip percent"
 output: 
   html_document:
     code_folding: hide
@@ -28,7 +28,6 @@ library(ppcor)
 library(patchwork)
 library(tidyverse)
 library(plotly)
-
 
 weather <-
   read_csv("./data/weather_nyc_2018.csv") %>% 
@@ -115,11 +114,9 @@ reg_plot = reg %>%
 
 ```
 
-
 ### Scatterplot of fare amount by distance and duration
 
 ```{r }
- 
 fare_distance = reg_plot %>% 
   ggplot(aes(x = trip_distance, y = fare_amount)) +
   geom_point(alpha = 0.3, color = 'skyblue',size = 0.3) +
@@ -138,7 +135,6 @@ fare_duration = reg_plot %>%
   )
 
 fare_distance + fare_duration
-
 ```
 
 According to the scatterplots, there is a positive relationship among trip distance and fare amount. Trip duration is also positively associated with fare amount.
@@ -157,15 +153,24 @@ fit1 = lm(fare_amount ~ duration + trip_distance , data = reg )
 summary(fit1) %>% broom::tidy() %>% knitr::kable(digit = 2)
 ```
 
-```{r }
+```{r, eval = FALSE}
 summary(fit1) %>% broom::glance() %>% knitr::kable(digit = 2)
 ```
+
+![](regression_analysis_files/figure-html/unnamed-chunk-5-1.png)
 
 The p-value of the two coefficients are both < 0.05. It is seen that both variables (duration, trip_distance) are statistically significant at 5 % level of significance.
 
 ### Diagnostics
 Further we can plot the model diagnostic checking for other problems such as normality of error term, heteroscedasticity etc.
 
+<<<<<<< HEAD:regression_analysis_files/regression_analysis copy.Rmd
+=======
+```{r }
+par(mfrow = c(2,2))
+plot(fit1)
+```
+>>>>>>> aff86fe99e8e802561c4a709a899847537db2c01:regression_analysis.Rmd
 
 The plots indicate a lot of outliers, which make the model violate the linear regression assumptions.
 
@@ -173,7 +178,7 @@ It can be the result of the skewed distribution of fare amount.
 
 ```{r}
 reg_plot %>% 
-  ggplot(aes(x=fare_amount)) +
+  ggplot(aes(x = fare_amount)) +
   geom_histogram(bins = 100) +
   labs(
     title = "Distribution of fare amount",
@@ -184,14 +189,14 @@ reg_plot %>%
 
 In addition, we realized that the duration will increase if the trip distance increased. Therefore, possibly there is multicollinearity problem in this model as well. For further diagnosis of the problem, let us first look at the pair-wise correlation among the explanatory variables.
 
-```{r }
+```{r message=FALSE,warning=FALSE}
 corr = reg %>% dplyr::select(trip_distance, duration)
 pcor(corr, method = "pearson") 
 ```  
 
 The correlation between trip distance and duration is 0.74. The p-value is smaller than 0.05, therefore, at 5% level of significance,  trip distance and duration is related to each other. 
 
-```{r }
+```{r message=FALSE,warning=FALSE}
 
 imcdiag(corr, reg$fare_amount)
 
@@ -261,7 +266,7 @@ boxplot <- pilot %>%
     pu_date == do_date ~ do_min - pu_min + (60 *(do_hour - pu_hour) )
 
   ),
-      tip_percent = round(tip_amount/fare_amount, 4))
+    tip_percent = round(tip_amount/fare_amount, 4))
 
 ```
 
@@ -276,3 +281,103 @@ tip_plot <-  boxplot %>%
 ```
 
 
+<<<<<<< HEAD:regression_analysis_files/regression_analysis copy.Rmd
+=======
+We look at rides that are either picked-up at and dropped-off at a neighborhood in Manhattan. 
+
+## Drop-off Zone
+```{r}
+# plotly for do_zone
+f1 <- list(
+  family = "Arial, sans-serif",
+  size = 18,
+  color = "grey"
+)
+f2 <- list(
+  family = "Old Standard TT, serif",
+  size = 14,
+  color = "black"
+)
+a <- list(
+  title = "Tip Percentage",
+  titlefont = f1,
+  showticklabels = TRUE,
+  tickangle = 45,
+  tickfont = f2,
+  exponentformat = "E",
+  range = c(0,1)
+)
+
+b <- list(
+  title = "Drop off Manhattan Neighborhoods",
+  titlefont = f1, 
+  showticklabels = TRUE,
+  tickangle = 45,
+  tickfont = f2,
+  exponntformat = "E"
+)
+
+c <- list(
+  title = "Pick up Manhattan Neighborhoods",
+  titlefont = f1, 
+  showticklabels = TRUE,
+  tickangle = 45,
+  tickfont = f2,
+  exponntformat = "E"
+)
+
+set.seed(1)
+tip_plot %>%
+  sample_frac(size = 0.1, replace = FALSE) %>% 
+  mutate(do_zone = forcats::fct_reorder(do_zone, tip_percent),
+       pu_zone = forcats::fct_reorder(pu_zone, tip_percent),
+       do_median = median(tip_percent),
+       text = str_c("Drop Off Zone: ", do_zone , "\nTip Percent: ",      tip_percent, "\nMedian Percentage:", do_median) ) %>% 
+  drop_na(do_zone, pu_zone) %>% 
+  plot_ly(y = ~tip_percent, color = ~do_zone, text = ~text, type = "box",  colors = "Set2", marker = list(size = 2)) %>% 
+  layout(xaxis = b, yaxis = a) 
+```
+
+```{r include = FALSE}
+ tip_plot %>% 
+  filter(do_zone == "Highbridge Park") %>% 
+  mutate(do_median = median(tip_percent))
+
+ tip_plot %>% 
+   filter(do_zone == "Randalls Island") %>% 
+   mutate(do_median = median(tip_percent))
+```
+We can see that of all 64 drop-off neighborhoods, Highbridge Park has the lowest median tip percentage at 10.73%, wehre Randalls Island has the highest median tip percentage at 25.46%. Overall, we do see that if the lower the cab go into Manhattan, the higher the percentage of tip is given.
+
+
+```{r}
+set.seed(1)
+tip_plot %>%
+  sample_frac(size = 0.1, replace = FALSE) %>% 
+  mutate(do_zone = forcats::fct_reorder(do_zone, tip_percent),
+         pu_zone = forcats::fct_reorder(pu_zone, tip_percent),
+         pu_median = median(tip_percent),
+         text = str_c("Pick Up Zone: ", pu_zone , "\nTip Percent: ",
+                      tip_percent, "\nMedian Percentage:", pu_median) ) %>%
+drop_na(do_zone, pu_zone) %>%
+plot_ly(y = ~tip_percent, color = ~pu_zone, text = ~text, type = "box", colors = "Set2", marker = list(size = 2)) %>%
+layout(xaxis = c, yaxis = a)
+```
+
+```{r include = FALSE}
+tip_plot %>% 
+  filter(pu_zone == "Marble Hill") %>% 
+   mutate(do_median = median(tip_percent))
+
+ tip_plot %>% 
+   filter(pu_zone == "Roosevelt Island") %>% 
+   mutate(do_median = median(tip_percent))
+```
+
+We can see that of all 66 pick-up neighborhoods, Marble Hill has the lowest median tip percentage at 10.0%, wehre Roosevelt Island has the highest median tip percentage at 21.88%. HOwever, only 8 rides and 15 ride were recorded for Marble Hill and Roosevelt Island respectively. Therefore, the result is not quite representative. However, considering that how restricted public transportation to Roosevelt Island is, I'm not surprised that passengers picked up from there feel generous towards their driver. Overall, we see a similiar trend to the drop-off neighborhoods, if cab driver wants a bigger tip, they should wait around lower Manhattan. 
+
+
+
+
+
+>>>>>>> aff86fe99e8e802561c4a709a899847537db2c01:regression_analysis.Rmd

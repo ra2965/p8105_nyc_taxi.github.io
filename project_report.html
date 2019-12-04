@@ -21,7 +21,11 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -253,7 +257,67 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
 
 
 
@@ -263,6 +327,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -283,6 +357,9 @@ $(document).ready(function () {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
+  <a href="about.html">About</a>
+</li>
+<li>
   <a href="raw_data_tidy.html">Data</a>
 </li>
 <li class="dropdown">
@@ -296,10 +373,10 @@ $(document).ready(function () {
       <a href="10_year_overall_analysis.html">Overall Analysis across 10 Years</a>
     </li>
     <li>
-      <a href="10_year_overall_analysis.html">Overall Analysis across 10 Years</a>
+      <a href="2018_Trip_Pattern.html">Trip Pattern Analysis</a>
     </li>
     <li>
-      <a href="10_year_overall_analysis.html">Overall Analysis across 10 Years</a>
+      <a href="regression_analysis.html">Regression Analysis</a>
     </li>
   </ul>
 </li>
@@ -325,6 +402,14 @@ $(document).ready(function () {
 
 <div class="fluid-row" id="header">
 
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">NYC Yellow Cab Project Report</h1>
@@ -334,7 +419,572 @@ $(document).ready(function () {
 </div>
 
 
+<div id="authors" class="section level3">
+<h3>Authors</h3>
+<ul>
+<li>Xun Wang: xw2417</li>
+<li>Ran An: ra2965</li>
+<li>Yuqing Xue: yx2507</li>
+<li>Xintao Ding: xd2222</li>
+<li>Xinyu Yang: xy2396</li>
+</ul>
+</div>
+<div id="introduction-motivation" class="section level2">
+<h2>Introduction &amp; Motivation:</h2>
+<p>Taxicab service has been around New York City for as early as the late 1890s and has since been a major player in the NYC transportation system. In 2011, the ridesharing company Uber went alive in New York City, and disrupted the taxicab business tremendously. Since the emergence of Uber, taxi usage and profits have gone down, causing the value of NYC taxi medallion to go down by more than 80%. In NYC, there are more rideshare vehicles than taxi medallion vehicles. In addition, with the increasing prevalence of smartphones, more people choose to order and pay for their rides via ride-sharing apps.</p>
+</div>
+<div id="initial-questions" class="section level2">
+<h2>Initial Questions:</h2>
+<p>In this report, we ask the question, NYC taxicabs, besides being part of the NYC signature look, do we still need them around? Our goal is to provide data-driven insights into the taxicab operation in NYC and determine if and why NYC cabs should still be around for a while.</p>
+<p>** What is the overview of NYC yellow cab operations over the past 10 years? ** How did weather (i.e. temperature and precipitation) affect the use of yellow cab? ** What factors might affect the tips given? ** How did duration and distance affect fare amount?</p>
+</div>
+<div id="data-tidy" class="section level2">
+<h2>Data Tidy</h2>
+<p>We use public dataset from webistes</p>
+<p><strong>NYC Weather Data:</strong> The weather of New York City (NYC) in 2018 raw data is from the <a href="https://www.ncdc.noaa.gov/data-access/land-based-station-data/land-based-datasets/global-historical-climatology-network-ghcn">Global Historical Climatology Network’s daily data (GHCND)</a>. This dataset can be downloaded by <code>rnoaa::meteo_pull_monitors</code>.</p>
+<p><strong>NYC Yellow Taxi Data:</strong> The NYC yellow taxi raw data is from the <a href="https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page">TLC TriP Record Data</a>.</p>
+<p>It contains all the yellow taxi trip records in NYC from 2009 to 2019. First, to analyze change of the NYC yellow taxi use across 10 years, we focus on Yellow Taxi Trip Records raw data in every month of 2009, 2011, 2013, 2015, 2017. Next, to analyze change of the NYC yellow taxi use in detail, we focus on the year of 2018 and generate randomly sampled sub-datasets for each month in 2018. Because the raw data is too large, we put it in a folder named <em>raw_data</em> and added it to the <code>.gitignore</code> file. So the <em>raw_data</em> folder was not uploaded to the Github. The monthly sub-datasets were generated by randomly sampling 100,000 observations from each month of 2018 and saved in the folder <em>data</em>.</p>
+<p>For weather related data, we extracted minimum temperature<code>tmin</code> and maximum temperature <code>tmax</code> and precipitation data<code>prcp</code> in 2018 and then joined with taxi data by month and date.</p>
+</div>
+<div id="part-1-10-year-overall-analysis" class="section level2">
+<h2>Part 1 10-Year Overall Analysis</h2>
+<div id="introduction" class="section level4">
+<h4>1.1 Introduction</h4>
+<p>With the development of shared traveling methods such as Uber, Lyft, VIA etc., what will the demands for NYC yellow taxi change? Will we still need these cute yellow cabs in the future? In this section, we analyze the usage of NYC yellow taxi in the past 10 years, trying to shed light on the future of the yellow cab in NYC.</p>
+</div>
+<div id="data-import-and-tidy" class="section level4">
+<h4>1.2 Data Import and Tidy</h4>
+<p>To analyze the overall change of NYC yellow taxi usage, we import and tidy yearly summary datasets from 2009 to 2018 in the folder <em>data/yearly_summary</em>. It combines information of rides, passenger numbers, fares in 2009, 2011, 2013, 2015, 2017, 2018 to form a <code>overall_df</code>.</p>
+<pre class="r"><code>file_name = list.files(path = &quot;data/yearly_summary&quot;, pattern = &quot;_taxi_trip_summary&quot;)
 
+overall_df_raw = map(.x = file_name, ~ read_csv(str_c(&quot;data/yearly_summary/&quot;, .x))) 
+
+overall_df = 
+  overall_df_raw %&gt;% 
+  bind_rows() %&gt;%
+  mutate(
+    time = str_remove(file, &quot;yellow_tripdata_&quot;),
+    time = str_remove(time, &quot;.csv&quot;),
+    total_ride_million = total_ride/1000000,
+    total_passenger_million = total_passenger/1000000,
+    total_fare_million = total_fare/1000000) %&gt;% 
+  separate(time, into = c(&quot;year&quot;, &quot;month&quot;), sep = &quot;_&quot;, remove = TRUE) %&gt;%
+  #filter(year != 2018) %&gt;% 
+  select(year, month, total_ride_million, total_passenger_million, total_fare_million, mean_fare, median_fare)</code></pre>
+</div>
+<div id="year-overall-analysis" class="section level4">
+<h4>1.3 10-Year Overall Analysis</h4>
+<p>To study changes of NYC yellow taxi usage in the past ten years, we analyze total rides, total passenger numbers, total income and median income for one trip in 2009, 2011, 2013, 2015, 2017, 2018.</p>
+<div id="nyc-yellow-cab-ride-and-passenger-numbers-are-decreasing" class="section level5">
+<h5>1.3.1 NYC yellow cab ride and passenger numbers are decreasing</h5>
+<p>First, we look at how the NYC yellow cab <strong>ride number (Fig. 1)</strong> and the <strong>passenger number (Fig. 2)</strong> change with time. From Figure 1, we can see that the total number of taxi rides starts to decrease since 2011 and has decreased by more than <strong>40%</strong> in the past 10 years, and monthly ride numbers are decreasing comparing two adjacent years. Figure 2 shows how the total passenger numbers change with time. When comparing within a single year, one interesting result is that fewer people take yellow taxis during the summer (July, August and September) even more tourists are in NYC then. When comparing among different years, the total passenger number has been also decreasing since 2011, and has also decreased by more than <strong>40%</strong> in the past 10 years.</p>
+<p>Therefore, in the past 10 years, <strong>NYC yellow cab has had fewer and fewer usage and customers!!!</strong></p>
+<pre class="r"><code>total_ride_plot = 
+  overall_df %&gt;% 
+  ggplot(aes(year, weight = total_ride_million, fill = month)) +
+  geom_bar(position = &quot;stack&quot;) +
+  labs(title = &quot;Figure 1. NYC Yellow Taxi Total Rides vs. Time&quot;, 
+       y = &quot;total rides (million)&quot;,
+       caption = &quot;Data from the NYC TLC Data&quot;)
+
+total_ride_plot</code></pre>
+<p><img src="10_year_overall_analysis_files/figure-html/total_ride_plot-1.png" /></p>
+<pre class="r"><code>total_passenger_plot = 
+  overall_df %&gt;% 
+  ggplot(aes(x = month, y = total_passenger_million, color = year, group = year)) +
+  geom_line(size = 2) +
+  labs(title = &quot;Figure 2. NYC Yellow Taxi Passenger vs. Time&quot;, 
+       y = &quot;total passenger (million)&quot;,
+       caption = &quot;Data from the NYC TLC Data&quot;)
+
+total_passenger_plot</code></pre>
+<p><img src="10_year_overall_analysis_files/figure-html/total_passenger_plot-1.png" /></p>
+</div>
+<div id="nyc-yellow-cab-is-more-expensive-for-a-single-ride" class="section level5">
+<h5>1.3.2 NYC yellow cab is more expensive for a single ride</h5>
+<p>Second, we look at how the price of taking a yellow cub changes with time and plot the relationship between media fare for a single trip and time time as Figure 3. From Figure 3, we can see that the median fare for a single trip is increasing within a year and among different years with time goes by. For a single trip, the median fare has increased by about <strong>45%</strong>.</p>
+<p>Therefore, in the past 10 years, <strong>NYC yellow cab has become more and more expensive!!!</strong></p>
+<pre class="r"><code>median_fare_plot =
+  overall_df %&gt;% 
+  ggplot(aes(x = month, y = mean_fare, color = year, group = year)) +
+  geom_line(size = 2) +
+  labs(title = &quot;Figure 3. NYC Yellow Taxi Median Fare vs. Time&quot;, 
+       y = &quot;median fare for one trip (US dollar)&quot;,
+       caption = &quot;Data from the NYC TLC Data&quot;)
+
+median_fare_plot</code></pre>
+<p><img src="10_year_overall_analysis_files/figure-html/median_fare_plot-1.png" /></p>
+</div>
+<div id="nyc-yellow-cab-gets-lower-income" class="section level5">
+<h5>1.3.3 NYC yellow cab gets lower income</h5>
+<p>At last, we look at how the gross income from the NYC yellow cab changes with time. We plot the relationship between total income and time as Figure 4. From Figure 4, we can see that the total income from the NYC yellow cab reaches to the peak in 2013. This might because the customer number didn’t decrease too much while the median fare for a single trip increased a lot in 2013 compared with 2012. However, the total income has decreased by about <strong>30%</strong> (amost 1 billion dollars!) in the past 5 years.</p>
+<p>Therefore, <strong>the total income from the NYC yellow cab has been decreasing since 2013</strong>.</p>
+<pre class="r"><code>total_fare_plot = 
+  overall_df %&gt;% 
+  ggplot(aes(year, weight = total_fare_million, fill = month)) +
+  geom_bar(position = &quot;stack&quot;) +
+  labs(title = &quot;Figure 4. NYC Yellow Taxi Total Income vs. Time&quot;, 
+       y = &quot;total income (million US dollar)&quot;,
+       caption = &quot;Data from the NYC TLC Data&quot;)
+
+total_fare_plot</code></pre>
+<p><img src="10_year_overall_analysis_files/figure-html/total_fare_plot-1.png" /></p>
+</div>
+</div>
+<div id="conclusion" class="section level4">
+<h4>1.4 Conclusion</h4>
+<p>From the analysis of overall data of the NYC yellow cab in the past 10 years, we know that with time goes by, fewer and fewer people are using the NYC yellow cab. Even though the fare for a single trip is increasing, the total income from these cute cabs is decreasing and almost 1 billion dollars vanished in 2018 compared with 2013. Therefore, the future of the NYC yellow cab is not very bright. Good luck!</p>
+</div>
+</div>
+<div id="part-2-2018-trip-pattern" class="section level2">
+<h2>Part 2 2018 Trip Pattern</h2>
+<div id="temperature-and-taxi-use" class="section level4">
+<h4>2.1 Temperature and Taxi Use</h4>
+<div id="background" class="section level5">
+<h5>2.1.1 Background</h5>
+<p>Previous work have shown that there are relationships between taxi ridership and weather events.“During adverse weather, taxi drivers tend to make more money” (Kamga et al., 2013). Kamga et al. also found that during days when adverse weather took place, there was a higher demand for taxis in Manhattan compared to the other boroughs, and that more people were prone to take shorter taxi trips.</p>
+</div>
+<div id="data-tidy-1" class="section level5">
+<h5>2.1.2 Data Tidy</h5>
+<p>In this part, we wanted to see whether there is a trend between weather and yellow cab within and between months use using our data. We used the weather data including temperature and precipitation data in 2018 and their corresponding yellow taxi use data. For temperature, we used average temperature <code>average_temp</code> as the mean of maximum temperarure and miniminum temperature in each day. For yellow cab data, we used the raw data for 2018 from NYC Taxi Website, counted the daily taxi usage by <code>pick_up_data</code> and then joined the weather dataset by month and date.</p>
+<pre class="r"><code>weather_tot = read_csv(file = &quot;./data/weather_nyc_2018.csv&quot;) %&gt;%
+  mutate(date = as.character(date)) %&gt;%
+  separate(date, into = c(&quot;year&quot;,&quot;month&quot;,&quot;pu_date&quot;), sep = &quot;-&quot;, convert = TRUE) %&gt;%
+  mutate(
+  average_temp = (tmin + tmax) / 2)
+  
+
+yellowcab = read_csv(file = &quot;./data/yearly_summary/2018_taxi_trip_daily_summary.csv&quot;) %&gt;%
+  mutate(date = as.character(vars),
+         daily_drive = n) %&gt;%
+  separate(date, into = c(&quot;year&quot;,&quot;month&quot;,&quot;pu_date&quot;), sep = &quot;-&quot;, convert = TRUE) %&gt;%
+  select(-vars, -year)
+
+cab_weather =
+  left_join(weather_tot,yellowcab, by = c(&quot;month&quot;,&quot;pu_date&quot;)) %&gt;%
+  select(month, pu_date,average_temp, daily_drive,prcp) %&gt;%
+  mutate(month = as.factor(month),
+         month = recode_factor(month, &#39;1&#39; = &quot;January&quot;, &#39;2&#39; = &quot;Feburary&quot;, &#39;3&#39; = &quot;March&quot;, &#39;4&#39; = &#39;April&#39;, &#39;5&#39; = &#39;May&#39;, &#39;6&#39; = &#39;June&#39;, &#39;7&#39; = &#39;July&#39;, &#39;8&#39; = &#39;August&#39;, &#39;9&#39; = &#39;September&#39;, &#39;10&#39; = &#39;October&#39;, &#39;11&#39; = &#39;November&#39;, &#39;12&#39; = &#39;December&#39;))</code></pre>
+</div>
+<div id="plot-for-the-association-between-weather-and-daily-taxi-usage" class="section level5">
+<h5>2.1.3 Plot for the association between Weather and Daily Taxi Usage</h5>
+<p>Here we made an animation plot to show the daily drive amount and average daily temperature for each month.The size of the dots showed the precipitaiton for that day which help to identify whether rainy weather also increase taxi use.</p>
+<p>Although we hypothesized that cold weather and hot weather might have more taxi use, there was no obvious usage increase in summer time. While, we did observed high daily drive amount in Feburary, March and April which are the four coldest months in NYC. Also, no interaction between month and average temperature was being observed. In terms of the influence of precipitation, we didn’t observe a significant pattern. Contrast to what we guessed before, instead of increase daily drive amount, rainy days had lower drive amount. This might due to the reason that people would just stay at home during days with heavy rain or snow. Also, if we adjustded for distance, there might be a significant association between precipitation and short distance drive.</p>
+<pre class="r"><code>weather_plot = cab_weather %&gt;%
+  ggplot(aes(x = average_temp, y = daily_drive, frame_vars(month))) +
+  geom_point(aes(size = prcp, colour = month)) +
+   labs(title = &#39; Plot for the association between Weather and Daily Taxi Usage &#39;,
+       x = &#39;Daily Average Temperature for Year 2018&#39;, 
+       y = &#39;Daily Drive Amount&#39;,
+       colour = &#39;Month&#39;,
+       size = &#39;Precipitation&#39;
+       ) </code></pre>
+<p><img src="images/plot_weather_drive.png" /></p>
+<pre class="r"><code>zone_lookup &lt;-
+  read_csv(&quot;./data/taxi_zone_lookup.csv&quot;) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  select(-service_zone)
+
+file_names &lt;- list.files(&quot;./data/yellow_cab&quot;)
+read_in = function(x) {
+  read_csv(&quot;./data/yellow_cab/x&quot;) 
+}
+setwd(&quot;./data/yellow_cab&quot;)
+taxi_2018 &lt;-
+  file_names %&gt;% 
+  set_names() %&gt;% 
+  map_dfr(read_csv, .id = &quot;source&quot;) %&gt;% 
+  separate(source, c(&quot;a&quot;,&quot;b&quot;,&quot;year&quot;, &quot;month&quot;, &quot;c&quot;), sep = &quot;([\\.\\_])&quot;) %&gt;% 
+  select(-a, -b, -c, -X1)</code></pre>
+<pre class="r"><code>heatmap &lt;-
+  taxi_2018 %&gt;% 
+  filter(
+    passenger_count != 0,
+    trip_distance != 0,
+    total_amount &gt; 0,
+    fare_amount != 0
+  ) %&gt;% 
+  mutate(tpep_pickup_datetime = as.character(tpep_pickup_datetime),
+         tpep_dropoff_datetime = as.character(tpep_dropoff_datetime)) %&gt;%
+  separate(tpep_pickup_datetime, into = c(&quot;a&quot;,&quot;b&quot;), sep = &quot; &quot;) %&gt;%
+  separate(a, into = c(&quot;pick_year&quot;,&quot;pick_month&quot;,&quot;pu_date&quot;), sep = &quot;-&quot;) %&gt;%
+  separate(b, into = c(&quot;pu_hour&quot;,&quot;pu_min&quot;), sep = &quot;:&quot;) %&gt;%
+  separate(tpep_dropoff_datetime, into = c(&quot;c&quot;,&quot;d&quot;),sep = &quot; &quot;) %&gt;%
+  separate(c,into = c(&quot;drop_year&quot;,&quot;drop_month&quot;,&quot;do_date&quot;),sep = &quot;-&quot;) %&gt;%
+  separate(d, into = c(&quot;do_hour&quot;,&quot;do_min&quot;), sep = &quot;:&quot;) %&gt;%
+  select(-pick_month,-drop_month,-pick_year,-drop_year) %&gt;% 
+  mutate(
+    month = as.integer(month),
+    pu_date = as.integer(pu_date),
+    pu_hour = as.integer(pu_hour),
+    pu_min = as.integer(pu_min),
+    do_date = as.integer(do_date),
+    do_hour = as.integer(do_hour),
+    do_min = as.integer(do_min)
+  ) %&gt;% 
+  left_join(zone_lookup, by = c(&quot;pu_location_id&quot; = &quot;location_id&quot;)) %&gt;% 
+  rename(
+    pu_boro = borough,
+    pu_zone = zone
+  ) %&gt;% 
+  left_join(zone_lookup, by = c(&quot;do_location_id&quot; = &quot;location_id&quot;)) %&gt;% 
+  rename(
+    do_boro = borough,
+    do_zone = zone
+  ) %&gt;% 
+  select(-pu_location_id, -do_location_id)</code></pre>
+</div>
+</div>
+<div id="destination-time-and-taxi-use" class="section level4">
+<h4>2.2 Destination, Time, and Taxi Use</h4>
+<div id="background-and-data" class="section level5">
+<h5>2.2.1 Background and Data</h5>
+<p>We also looked at the yellow cab trip pattern across 24 hours in a day in the five boroughs plus Newark airport. The trip destination in the orginal data was coded in taxi zone, and information of borough was obtained by joining with the look-up table of taxi zones provided at the NYC Yellow Taxi Data webisite. Pick up time was used for the hour in a day. We then calcualted the percentage of trips in each hour among the total trips to a specific destination.</p>
+</div>
+<div id="section" class="section level5">
+<h5>2.2.2</h5>
+<p>Heatmap of Destination Borough and Hour in a Day</p>
+<pre class="r"><code>ax_1 &lt;- list(
+  title = &quot;Hour in Day&quot;,
+  type = &#39;category&#39;,
+  showticklabels = TRUE)
+
+ax_2 &lt;- list(
+  title = &quot;Dstination&quot;,
+  showticklabels = TRUE)
+
+heatmap %&gt;% 
+  filter(do_boro != &quot;Unknown&quot;) %&gt;% 
+  select(do_boro, pu_hour) %&gt;% 
+  mutate(
+    do_boro = fct_infreq(do_boro)
+  ) %&gt;% 
+  group_by(do_boro, pu_hour) %&gt;% 
+  count() %&gt;% 
+  group_by(do_boro) %&gt;% 
+  mutate( 
+    total = sum(n)
+    ) %&gt;% 
+   mutate(percent = round((n/total)*100,1)) %&gt;% 
+  arrange(do_boro, pu_hour) %&gt;% 
+    plot_ly(
+    x = ~pu_hour, y = ~do_boro,
+    height = 400, width = 1400) %&gt;%
+  add_heatmap(
+    z = ~percent,
+    text = ~paste(
+      &quot;Trip to: &quot;, do_boro, &quot;&lt;br&gt;Pickup Time: &quot;, pu_hour, &quot;: 00&quot;,
+      &quot;&lt;br&gt;Percent: &quot;, percent, &quot;%&quot;),
+    hoverinfo = &quot;text&quot;, showscale = TRUE,
+    opacity = 0.90) %&gt;%
+    layout(xaxis = ax_1, yaxis = ax_2)</code></pre>
+<p><img src="images/heatmap_screenshot.png" /></p>
+<p>Each square in the heatmap represents a unique combination of destination boroughs and 24 hours in a day, and the color represents the percent of trip amount out of the total trip amount in that borough, with brighter color represents higher percent.</p>
+<p>We can see that in boroughs like Staten Island, Bronx, or Brroklyn, there were more trips to these places in night or late night (8pm - 1am) than in the day time. Trips to Queens were relatively evenly spread out across hours in a day and trips to Manhattan were more likely to be in the day rather than in the night. Trips to Newark had a clear peak in the afternoon hours.</p>
+</div>
+</div>
+</div>
+<div id="part-3-fare" class="section level2">
+<h2>Part 3 Fare</h2>
+<p>We are interested in the factors that potentially effect the revenue of each taxi trip. The total amount is the sum of fare amount, tax, tip amount, tolls amount and <a href="https://www1.nyc.gov/site/tlc/about/taxi-improvement-fund.page">improvement surcharge</a>. Tolls amount is fixed. Since tax and tip are dependent on fare amount, we are interested in fare amount.</p>
+<p>According to a tipping guide that’s published by The New York Times in their Travel section back in 2006, the tipping rate is 15-20% for taxi drivers. So much has chnanged since then. Uber, lyft and other ride-hailing service companies have entered the market; paying has never become easier now that you can pay through an app on your phone and choose how much you want to tip. Even though most of time the tip percent will fall between 15% and 20% in NYC, it still varies across difference trips. We also hope to explore the reasons for higher tip percent.</p>
+<div id="fare-amount" class="section level3">
+<h3>Fare Amount</h3>
+<p>The rule of standard metered taxi fare is too <a href="https://www1.nyc.gov/site/tlc/passengers/taxi-fare.page">complicated</a> . It is difficult for a passenger to estimate the fare amount refering to such complext instructions.</p>
+<p>According to the codebook from the TLC website, the fare amount is defined as “The time-and-distance fare calculated by the meter”. Therefore, we hope to explore the association between fare amount and trip distance and duration. If possible, we also want to roughly predict the fare amount by duration and distance.</p>
+<p>Data was queried from year 2018, covering all NYC boroughs. The duration is calculated from drop-off time and pick-up time. There might be data entry error since a large number of records with fare_amount of 52 have different distance and duration. We are also not interested in the trips with no time or a long duration, i.e. longer than 6 hours. The initial charge of NYC Yellow Cab is 2.5 dollars. Therefore, we exclude the data with duration longer than 360 or equals to 0, fare amount of 52 or less than 2.5.</p>
+<pre class="r"><code>library(ggplot2)
+library(PerformanceAnalytics)
+library(mctest)
+library(ppcor)
+library(patchwork)
+library(tidyverse)
+library(plotly)
+
+
+weather &lt;-
+  read_csv(&quot;./data/weather_nyc_2018.csv&quot;) %&gt;% 
+  mutate(date = as.character(date)) %&gt;%
+  separate(date, into = c(&quot;year&quot;,&quot;month&quot;,&quot;day&quot;), sep = &quot;-&quot;, convert = TRUE) %&gt;%
+  dplyr::select(-year, -name, -id)
+
+zone_lookup &lt;-
+  read_csv(&quot;./data/taxi_zone_lookup.csv&quot;) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  dplyr::select(-service_zone)
+
+file_names &lt;- list.files(&quot;./data/yellow_cab&quot;)
+read_in = function(x) {
+  read_csv(&quot;./data/yellow_cab/x&quot;) 
+}
+setwd(&quot;./data/yellow_cab&quot;)
+
+taxi_2018 &lt;-
+  file_names %&gt;% 
+  set_names() %&gt;% 
+  map_dfr(read_csv, .id = &quot;source&quot;) %&gt;% 
+  separate(source, c(&quot;a&quot;,&quot;b&quot;,&quot;year&quot;, &quot;month&quot;, &quot;c&quot;), sep = &quot;([\\.\\_])&quot;) %&gt;% 
+  dplyr::select(-a, -b, -c, -X1)</code></pre>
+<pre class="r"><code>pilot &lt;-
+  taxi_2018 %&gt;% 
+  filter(
+    passenger_count != 0,
+    trip_distance != 0,
+    total_amount &gt; 0,
+    fare_amount != 0
+  ) %&gt;% 
+  mutate(tpep_pickup_datetime = as.character(tpep_pickup_datetime),
+         tpep_dropoff_datetime = as.character(tpep_dropoff_datetime)) %&gt;%
+  separate(tpep_pickup_datetime, into = c(&quot;a&quot;,&quot;b&quot;), sep = &quot; &quot;) %&gt;%
+  separate(a, into = c(&quot;pick_year&quot;,&quot;pick_month&quot;,&quot;pu_date&quot;), sep = &quot;-&quot;) %&gt;%
+  separate(b, into = c(&quot;pu_hour&quot;,&quot;pu_min&quot;), sep = &quot;:&quot;) %&gt;%
+  separate(tpep_dropoff_datetime, into = c(&quot;c&quot;,&quot;d&quot;),sep = &quot; &quot;) %&gt;%
+  separate(c,into = c(&quot;drop_year&quot;,&quot;drop_month&quot;,&quot;do_date&quot;),sep = &quot;-&quot;) %&gt;%
+  separate(d, into = c(&quot;do_hour&quot;,&quot;do_min&quot;), sep = &quot;:&quot;) %&gt;%
+  dplyr::select(-pick_month,-drop_month,-pick_year,-drop_year) %&gt;% 
+  mutate(
+    month = as.integer(month),
+    pu_date = as.integer(pu_date),
+    pu_hour = as.integer(pu_hour),
+    pu_min = as.integer(pu_min),
+    do_date = as.integer(do_date),
+    do_hour = as.integer(do_hour),
+    do_min = as.integer(do_min)
+  ) %&gt;% 
+  left_join(weather, by = c(&quot;month&quot; = &quot;month&quot;, &quot;pu_date&quot; = &quot;day&quot;)) %&gt;% 
+  left_join(zone_lookup, by = c(&quot;pu_location_id&quot; = &quot;location_id&quot;)) %&gt;% 
+  rename(
+    pu_boro = borough,
+    pu_zone = zone
+  ) %&gt;% 
+  left_join(zone_lookup, by = c(&quot;do_location_id&quot; = &quot;location_id&quot;)) %&gt;% 
+  rename(
+    do_boro = borough,
+    do_zone = zone
+  ) %&gt;% 
+   dplyr::select(-pu_location_id, -do_location_id)
+
+reg = pilot %&gt;% 
+  mutate(
+    duration = case_when(
+    pu_date != do_date ~ do_min - pu_min + (60 *(do_hour - pu_hour + 24)),
+    pu_date == do_date ~ do_min - pu_min + (60 *(do_hour - pu_hour) )
+  ),
+      tip_percent = tip_amount/fare_amount
+  ) %&gt;% 
+  filter(duration != 0,
+         fare_amount != 52,#There might be data entry error since all records that fare_amount is 52 have different distance and duration#
+         duration &lt;= 360, #There are some points gathering with a long duration without long distance, which can be miscoding or influntial outliers, so we should exclude these data.#
+         fare_amount &gt;= 2.5 #There can be data entry error since the initial charge of NYC taxi is $2.5, so we exclude those with fare amount &lt; $2.5.#
+         ) 
+ 
+set.seed(1)
+reg_plot = reg %&gt;% 
+  sample_frac(size = 0.1, replace = FALSE)</code></pre>
+</div>
+<div id="scatterplot-of-fare-amount-by-distance-and-duration" class="section level3">
+<h3>Scatterplot of fare amount by distance and duration</h3>
+<pre class="r"><code>fare_distance = reg_plot %&gt;% 
+  ggplot(aes(x = trip_distance, y = fare_amount)) +
+  geom_point(alpha = 0.3, color = &#39;skyblue&#39;,size = 0.3) +
+  labs(
+    title = &quot;The distribution of fare amount by trip distance and duration&quot;,
+    x = &quot;Trip Distance&quot;,
+    y = &quot;Fare Amount&quot;
+  )
+
+fare_duration = reg_plot %&gt;% 
+  ggplot(aes(x = duration, y = fare_amount)) +
+  geom_point(alpha = 0.3, color = &#39;red&#39;, size = 0.3) +
+  labs(
+    x = &quot;Trip Duration&quot;,
+    y = &quot;Fare Amount&quot;
+  )
+
+fare_distance + fare_duration</code></pre>
+<p><img src="regression_analysis_files/figure-html/unnamed-chunk-2-1.png" /></p>
+<p>According to the scatterplots, there is a positive relationship among trip distance and fare amount. Trip duration is also positively associated with fare amount.</p>
+</div>
+<div id="building-linear-regression-model-of-fare-amount" class="section level3">
+<h3>Building linear regression model of fare amount</h3>
+<p>The outcome of linear regression model is fare amount, and the predictors include trip distance and duration.</p>
+<pre class="r"><code>fit1 = lm(fare_amount ~ duration + trip_distance , data = reg) %&gt;% 
+  broom::tidy() %&gt;% 
+  janitor::clean_names() %&gt;% 
+  mutate(p = round(p_value,3))
+
+fit1 = lm(fare_amount ~ duration + trip_distance , data = reg ) 
+summary(fit1) %&gt;% broom::tidy() %&gt;% knitr::kable(digit = 2)</code></pre>
+<p><img src="images/table_1.png" /></p>
+<pre class="r"><code>summary(fit1) %&gt;% broom::glance() %&gt;% knitr::kable(digit = 2)</code></pre>
+<p><img src="images/table_2.png" /></p>
+<p>The p-value of the two coefficients are both &lt; 0.05. It is seen that both variables (duration, trip_distance) are statistically significant at 5 % level of significance. R square of the model is 0.93.</p>
+</div>
+<div id="diagnostics" class="section level3">
+<h3>Diagnostics</h3>
+<p>Further we can plot the model diagnostic checking for other problems such as normality of error term, heteroscedasticity etc.</p>
+<pre class="r"><code>par(mfrow = c (2,2))
+plot(fit1)</code></pre>
+<p>After running the model diagnostics, the model violates the linear regression assumptions. It can be the result of the skewed distribution of fare amount.</p>
+<pre class="r"><code>reg_plot %&gt;% 
+  ggplot(aes(x = fare_amount)) +
+  geom_histogram(bins = 100) +
+  labs(
+    title = &quot;Distribution of fare amount&quot;,
+    x = &quot;Fare Amount&quot;,
+    y = &quot; &quot;
+  )</code></pre>
+<p><img src="regression_analysis_files/figure-html/unnamed-chunk-6-1.png" /></p>
+<p>In addition, we realized that the duration will increase if the trip distance increased. Therefore, possibly there is multicollinearity problem in this model as well. For further diagnosis of the problem, let us first look at the pair-wise correlation among the explanatory variables.</p>
+<pre class="r"><code>corr = reg %&gt;% dplyr::select(trip_distance, duration)
+pcor(corr, method = &quot;pearson&quot;) </code></pre>
+<p>The correlation between trip distance and duration is 0.74. The p-value is smaller than 0.05, therefore, at 5% level of significance, trip distance and duration is related to each other.</p>
+<pre class="r"><code>imcdiag(corr, reg$fare_amount)</code></pre>
+<p>The VIF, TOL and Wi columns provide the diagnostic output for variance inflation factor, tolerance and Farrar-Glauber F-test respectively. Since VIF&lt;10 and TOL&gt;0.1, there is no multicolinearity in the regression model.</p>
+</div>
+<div id="tip-percent" class="section level3">
+<h3>Tip percent</h3>
+<p>In addition ot fare amount, we are also interested in the factors that may effect tip percent in each trip.</p>
+<pre class="r"><code>tip_distance = reg_plot %&gt;% 
+  filter(payment_type == 1) %&gt;% 
+  ggplot(aes(x = trip_distance, y = tip_percent)) +
+  geom_point(alpha = 0.3, color = &#39;skyblue&#39;, size = 0.1,na.rm = TRUE) +
+  labs(
+    title = &quot;Tip percent by Trip Distance, Passenger Count, Precipitation&quot;,
+    x = &quot;Trip Distance&quot;,
+    y = &quot;Tip Percent&quot;
+  ) +
+  scale_y_continuous(
+    limits = c(0,1)
+  )
+
+tip_passenger = reg_plot %&gt;% 
+  filter(payment_type == 1) %&gt;% 
+  ggplot(aes(x = passenger_count, y = tip_percent)) +
+  geom_point(alpha = 0.3, color = &#39;palevioletred2&#39;, size = 0.1,na.rm = TRUE) +
+  labs(
+    x = &quot;Passenger Count&quot;,
+    y = &quot;Tip Percent&quot;
+  ) +
+  scale_y_continuous(
+    limits = c(0,1)
+  )
+
+tip_prcp = reg_plot %&gt;% 
+  filter(payment_type == 1) %&gt;% 
+  ggplot(aes(x = prcp, y = tip_percent)) +
+  geom_point(alpha = 0.3, color = &#39;palegreen3&#39;, size = 0.1,na.rm = TRUE) +
+  labs(
+    x = &quot;Precipitation&quot;,
+    y = &quot;Tip Percent&quot;
+  ) +
+  scale_y_continuous(
+    limits = c(0,1)
+  )
+
+tip_distance + tip_passenger + tip_prcp</code></pre>
+<p><img src="regression_analysis_files/figure-html/unnamed-chunk-9-1.png" /></p>
+<p>There is no clear pattern among tip percent and the three predictors. Therefore, we will not conduct regression analysis about tip percent. Instead, we’ll look at the cab-tipping scence is like in Manhattan, where yellow cabs are mostly concentrated. We look at tip percentage, which we generated by dividing the tip amount by the total fare amount.</p>
+<pre class="r"><code>boxplot &lt;- pilot %&gt;%
+  filter(fare_amount != 0,
+         fare_amount != 52, #We find that there might be an entry error since all records that fare_amount is 52 have different distance and duration
+        fare_amount &gt;= 2.5) %&gt;%  #There can be data entry error since the initial charge of NYC taxi is $2.5, so we exclude those with fare amount &lt; $2.5
+  mutate(
+    duration = case_when(
+    pu_date != do_date ~ do_min - pu_min + (60 *(do_hour - pu_hour + 24)),
+    pu_date == do_date ~ do_min - pu_min + (60 *(do_hour - pu_hour) )
+
+  ),
+      tip_percent = round(tip_amount/fare_amount, 4))</code></pre>
+<p>Since only tips made by credit card are recorded, we’ll only be looking at rides that are paid with a credit card.</p>
+<pre class="r"><code>tip_plot &lt;-  boxplot %&gt;% 
+  filter(payment_type == 1, do_boro == &#39;Manhattan&#39;, pu_boro == &#39;Manhattan&#39;, do_zone != &#39;Unknown&#39;, pu_zone != &#39;Unknown&#39;) %&gt;% 
+  mutate(do_zone = forcats::fct_reorder(do_zone, tip_percent),
+       pu_zone = forcats::fct_reorder(pu_zone, tip_percent)) %&gt;% 
+  drop_na(do_zone, pu_zone)</code></pre>
+<p>We look at rides that are either picked-up at and dropped-off at a neighborhood in Manhattan.</p>
+</div>
+<div id="drop-off-zone" class="section level3">
+<h3>Drop-off Zone</h3>
+<pre class="r"><code># plotly for do_zone
+f1 &lt;- list(
+  family = &quot;Arial, sans-serif&quot;,
+  size = 18,
+  color = &quot;grey&quot;
+)
+f2 &lt;- list(
+  family = &quot;Old Standard TT, serif&quot;,
+  size = 14,
+  color = &quot;black&quot;
+)
+a &lt;- list(
+  title = &quot;Tip Percentage&quot;,
+  titlefont = f1,
+  showticklabels = TRUE,
+  tickangle = 45,
+  tickfont = f2,
+  exponentformat = &quot;E&quot;,
+  range = c(0,1)
+)
+
+b &lt;- list(
+  title = &quot;Drop off Manhanttan Neighborhoods&quot;,
+  titlefont = f1, 
+  showticklabels = TRUE,
+  tickangle = 45,
+  tickfont = f2,
+  exponntformat = &quot;E&quot;
+)
+
+c &lt;- list(
+  title = &quot;Pick up Manhanttan Neighborhoods&quot;,
+  titlefont = f1, 
+  showticklabels = TRUE,
+  tickangle = 45,
+  tickfont = f2,
+  exponntformat = &quot;E&quot;
+)
+
+tip_plot %&gt;% 
+  mutate(do_zone = forcats::fct_reorder(do_zone, tip_percent),
+       pu_zone = forcats::fct_reorder(pu_zone, tip_percent),
+       do_median = median(tip_percent),
+       text = str_c(&quot;Drop Off Zone: &quot;, do_zone , &quot;\nTip Percent: &quot;, tip_percent, &quot;\nMedian Percentage:&quot;, do_median) )%&gt;% 
+  drop_na(do_zone, pu_zone) %&gt;% 
+  plot_ly(y = ~tip_percent, color = ~do_zone, text = ~text, type = &quot;box&quot;,  colors = &quot;Set2&quot;, marker = list(size = 2))%&gt;% 
+  layout(xaxis = b, yaxis = a) </code></pre>
+<p><img src="images/drop_off.png" /></p>
+<pre class="r"><code> tip_plot %&gt;% 
+  filter(do_zone == &quot;Highbridge Park&quot;) %&gt;% 
+  mutate(do_median = median(tip_percent))
+
+ tip_plot %&gt;% 
+   filter(do_zone == &quot;Randalls Island&quot;) %&gt;% 
+   mutate(do_median = median(tip_percent))</code></pre>
+<p>We can see that of all 64 drop-off neighborhoods, Highbridge Park has the lowest median tip percentage at 10.73%, wehre Randalls Island has the highest median tip percentage at 25.46%. Overall, we do see that if the lower the cab go into Manhattan, the higher the percentage of tip is given.</p>
+<pre class="r"><code>tip_plot %&gt;% 
+mutate(do_zone = forcats::fct_reorder(do_zone, tip_percent),
+pu_zone = forcats::fct_reorder(pu_zone, tip_percent),
+pu_median = median(tip_percent),
+text = str_c(&quot;Pick Up Zone: &quot;, pu_zone , &quot;\nTip Percent: &quot;, tip_percent, &quot;\nMedian Percentage:&quot;, pu_median) )%&gt;%
+drop_na(do_zone, pu_zone) %&gt;%
+plot_ly(y = ~tip_percent, color = ~pu_zone, type = &quot;box&quot;, colors = &quot;Set2&quot;, marker = list(size = 2)) %&gt;%
+layout(xaxis = c, yaxis = a)</code></pre>
+<p><img src="images/pickup.png" /></p>
+<pre class="r"><code>tip_plot %&gt;% 
+  filter(pu_zone == &quot;Marble Hill&quot;) %&gt;% 
+   mutate(do_median = median(tip_percent))
+
+ tip_plot %&gt;% 
+   filter(pu_zone == &quot;Roosevelt Island&quot;) %&gt;% 
+   mutate(do_median = median(tip_percent))</code></pre>
+<p>We can see that of all 66 pick-up neighborhoods, Marble Hill has the lowest median tip percentage at 10.0%, wehre Roosevelt Island has the highest median tip percentage at 21.88%. HOwever, only 8 rides and 15 ride were recorded for Marble Hill and Roosevelt Island respectively. Therefore, the result is not quite representative. However, considering that how restricted public transportation to Roosevelt Island is, I’m not surprised that passengers picked up from there feel generous towards their driver. Overall, we see a similiar trend to the drop-off neighborhoods, if cab driver wants a bigger tip, they should wait around lower Manhattan.</p>
+</div>
+</div>
+<div id="conclusion-1" class="section level2">
+<h2>Conclusion</h2>
+<p>In our study, we find some interesting points about NYC yellow cab usage: New Yorkers use yellow cabs less during the summer; and they take yellow cabs to different NYC boros at different time; New Yorkers don’t give more tips even with longer trip distance, more passengers or heavier daily precipitation. However, from previous studies, people proposed negative effects from shared traveling on NYC yellow cab usage. Our results shows a tremendous decrease of yellow cab usage in the past 10 years, in both customer numbers and income. From our findings, it seems the future of the NYC yellow cab is not very bright. Good luck NYC yellow cabs!</p>
+</div>
 
 <br><br>
 <footer>
@@ -343,6 +993,8 @@ $(document).ready(function () {
 </footer>
 
 
+</div>
+</div>
 
 </div>
 
@@ -374,7 +1026,38 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
