@@ -61,22 +61,27 @@ Here we made an animation plot to show the daily drive amount and average daily 
 Although we hypothesized that cold weather and hot weather might have more taxi use, there was no obvious usage increase in summer time. While, we did observed high daily drive amount in Feburary, March and April which are the four coldest months in NYC. Also, no interaction between month and average temperature was being observed. In terms of the influence of precipitation, we didn't observe a significant pattern. Contrast to what we guessed before, instead of increase daily drive amount, rainy days had lower drive amount. This might due to the reason that people would just stay at home during days with heavy rain or snow. Also, if we adjustded for distance, there might be a significant association between precipitation and short distance drive. 
 
 ```{r message = FALSE, warning = FALSE}
-weather_plot=cab_weather %>%
-  ggplot(aes(x=average_temp, y=daily_drive, frame_vars(month)))+
-  geom_point(aes(size=prcp,colour = month))+
+weather_plot = cab_weather %>%
+  ggplot(aes(x = average_temp, y = daily_drive, frame_vars(month))) +
+  geom_point(aes(size = prcp,colour = month)) +
    labs(title = 'Month: {closest_state}',
        x = 'Daily Average Temperature for Year 2018', 
        y = 'Daily Drive Amount',
        colour = 'Month',
-       size='Precipitation'
+       size = 'Precipitation'
        ) +
-  transition_states(month,2,1)+
-  enter_appear()+
+  transition_states(month,2,1) +
+  enter_appear() +
   exit_fade()
    
-animate(weather_plot, duration=12)
+animate(weather_plot, duration = 12)
 ```
 
+<br>   
+
+## Destination, Time, and Taxi Use
+   
+#### Background and Data
 
 ```{r, include=FALSE}
 zone_lookup <-
@@ -138,11 +143,6 @@ heatmap <-
   select(-pu_location_id, -do_location_id)
 ```
 
-<br>   
-
-## Destination, Time, and Taxi Use
-   
-#### Background and Data
    
 We also looked at the yellow cab trip pattern across 24 hours in a day in the five boroughs plus Newark airport. The trip destination in the orginal data was coded in taxi zone, and information of borough was obtained by joining with the look-up table of taxi zones provided at the NYC Yellow Taxi Data webisite. Pick up time was used for the hour in a day. We then calcualted the percentage of trips in each hour among the total trips to a specific destination.
 
@@ -190,3 +190,4 @@ heatmap %>%
 Each square in the heatmap represents a unique combination of destination boroughs and 24 hours in a day, and the color represents the percent of trip amount out of the total trip amount in that  borough,  with brighter color represents higher percent.
    
 We can see that in boroughs like Staten Island, Bronx, or Brooklyn, there were more trips to these places at night or late night (8pm - 1am) than in the day time. Trips to Queens were relatively evenly spread out across hours in a day and trips to Manhattan were more likely to be in the day rather than at night. Trips to Newark had a clear peak in the afternoon hours.
+ 
